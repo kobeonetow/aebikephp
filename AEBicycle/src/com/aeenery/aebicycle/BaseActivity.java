@@ -96,7 +96,7 @@ public class BaseActivity extends Activity {
 //	}
 	
 	protected void requiredLogin(){
-		LoginActivity.login = true;
+//		LoginActivity.login = true;
 		if(!LoginActivity.login){
 			ServerAPI api = new ServerAPI(this, LoginActivity.user);
 			api.useSharedPreferencesInfoLogin(this);

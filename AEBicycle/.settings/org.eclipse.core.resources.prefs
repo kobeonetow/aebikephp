@@ -6,5 +6,6 @@ encoding//src/com/aeenery/aebicycle/challenge/RouteMapActivity.java=GBK
 encoding//src/com/aeenery/aebicycle/entry/BicycleUtil.java=gbk
 encoding//src/com/aeenery/aebicycle/entry/WeatherInfo.java=gbk
 encoding//src/com/aeenery/aebicycle/model/HttpParseJsonUtil.java=gbk
+encoding//src/com/aeenery/aebicycle/model/HttpRestfulClient.java=UTF-8
 encoding//src/com/aeenery/aebicycle/model/netManager.java=gbk
 encoding//src/com/aeenery/aebicycle/weather/WeatherActivity.java=UTF-8

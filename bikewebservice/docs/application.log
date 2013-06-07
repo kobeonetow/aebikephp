@@ -1,0 +1,21 @@
+2013-06-07T10:26:35+02:00 INFO (6): Register logger as index 'logger', can be get from Zend::Registry::get('logger')
+2013-06-07T10:26:35+02:00 INFO (6): hash is from device:dc326d6783c2fa11ee989ec520211d27 AND from this is d41d8cd98f00b204e9800998ecf8427e
+2013-06-07T10:26:35+02:00 INFO (6): Key Verification fail!!
+2013-06-07T10:26:38+02:00 INFO (6): Register logger as index 'logger', can be get from Zend::Registry::get('logger')
+2013-06-07T10:26:38+02:00 INFO (6): hash is from device:dc326d6783c2fa11ee989ec520211d27 AND from this is d41d8cd98f00b204e9800998ecf8427e
+2013-06-07T10:26:38+02:00 INFO (6): Key Verification fail!!
+2013-06-07T10:27:01+02:00 INFO (6): Register logger as index 'logger', can be get from Zend::Registry::get('logger')
+2013-06-07T10:27:01+02:00 INFO (6): hash is from device: AND from this is d41d8cd98f00b204e9800998ecf8427e
+2013-06-07T10:27:01+02:00 INFO (6): Key Verification fail!!
+2013-06-07T10:27:04+02:00 INFO (6): Register logger as index 'logger', can be get from Zend::Registry::get('logger')
+2013-06-07T10:27:04+02:00 INFO (6): hash is from device: AND from this is d41d8cd98f00b204e9800998ecf8427e
+2013-06-07T10:27:04+02:00 INFO (6): Key Verification fail!!
+2013-06-07T10:27:04+02:00 INFO (6): Register logger as index 'logger', can be get from Zend::Registry::get('logger')
+2013-06-07T11:07:53+02:00 INFO (6): Register logger as index 'logger', can be get from Zend::Registry::get('logger')
+2013-06-07T11:07:53+02:00 INFO (6): hash is from device: AND from this is d41d8cd98f00b204e9800998ecf8427e
+2013-06-07T11:07:53+02:00 INFO (6): Key Verification fail!!
+2013-06-07T11:07:53+02:00 INFO (6): Register logger as index 'logger', can be get from Zend::Registry::get('logger')
+2013-06-07T11:08:01+02:00 INFO (6): Register logger as index 'logger', can be get from Zend::Registry::get('logger')
+2013-06-07T11:08:01+02:00 INFO (6): hash is from device: AND from this is d41d8cd98f00b204e9800998ecf8427e
+2013-06-07T11:08:01+02:00 INFO (6): Key Verification fail!!
+2013-06-07T11:08:01+02:00 INFO (6): Register logger as index 'logger', can be get from Zend::Registry::get('logger')

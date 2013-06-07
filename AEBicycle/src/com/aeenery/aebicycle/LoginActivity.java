@@ -91,11 +91,11 @@ public class LoginActivity extends BaseActivity {
 					writeToSharedPreferences();
 				}else{
 					showDialog("","正在登陆...");
-//					api.login(LoginActivity.this);
-//					
-					writeToSharedPreferences();
-					LoginActivity.login = true;
-					toMainActivity();
+					api.login(LoginActivity.this);
+////					
+//					writeToSharedPreferences();
+//					LoginActivity.login = true;
+//					toMainActivity();
 				}
 			}
 		}

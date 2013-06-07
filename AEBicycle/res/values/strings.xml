@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- 登录注册 -->
+    <string name="title_activity_login">登录板</string>
+    <string name="enter_username">用户名</string>
+    <string name="enter_password">密码</string>
+    <string name="user_login">登录</string>
+    <string name="user_register">注册</string>
+    <string name="enter_emailaddress">邮箱</string>
+    <string name="enter_display_name">显示名称</string>
+    <string name="submit">提交</string>
+    <string name="enter_password_again">确认密码</string>
+    <string name="password_not_the_same">两次输入的密码不一致</string>
+    <string name="user_register_success">注册成功</string>
+    <string name="server_busy">服务器繁忙，请稍后再试</string>
+    <string name="check_typo">请按要求填上表格注册</string>
+    <string name="app_name">精进电动自行车APP</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="menu_settings">设置</string>
+    <string name="title_activity_main">精进电动自行车</string>
+    <string name="title_activity_challenge">发起挑战</string>
+    <string name="challengeActivity">骑车计划</string>
+    <string name="maintab_manage">管理</string>
+    <string name="maintab_challenge">挑战</string>
+    <string name="maintab_community">社区</string>
+    <string name="maintab_weather">天气</string>
+    <string name="maintab_more">更多</string>
+    <string name="btSure">确定</string>
+
+    <string-array name="quick_city">
+        <item>北京</item>
+        <item>上海</item>
+        <item>广州</item>
+        <item>武汉</item>
+        <item>成都</item>
+        <item>深圳</item>
+        <item>杭州</item>
+        <item>西安</item>
+        <item>南京</item>
+        <item>郑州</item>
+        <item>长沙</item>
+        <item>沈阳</item>
+        <item>佛山</item>
+        <item>福州</item>
+        <item>哈尔滨</item>
+        <item>济南</item>
+        <item>天津</item>
+        <item>重庆</item>
+    </string-array>
+
+    <!-- Strings For ChallengeActivity List -->
+    <string-array name="challengemainlist">
+        <item>新建计划</item>
+        <item>查看计划</item>
+        <item>邀请朋友</item>
+        <item>计划历史</item>
+    </string-array>
+
+    <string name="btAdvance">高级</string>
+    <string name="map_dst_hint">城市 目的地</string>
+    <string name="route_my_location">我的位置</string>
+
+    <!-- Strings for server connection status -->
+    <!-- <string name="servername">http://192.168.1.103/</string> -->
+    <string name="servername">http://10.0.2.2/</string>
+    <!-- <string name="servername">http://ec2&#8211;54&#8211;251&#8211;17&#8211;187.ap&#8211;southeast&#8211;1.compute.amazonaws.com/bws/</string> -->
+    <string name="serverkey">aebike</string>
+    <string name="waitingforconnect">等待创建用户</string>
+    <string name="createusersuccess">用户创建成功</string>
+
+    <!-- 计划的参数 -->
+    <string name="plan_select_locations">选择地点</string>
+    <string name="plan_update">更新</string>
+    <string name="plan_creator">创建人</string>
+    <string name="plan_start_location">起点</string>
+    <string name="plan_terminate_location">终点 </string>
+    <string name="plan_name">计划名字</string>
+    <string name="plan_expected_distance">预计路程</string>
+    <string name="plan_expected_time">预计所需时间</string>
+    <string name="plan_start_time">开始时间</string>
+    <string name="plan_end_time">结束时间</string>
+    <string name="plan_ppl_expected">预计人数</string>
+    <string name="plan_ppl_going">参加人数</string>
+    <string name="plan_remark">描述</string>
+    <string name="plan_sponsor">赞助商</string>
+    <string name="plan_prizes">奖品</string>
+    <string name="plan_type">类型</string>
+    <string name="plan_status">状态</string>
+    <string name="plan_submit_button">提交</string>
+    <string name="plan_name_not_invalid">请输入计划名</string>
+    <string name="plan_start_not_invalid">请输入起点</string>
+    <string name="plan_terminate_not_invalid">请输入终点</string>
+    <string name="plan_create_success">创建计划成功</string>
+    <string name="title_activity_view_plan">查看计划</string>
+    <string name="title_activity_plan_detail">计划详情</string>
+    <string name="btn_plan_detail_join_plan">参加</string>
+    <string name="btn_plan_detail_quit_plan">退出</string>
+    <string name="btn_plan_detail_interest_plan">想去</string>
+    <string name="btn_plan_detail_cancel_plan">删除</string>
+    <string name="title_activity_route_selection">路线选择</string>
+    <string name="plan_check_route">查看路线</string>
+    <string name="title_activity_home">精进能源B计划</string>
+    <string name="title_activity_run_plan">计划行进</string>
+    <string name="title_activity_developing">正在开发中..</string>
+    <string name="title_activity_battery">电池信息</string>
+    <string name="weibosdk_close">关闭</string>
+    <string name="weibosdk_share_dialog_title">新浪微博</string>
+    <string name="weibosdk_send">发送</string>
+
+    <!-- 蓝牙电池 -->
+    <string name="title_paired_devices">已经匹配的设备</string>
+    <string name="title_other_devices">未匹配设备</string>
+    <string name="button_scan">搜索</string>
+    <string name="select_device">选择设备</string>
+    <string name="none_found">没找到设备</string>
+    <string name="scanning">正在搜索</string>
+    <string name="none_paired">没匹配</string>
+    <string name="title_activity_virtual_battery">VirtualBatteryActivity</string>
+    <string name="title_activity_battery_main">BatteryMainActivity</string>
+    <string name="title_activity_battery_description">BatteryDescriptionActivity</string>
+
+</resources>

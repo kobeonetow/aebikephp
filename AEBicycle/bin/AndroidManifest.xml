@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.aeenery.aebicycle"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-sdk
+        android:minSdkVersion="8"
+        android:targetSdkVersion="15" />
+
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <!-- 百度地位SDK权限 -->
+    <permission android:name="android.permission.BAIDU_LOCATION_SERVICE" >
+    </permission>
+
+    <uses-permission android:name="android.permission.BAIDU_LOCATION_SERVICE" >
+    </uses-permission>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" >
+    </uses-permission>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" >
+    </uses-permission>
+    <!-- <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"></uses-permission> -->
+    <!-- <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"></uses-permission> -->
+    <!-- <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"></uses-permission> -->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" >
+    </uses-permission>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" >
+    </uses-permission>
+    <!-- <uses-permission android:name="android.permission.INTERNET" /> -->
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" >
+    </uses-permission>
+    <uses-permission android:name="android.permission.READ_LOGS" >
+    </uses-permission>
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+
+    <supports-screens
+        android:anyDensity="true"
+        android:largeScreens="true"
+        android:normalScreens="true"
+        android:resizeable="true"
+        android:smallScreens="true" />
+
+    <application
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name" >
+        <activity
+            android:name="com.aeenery.aebicycle.HomeActivity"
+            android:label="@string/title_activity_home" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <!-- <activity -->
+        <!-- android:name="com.aeenery.aebicycle.MainActivity" -->
+        <!-- android:label="@string/title_activity_main" > -->
+        <!-- <intent-filter> -->
+        <!-- <action android:name="android.intent.action.MAIN" /> -->
+
+
+        <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+        <!-- </intent-filter> -->
+        <!-- </activity> -->
+        <activity android:name="com.aeenery.aebicycle.challenge.ChallengeActivity" >
+        </activity>
+        <activity android:name="com.aeenery.aebicycle.challenge.NormalPlanActivity" >
+        </activity>
+        <activity android:name="com.aeenery.aebicycle.challenge.QuickPlanActivity" >
+        </activity>
+        <activity android:name="com.aeenery.aebicycle.challenge.ChallengePlanActivity" >
+        </activity>
+        <activity android:name="com.aeenery.aebicycle.MainActivity" >
+        </activity>
+        <activity android:name="com.aeenery.aebicycle.weather.WeatherActivity" >
+        </activity>
+        <activity android:name="com.aeenery.aebicycle.MainTabActivity" >
+        </activity>
+        <activity android:name="com.aeenery.aebicycle.RegisterActivity" >
+        </activity>
+        <activity android:name="com.aeenery.aebicycle.battery.BatteryDetailActivity" >
+        </activity>
+
+        <service
+            android:name="com.baidu.location.f"
+            android:enabled="true"
+            android:permission="android.permission.BAIDU_LOCATION_SERVICE"
+            android:process=":remote" >
+            <intent-filter>
+                <action android:name="com.baidu.location.service_v2.6" >
+                </action>
+            </intent-filter>
+        </service>
+
+        <activity android:name="com.aeenery.aebicycle.challenge.RouteMapActivity" >
+        </activity>
+        <activity
+            android:name="com.aeenery.aebicycle.challenge.ViewPlanActivity"
+            android:label="@string/title_activity_view_plan" >
+        </activity>
+        <activity
+            android:name="com.aeenery.aebicycle.challenge.PlanDetailActivity"
+            android:label="@string/title_activity_plan_detail" >
+        </activity>
+        <activity
+            android:name="com.aeenery.aebicycle.challenge.RouteSelectionActivity"
+            android:label="@string/title_activity_route_selection" >
+        </activity>
+        <!-- <activity -->
+        <!-- android:name="com.aeenery.aebicycle.HomeActivity" -->
+        <!-- android:label="@string/title_activity_home" > -->
+        <!-- </activity> -->
+        <activity
+            android:name="com.aeenery.aebicycle.challenge.RunPlanActivity"
+            android:label="@string/title_activity_run_plan" >
+        </activity>
+        <activity
+            android:name="com.aeenery.aebicycle.DevelopingActivity"
+            android:label="@string/title_activity_developing" >
+        </activity>
+        <activity
+            android:name="com.aeenery.aebicycle.BatteryActivity"
+            android:label="@string/title_activity_battery" >
+        </activity>
+        <activity
+            android:name="com.aeenery.aebicycle.battery.DeviceListActivity"
+            android:label="@string/title_activity_battery" >
+        </activity>
+        <activity
+            android:name="com.aeenery.aebicycle.battery.BluetoothChat"
+            android:label="@string/title_activity_battery" >
+        </activity>
+        <activity android:name="com.aeenery.aebicycle.WeiBoEditActivity" >
+        </activity>
+        <activity
+            android:name="com.aeenery.aebicycle.VirtualBatteryActivity"
+            android:label="@string/title_activity_virtual_battery" >
+        </activity>
+
+        <service
+            android:name="com.aeenery.aebicycle.battery.BluetoothService"
+            android:icon="@drawable/bike"
+            android:label="btservice" >
+        </service>
+
+        <activity
+            android:name="com.aeenery.aebicycle.battery.BatteryMainActivity"
+            android:label="@string/title_activity_battery_main" >
+        </activity>
+        
+        <activity
+            android:name="com.aeenery.aebicycle.battery.BatteryDescriptionActivity"
+            android:label="@string/title_activity_battery_main" >
+        </activity>
+        <activity
+            android:name="com.aeenery.aebicycle.battery.BatteryVersionActivity"
+            android:label="@string/title_activity_battery_main" >
+        </activity>
+    </application>
+
+</manifest>

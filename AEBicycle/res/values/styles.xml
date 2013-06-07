@@ -1,0 +1,14 @@
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <style name="AppTheme" parent="android:Theme.Light" />
+
+    <style name="detailHeader" parent="@android:style/TextAppearance">
+        <item name="android:textSize">24sp</item>
+        <item name="android:textColor">#EEEEEE</item>
+    </style>
+    
+    <style name="detailText">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">#FFEE00</item>
+    </style>
+</resources>

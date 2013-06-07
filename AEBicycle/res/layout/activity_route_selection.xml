@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    >
+    <LinearLayout 
+	    android:id = "@+id/route_information_editing"
+    	android:orientation="vertical"
+    	android:layout_width="fill_parent"
+    	android:layout_height="wrap_content"
+    >
+     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content">
+<Button
+    	android:id="@+id/btn_selection_search_start_location"
+    	android:text="搜索"
+    	android:layout_width="wrap_content"
+    	android:layout_height="wrap_content"
+    />
+<EditText
+	android:id="@+id/selection_start_location"
+    android:layout_width="fill_parent" 
+    android:layout_height="wrap_content" 
+    android:hint="请输入"
+/>
+
+</LinearLayout>
+ <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content">
+<Button
+    	android:id="@+id/btn_selection_search_terminate_location"
+    	android:text="搜索"
+    	android:layout_width="wrap_content"
+    	android:layout_height="wrap_content"
+    />
+<EditText
+	android:id="@+id/select_end_location"
+    android:layout_width="fill_parent" 
+    android:layout_height="wrap_content" 
+    android:hint="请输入"
+/>
+
+</LinearLayout>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content">
+    <Button
+    	android:id="@+id/btn_selection_ride_button"
+    	android:text="骑车路线"
+    	android:layout_width="wrap_content"
+    	android:layout_height="wrap_content"
+    />
+    <Button
+    	android:id="@+id/btn_return_coordinate_button"
+    	android:text="确定"
+    	android:layout_width="wrap_content"
+    	android:layout_height="wrap_content"
+    />
+</LinearLayout>
+</LinearLayout>
+ <com.baidu.mapapi.MapView android:id="@+id/selection_bmapView"
+	android:layout_width="fill_parent" android:layout_height="fill_parent" 
+	android:clickable="true"     
+	/>
+</LinearLayout>

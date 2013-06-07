@@ -1,0 +1,113 @@
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"  
+    android:layout_width="fill_parent"  
+    android:layout_height="match_parent" 
+    android:scrollbars="vertical"> 
+    
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    tools:context=".BatteryDescriptionActivity" >
+
+    <Button 
+        android:id="@+id/btn_description_update"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:onClick="updateAll"
+        android:text="5秒自动更新一次(点击手动)"
+        />
+        
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        style="@style/detailHeader"
+        android:text="SOC状态" />
+    
+	<TextView
+	    android:id="@+id/tvsoc"
+	    android:layout_width = "fill_parent"
+	    android:layout_height="wrap_content"
+	    style="@style/detailText"
+	    />
+	
+	<TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/detailHeader"
+        android:text="剩余电量" />
+    
+	<TextView
+	    android:id="@+id/tvpowerremain"
+	    android:layout_width = "fill_parent"
+	    android:layout_height="wrap_content"
+	    style="@style/detailText"
+	    />
+	
+	<TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/detailHeader"
+        android:text="当前电流" />
+    
+	<TextView
+	    android:id="@+id/tvcurrentnow"
+	    android:layout_width = "fill_parent"
+	    android:layout_height="wrap_content"
+	    style="@style/detailText"
+	    />
+	
+	<TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/detailHeader"
+        android:text="总电压" />
+    
+	<TextView
+	    android:id="@+id/tvtotalvoltage"
+	    android:layout_width = "fill_parent"
+	    android:layout_height="wrap_content"
+	    style="@style/detailText"
+	    />
+	
+	<TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/detailHeader"
+        android:text="当前温度" />
+    
+	<TextView
+	    android:id="@+id/tvtempnow"
+	    android:layout_width = "fill_parent"
+	    android:layout_height="wrap_content"
+	    style="@style/detailText"
+	    />
+	<TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/detailHeader"
+        android:text="历史温度" />
+    
+	<TextView
+	    android:id="@+id/tvtemphistory"
+	    android:layout_width = "fill_parent"
+	    android:layout_height="wrap_content"
+	    style="@style/detailText"
+	    />
+	
+	<TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/detailHeader"
+        android:text="循环充电次数" />
+    
+	<TextView
+	    android:id="@+id/tvperiod"
+	    android:layout_width = "fill_parent"
+	    android:layout_height="wrap_content"
+	    style="@style/detailText"
+	    />
+	
+</LinearLayout>	
+</ScrollView>

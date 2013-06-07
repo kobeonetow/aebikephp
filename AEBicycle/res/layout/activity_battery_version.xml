@@ -1,0 +1,81 @@
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"  
+    android:layout_width="fill_parent"  
+    android:layout_height="match_parent" 
+    android:scrollbars="vertical"> 
+    
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    tools:context=".BatteryVersionActivity" >
+
+    <Button 
+        android:id="@+id/btn_version_update"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:onClick="updateAll"
+        android:text="手动更新"
+        />
+        
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        style="@style/detailHeader"
+        android:text="硬件版本号" />
+    
+	<TextView
+	    android:id="@+id/tvhardware"
+	    android:layout_width = "fill_parent"
+	    android:layout_height="wrap_content"
+	    style="@style/detailText"
+	    />
+	
+	<TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/detailHeader"
+        android:text="软件版本号" />
+    
+	<TextView
+	    android:id="@+id/tvsoftware"
+	    android:layout_width = "fill_parent"
+	    android:layout_height="wrap_content"
+	    style="@style/detailText"
+	    />
+	
+	<TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/detailHeader"
+        android:text="设备编号" />
+    
+	<TextView
+	    android:id="@+id/tvdeviceserial"
+	    android:layout_width = "fill_parent"
+	    android:layout_height="wrap_content"
+	    style="@style/detailText"
+	    />
+	
+	<TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/detailHeader"
+        android:text="电池组信息" />
+    
+	<TextView
+	    android:id="@+id/tvbatterygroupinfo"
+	    android:layout_width = "fill_parent"
+	    android:layout_height="wrap_content"
+	    style="@style/detailText"
+	    />
+	
+	<Button 
+	    android:id="@+id/btndevicename"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:text="修改设备名称"
+	    />
+</LinearLayout>	
+</ScrollView>

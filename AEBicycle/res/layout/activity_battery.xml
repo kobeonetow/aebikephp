@@ -1,0 +1,271 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"  
+    android:layout_width="fill_parent"  
+    android:layout_height="match_parent" 
+    android:scrollbars="vertical">   
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".BatteryActivity" >
+
+    
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp">
+    
+        <TextView
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:text="名称:" 
+        android:gravity="center_horizontal"
+        />
+        
+        <TextView
+            android:id="@+id/b_name"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            />
+        
+    </LinearLayout>
+    
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp">
+    
+        <TextView
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:text="电压:" 
+        android:gravity="center_horizontal"
+        />
+        
+        <TextView
+            android:id="@+id/b_voltage"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            />
+        
+    </LinearLayout>
+    
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp">
+    
+        <TextView
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:text="电流:" 
+        android:gravity="center_horizontal"
+        />
+        
+        <TextView
+            android:id="@+id/b_current"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            />
+        
+    </LinearLayout>
+    
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp">
+    
+        <TextView
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:text="剩余电量:" 
+        android:gravity="center_horizontal"
+        />
+        
+        <TextView
+            android:id="@+id/b_lvl"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            />
+        
+    </LinearLayout>
+    
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp">
+    
+        <TextView
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:text="使用时间:" 
+        android:gravity="center_horizontal"
+        />
+        
+        <TextView
+            android:id="@+id/b_time"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            />
+        
+    </LinearLayout>
+    
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp">
+    
+        <TextView
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:text="状态:" 
+        android:gravity="center_horizontal"
+        />
+        
+        <TextView
+            android:id="@+id/b_status"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            />
+        
+    </LinearLayout>
+    
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp">
+    
+        <TextView
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:text="连接中:" 
+        android:gravity="center_horizontal"
+        />
+        
+        <TextView
+            android:id="@+id/b_conn"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            />
+        
+    </LinearLayout>
+    
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp">
+    
+        <TextView
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:text="最大功率:" 
+        android:gravity="center_horizontal"
+        />
+        
+        <TextView
+            android:id="@+id/b_power"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            />
+        
+    </LinearLayout>
+    
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp">
+    
+        <TextView
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:text="型号:" 
+        android:gravity="center_horizontal"
+        />
+        
+        <TextView
+            android:id="@+id/b_model"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            />
+        
+    </LinearLayout>
+    
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
+        android:gravity="center">
+    
+        <Button
+            android:id="@+id/btnFindDevice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="启动服务" 
+        />
+        
+        <Button
+            android:id="@+id/btnUpdateAll"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="启动蓝牙"
+            />
+        
+    </LinearLayout>
+    <Button
+            android:id="@+id/functions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="关闭蓝牙和服务"
+            />
+    <Button
+            android:id="@+id/reconnectBT"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="重新连接"
+            />
+    <Button
+            android:id="@+id/stopServices"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="暂停服务"
+            />
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
+        android:gravity="center">
+        <Button 
+            android:id="@+id/sendMessageBT"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="发送"/>
+        <EditText 
+            android:id="@+id/sendMessageBTContain"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            />
+    </LinearLayout>
+</LinearLayout>
+</ScrollView>

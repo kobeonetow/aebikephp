@@ -1,0 +1,31 @@
+M-------->Mapper
+M01------>Useraccountmapper
+M02------>Planmapper
+M03------>Plansummarymapper
+M04------>Planassignmentmapper  
+M05------>Plansummarymapper
+M06------>Achievementmapper
+M07------>Achievementassignmentmapper
+M08------>Friendmapper
+M09------>Invitefriendmapper
+M10------>Usertravelexpmapper
+
+P-------->ProcessModel
+    
+
+//Define the status
+STATUS_NEW                  1
+STATUS_PLAN_FINISH          2
+STATUS_PLAN_ACCEPT          3
+STATUS_PLAN_INTEREST        4
+STATUS_PLAN_START           5
+STATUS_PLAN_TERMINATED      6
+STATUS_ACHIEVEMENT_GRAB     7
+STATUS_NEW_FRIEND           8
+STATUS_INVITE_FRIEND        9
+STATUS_REQUEST_FRIEND       A
+
+//Define the plan type Q:QUICK, N:NORMAL, C:CHALLENGE
+PLAN_TYPE_QUICK 'Q'
+PLAN_TYPE_NORMAL 'N'
+PLAN_TYPE_CHALLENGE 'C'

@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TabHost 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/activity_maintab_bg"
+    android:id="@android:id/tabhost">
+<!--     <LinearLayout  -->
+<!--         android:orientation="vertical" -->
+<!--         android:layout_width="fill_parent" -->
+<!--         android:layout_height="fill_parent"> -->
+<!--         <TabWidget  -->
+<!--             android:id="@android:id/tabs" -->
+<!--             android:layout_width="fill_parent" -->
+<!--             android:layout_height="wrap_content" -->
+<!--             android:visibility="gone"/> -->
+<!--             标签内容 -->
+<!--             <FrameLayout  -->
+<!--                 android:id="@android:id/tabcontent" -->
+<!--                 android:layout_width="fill_parent" -->
+<!--                 android:layout_height="0.0dip" -->
+<!--                 android:layout_weight="1.0"/> -->
+<!--             RadioGroup的作用是用于美化tab -->
+<!--             <RadioGroup  -->
+<!--                 android:id="@+id/tab_group" -->
+<!--                 android:layout_width="fill_parent" -->
+<!--             	android:layout_height="50dp" -->
+<!--             	android:gravity="center_vertical" -->
+<!--             	android:layout_gravity="bottom" -->
+<!--             	android:orientation="horizontal" -->
+<!--             	android:background="@drawable/tab" -->
+<!--             	android:checkedButton="@+id/tab1"> -->
+<!--                 android:button="@null"表示不显示radio那个选择框 -->
+<!--             	<RadioButton -->
+<!--                 	android:id="@+id/tab_community" -->
+<!--                 	android:tag="tab1" -->
+<!--                 	android:layout_width="fill_parent" -->
+<!--                 	android:layout_height="fill_parent" -->
+<!--                 	android:layout_weight="1.0" -->
+<!--                 	android:height="50dip" -->
+<!--                 	android:layout_marginTop="1.0dip" -->
+<!--                 	android:text="@string/maintab_community" -->
+<!--                 	android:button="@null" -->
+<!--                 	android:textSize="12sp" -->
+<!--                 	android:gravity="center" -->
+<!--                 	android:background="@drawable/tab_item"/> -->
+<!--             	<RadioButton -->
+<!--                 	android:id="@+id/tab_challenge" -->
+<!--                 	android:layout_width="fill_parent" -->
+<!--                 	android:layout_height="fill_parent" -->
+<!--                 	android:layout_weight="1.0" -->
+<!--                 	android:layout_marginTop="1.0dip" -->
+<!--                 	android:text="@string/maintab_challenge" -->
+<!--                 	android:button="@null" -->
+<!--                 	android:textSize="12sp" -->
+<!--                 	android:gravity="center" -->
+<!--                 	android:background="@drawable/tab_item"/> -->
+<!--             	<RadioButton -->
+<!--                 	android:id="@+id/tab_manage" -->
+<!--                 	android:layout_width="fill_parent" -->
+<!--                 	android:layout_height="fill_parent" -->
+<!--                 	android:layout_weight="1.0" -->
+<!--                 	android:layout_marginTop="1.0dip" -->
+<!--                 	android:text="@string/maintab_manage" -->
+<!--                 	android:button="@null" -->
+<!--                 	android:textSize="12sp" -->
+<!--                 	android:gravity="center" -->
+<!--                 	android:background="@drawable/tab_item"/> -->
+<!--             	<RadioButton -->
+<!--                 	android:id="@+id/tab_weather" -->
+<!--                 	android:layout_width="fill_parent" -->
+<!--                 	android:layout_height="fill_parent" -->
+<!--                 	android:layout_weight="1.0" -->
+<!--                 	android:layout_marginTop="1.0dip" -->
+<!--                 	android:text="@string/maintab_weather" -->
+<!--                 	android:textSize="12sp" -->
+<!--                 	android:button="@null" -->
+<!--                 	android:gravity="center" -->
+<!--                 	android:background="@drawable/tab_item"/> -->
+<!--             	<RadioButton -->
+<!--                 	android:id="@+id/tab_more" -->
+<!--                 	android:layout_width="fill_parent" -->
+<!--                 	android:layout_height="fill_parent" -->
+<!--                 	android:layout_weight="1.0" -->
+<!--                 	android:layout_marginTop="1.0dip" -->
+<!--                 	android:text="@string/maintab_more" -->
+<!--                 	android:textSize="12sp" -->
+<!--                 	android:button="@null" -->
+<!--                 	android:gravity="center" -->
+<!--                 	android:background="@drawable/tab_item"/> -->
+<!--             </RadioGroup> -->
+<!--     </LinearLayout> -->
+
+<LinearLayout 
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+        <TabWidget 
+            android:id="@android:id/tabs"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"/>
+            <!-- 标签内容 -->
+            <FrameLayout 
+                android:id="@android:id/tabcontent"
+                android:layout_width="fill_parent"
+                android:layout_height="0.0dip"
+                android:layout_weight="1.0"/>
+            <!-- RadioGroup的作用是用于美化tab -->
+            <RadioGroup 
+                android:id="@+id/tab_group"
+                android:layout_width="fill_parent"
+            	android:layout_height="50dp"
+            	android:gravity="center_vertical"
+            	android:layout_gravity="bottom"
+            	android:orientation="horizontal"
+            	android:background="@drawable/tab"
+            	android:checkedButton="@+id/tab1">
+                <!-- android:button="@null"表示不显示radio那个选择框 -->
+            	<RadioButton
+                	android:id="@+id/tab_community"
+                	android:tag="tab1"
+                	android:layout_width="fill_parent"
+                	android:layout_height="fill_parent"
+                	android:layout_weight="1.0"
+                	android:height="50dip"
+                	android:layout_marginTop="1.0dip"
+                	android:text="新闻"
+                	android:button="@null"
+                	android:textSize="12sp"
+                	android:gravity="center"
+                	android:background="@drawable/tab_item"/>
+            	<RadioButton
+                	android:id="@+id/tab_rules"
+                	android:layout_width="fill_parent"
+                	android:layout_height="fill_parent"
+                	android:layout_weight="1.0"
+                	android:layout_marginTop="1.0dip"
+                	android:text="规则"
+                	android:button="@null"
+                	android:textSize="12sp"
+                	android:gravity="center"
+                	android:background="@drawable/tab_item"/>
+            	<RadioButton
+                	android:id="@+id/tab_training"
+                	android:layout_width="fill_parent"
+                	android:layout_height="fill_parent"
+                	android:layout_weight="1.0"
+                	android:layout_marginTop="1.0dip"
+                	android:text="训练"
+                	android:button="@null"
+                	android:textSize="12sp"
+                	android:gravity="center"
+                	android:background="@drawable/tab_item"/>
+            	<RadioButton
+                	android:id="@+id/tab_annoucement"
+                	android:layout_width="fill_parent"
+                	android:layout_height="fill_parent"
+                	android:layout_weight="1.0"
+                	android:layout_marginTop="1.0dip"
+                	android:text="公告"
+                	android:textSize="12sp"
+                	android:button="@null"
+                	android:gravity="center"
+                	android:background="@drawable/tab_item"/>
+            	<RadioButton
+                	android:id="@+id/tab_enquiry"
+                	android:layout_width="fill_parent"
+                	android:layout_height="fill_parent"
+                	android:layout_weight="1.0"
+                	android:layout_marginTop="1.0dip"
+                	android:text="咨询"
+                	android:textSize="12sp"
+                	android:button="@null"
+                	android:gravity="center"
+                	android:background="@drawable/tab_item"/>
+            </RadioGroup>
+    </LinearLayout>
+</TabHost>

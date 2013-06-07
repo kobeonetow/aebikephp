@@ -1,0 +1,69 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"  
+    android:layout_width="fill_parent"  
+    android:layout_height="match_parent" 
+    android:scrollbars="vertical">   
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".VirtualBatteryActivity" >
+
+    <Button
+        android:id="@+id/batteryName"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="电池名称"/>
+    <Button
+        android:id="@+id/batteryVoltage"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="电压"/>
+    <Button
+        android:id="@+id/batteryCurrent"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="电流"/>
+    <Button
+        android:id="@+id/batteryLvl"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="电量"/>
+    <Button
+        android:id="@+id/batteryUsedTime"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="使用时间"/>
+    <Button
+        android:id="@+id/batteryState"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="状态"/>
+    <Button
+        android:id="@+id/batteryConnection"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="连接状态 信号"/>
+    <Button
+        android:id="@+id/batteryPower"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="功率"/>
+    <Button
+        android:id="@+id/batteryModel"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="型号"/>
+    <Button
+        android:id="@+id/batteryUpdateAll"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="全部更新"/>
+    <Button
+        android:id="@+id/batteryUpdateAllContinue"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="全部持续更新"/>
+</LinearLayout>
+</ScrollView>

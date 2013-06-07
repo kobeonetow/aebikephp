@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    >
+    
+     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content">
+		<TextView
+		    android:text="行走距离:"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:textSize="10sp"
+		    />
+		<TextView
+		    android:id="@+id/plan_run_distance"
+		    android:layout_width="0dip"
+		    android:layout_height="wrap_content"
+		    android:textSize="10sp"
+		    android:layout_weight="0.25"/>
+		<TextView
+		    android:text="速度:"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:textSize="10sp"/>
+		<TextView
+		    android:id="@+id/plan_run_speed"
+		    android:layout_width="0dip"
+		    android:layout_height="wrap_content"
+		    android:textSize="10sp"
+		    android:layout_weight="0.25"/>
+</LinearLayout>
+ <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content">
+		<TextView
+		    android:text="时间:"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:textSize="10sp"/>
+		<TextView
+		    android:id="@+id/plan_run_time"
+		    android:layout_width="0dip"
+		    android:layout_height="wrap_content"
+		    android:textSize="10sp"
+		    android:layout_weight="0.25"/>
+		<TextView
+		    android:text="电池使用率:"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:textSize="10sp"/>
+		<TextView
+		    android:id="@+id/plan_run_batteryusage"
+		    android:layout_width="0dip"
+		    android:layout_height="wrap_content"
+		    android:textSize="10sp"
+		    android:layout_weight="0.25"/>
+</LinearLayout>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content">
+		<TextView
+		    android:text="电量:"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:textSize="10sp"/>
+		<TextView
+		    android:id="@+id/plan_run_batterylife"
+		    android:layout_width="0dip"
+		    android:layout_height="wrap_content"
+		    android:textSize="10sp"
+		    android:layout_weight="0.25"/>
+		<TextView
+		    android:text="距离目的地:"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:textSize="10sp"/>
+		<TextView
+		    android:id="@+id/plan_run_distance_to_target"
+		    android:layout_width="0dip"
+		    android:layout_height="wrap_content"
+		    android:textSize="10sp"
+		    android:layout_weight="0.25"/>
+</LinearLayout>
+ <com.baidu.mapapi.MapView android:id="@+id/selection_bmapView"
+	android:layout_width="fill_parent" android:layout_height="fill_parent" 
+	android:clickable="true"     
+	/>
+</LinearLayout>

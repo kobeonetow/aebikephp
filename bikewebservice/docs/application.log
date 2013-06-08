@@ -1,0 +1,40 @@
+2013-06-08T10:10:23+02:00 INFO (6): Register logger as index 'logger', can be get from Zend::Registry::get('logger')
+2013-06-08T10:10:23+02:00 INFO (6): hash is from device:0d337b8707195e549b3dfd1954a363c2 AND from this is 0d337b8707195e549b3dfd1954a363c2
+2013-06-08T10:10:23+02:00 INFO (6): Key Verify!!
+2013-06-08T10:10:23+02:00 ERR (3): #0 D:\xampp\php\pear\Zend\Db\Statement.php(303): Zend_Db_Statement_Pdo->_execute(Array)
+#1 D:\xampp\php\pear\Zend\Db\Adapter\Abstract.php(480): Zend_Db_Statement->execute(Array)
+#2 D:\xampp\php\pear\Zend\Db\Adapter\Pdo\Abstract.php(238): Zend_Db_Adapter_Abstract->query(Object(Zend_Db_Table_Select), Array)
+#3 D:\xampp\php\pear\Zend\Db\Table\Abstract.php(1575): Zend_Db_Adapter_Pdo_Abstract->query(Object(Zend_Db_Table_Select))
+#4 D:\xampp\php\pear\Zend\Db\Table\Abstract.php(1390): Zend_Db_Table_Abstract->_fetch(Object(Zend_Db_Table_Select))
+#5 D:\www\ae\bikewebservice\application\models\Planassignmentmapper.php(144): Zend_Db_Table_Abstract->fetchAll(Object(Zend_Db_Table_Select))
+#6 D:\www\ae\bikewebservice\application\models\ProcessModel.php(728): Application_Model_Planassignmentmapper->getAssignment(1, '')
+#7 D:\www\ae\bikewebservice\application\controllers\IndexController.php(88): Application_Model_ProcessModel->getCurrentPlanList(Array)
+#8 D:\xampp\php\pear\Zend\Controller\Action.php(516): IndexController->getcurrentplanlistAction()
+#9 D:\xampp\php\pear\Zend\Controller\Dispatcher\Standard.php(308): Zend_Controller_Action->dispatch('getcurrentplanl...')
+#10 D:\xampp\php\pear\Zend\Controller\Front.php(954): Zend_Controller_Dispatcher_Standard->dispatch(Object(Zend_Controller_Request_Http), Object(Zend_Controller_Response_Http))
+#11 D:\xampp\php\pear\Zend\Application\Bootstrap\Bootstrap.php(97): Zend_Controller_Front->dispatch()
+#12 D:\xampp\php\pear\Zend\Application.php(366): Zend_Application_Bootstrap_Bootstrap->run()
+#13 D:\www\ae\bikewebservice\public\index.php(58): Zend_Application->run()
+#14 {main}
+2013-06-08T10:10:23+02:00 ERR (3): #0 D:\www\ae\bikewebservice\application\models\ProcessModel.php(728): Application_Model_Planassignmentmapper->getAssignment(1, '')
+#1 D:\www\ae\bikewebservice\application\controllers\IndexController.php(88): Application_Model_ProcessModel->getCurrentPlanList(Array)
+#2 D:\xampp\php\pear\Zend\Controller\Action.php(516): IndexController->getcurrentplanlistAction()
+#3 D:\xampp\php\pear\Zend\Controller\Dispatcher\Standard.php(308): Zend_Controller_Action->dispatch('getcurrentplanl...')
+#4 D:\xampp\php\pear\Zend\Controller\Front.php(954): Zend_Controller_Dispatcher_Standard->dispatch(Object(Zend_Controller_Request_Http), Object(Zend_Controller_Response_Http))
+#5 D:\xampp\php\pear\Zend\Application\Bootstrap\Bootstrap.php(97): Zend_Controller_Front->dispatch()
+#6 D:\xampp\php\pear\Zend\Application.php(366): Zend_Application_Bootstrap_Bootstrap->run()
+#7 D:\www\ae\bikewebservice\public\index.php(58): Zend_Application->run()
+#8 {main}
+2013-06-08T10:10:23+02:00 INFO (6): P000033 Get current plan list fail. M040007 Get assignment fail by planid 1 and userid . SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ')' at line 1
+2013-06-08T10:10:51+02:00 INFO (6): Register logger as index 'logger', can be get from Zend::Registry::get('logger')
+2013-06-08T10:10:51+02:00 INFO (6): hash is from device:46b2e5f5630a5ae5e7c0ac7a2c3e8591 AND from this is 46b2e5f5630a5ae5e7c0ac7a2c3e8591
+2013-06-08T10:10:51+02:00 INFO (6): Key Verify!!
+2013-06-08T10:10:51+02:00 INFO (6): Password same , ok
+2013-06-08T10:18:28+02:00 INFO (6): Register logger as index 'logger', can be get from Zend::Registry::get('logger')
+2013-06-08T10:18:28+02:00 INFO (6): hash is from device: AND from this is d41d8cd98f00b204e9800998ecf8427e
+2013-06-08T10:18:28+02:00 INFO (6): Key Verification fail!!
+2013-06-08T10:18:29+02:00 INFO (6): Register logger as index 'logger', can be get from Zend::Registry::get('logger')
+2013-06-08T10:21:29+02:00 INFO (6): Register logger as index 'logger', can be get from Zend::Registry::get('logger')
+2013-06-08T10:21:29+02:00 INFO (6): hash is from device: AND from this is d41d8cd98f00b204e9800998ecf8427e
+2013-06-08T10:21:29+02:00 INFO (6): Key Verification fail!!
+2013-06-08T10:21:29+02:00 INFO (6): Register logger as index 'logger', can be get from Zend::Registry::get('logger')

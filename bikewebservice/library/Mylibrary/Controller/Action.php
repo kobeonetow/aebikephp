@@ -9,8 +9,10 @@ class Mylibrary_Controller_Action extends Zend_Controller_Action{
     protected $_appKey;
     protected $_body;
     protected $_postdata = array();
+    protected $_logger;
 
     public function preDispatch() {
+        $this->_logger = Zend_Registry::get('logger');
         $this->getResponse()->setHeader('Content-type', 'application/json;charset=UTF-8');
         $this->getHeaders();
         if(!$this->callAccepted()) {
@@ -46,10 +48,8 @@ class Mylibrary_Controller_Action extends Zend_Controller_Action{
         $this->_appKey = $this->_request->getHeader('X-CapDyn-MACHASH');
         $this->_body = @file_get_contents('php://input');
         
-        $logger = Zend_Registry::get('logger');
-        $logger->err("appName:".$this->_appName);
-        $logger->err("appKey:".$this->_appKey);
-        print_r($this->_body);
+         $this->_logger->info("appName:".$this->_appName);
+         $this->_logger->info("appKey:".$this->_appKey);
     }
     
      public function callAccepted() {
@@ -60,22 +60,22 @@ class Mylibrary_Controller_Action extends Zend_Controller_Action{
             $key = $options[$this->_appName]['secret'];
         }
         $signature = $this->getMD5FromPost($key);
-        $logger = Zend_Registry::get('logger');
         
-        $logger->err("generatedKey:".$signature);
+        $this->_logger->info("generatedKey:".$signature);
         
-        $logger->info("hash is from device:".$this->_appKey ." AND from this is ".$signature);
+        $this->_logger->info("hash is from device:".$this->_appKey ." AND from this is ".$signature);
         if($signature === $this->_appKey) {
             $logger->info("Key Verify!!");
             return true;
         }
-        $logger->info("Key Verification fail!!");
+        $this->_logger->info("Key Verification fail!!");
         return false;
     }
     
     public function getMD5FromPost($secret){
         $str = '';
         foreach($_POST as $key=>$val){
+            $this->_logger->info("Key:".$key." Value:".$val);
             $str .= $key.$val;
 //            Zend_Registry::get("logger")->info("Pair: ". $key. "=".$val);
         }

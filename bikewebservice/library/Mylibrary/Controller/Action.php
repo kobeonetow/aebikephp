@@ -45,6 +45,11 @@ class Mylibrary_Controller_Action extends Zend_Controller_Action{
         $this->_appName = $this->_request->getHeader('X-CapDyn-AppName');
         $this->_appKey = $this->_request->getHeader('X-CapDyn-MACHASH');
         $this->_body = @file_get_contents('php://input');
+        
+        $logger = Zend_Registry::get('logger');
+        $logger->err("appName:".$this->appName);
+        $logger->err("appKey:".$this->appKey);
+        print_r($this->body);
     }
     
      public function callAccepted() {
@@ -56,6 +61,9 @@ class Mylibrary_Controller_Action extends Zend_Controller_Action{
         }
         $signature = $this->getMD5FromPost($key);
         $logger = Zend_Registry::get('logger');
+        
+        $logger->err("generatedKey:".$signature);
+        
         $logger->info("hash is from device:".$this->_appKey ." AND from this is ".$signature);
         if($signature === $this->_appKey) {
             $logger->info("Key Verify!!");

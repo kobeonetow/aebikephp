@@ -47,9 +47,9 @@ class Mylibrary_Controller_Action extends Zend_Controller_Action{
         $this->_body = @file_get_contents('php://input');
         
         $logger = Zend_Registry::get('logger');
-        $logger->err("appName:".$this->appName);
-        $logger->err("appKey:".$this->appKey);
-        print_r($this->body);
+        $logger->err("appName:".$this->_appName);
+        $logger->err("appKey:".$this->_appKey);
+        print_r($this->_body);
     }
     
      public function callAccepted() {

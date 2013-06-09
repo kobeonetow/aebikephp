@@ -149,8 +149,8 @@ public class HttpRestfulClient {
 		HttpURLConnection  connection = null;
 		try{
 		
-//		URL url = new URL("http://webservice.bike/"+suburi);
-		URL url = new URL("http://aebike.alienpig.org/"+suburi);
+		URL url = new URL("http://webservice.bike/"+suburi);
+//		URL url = new URL("http://aebike.alienpig.org/"+suburi);
 //		URL url = new URL("http://ec2-54-251-17-187.ap-southeast-1.compute.com/bws/" + suburi);
 //		URL url = new URL("http://ec2-54-251-17-187.ap-southeast-1.compute.amazonaws.com");
 		URLConnection urlConnection = url.openConnection();
@@ -182,7 +182,7 @@ public class HttpRestfulClient {
 		String strbud = "";
 		for(NameValuePair p : this.postdata){
 			if(strbud.equals(""))
-				strbud += URLEncoder.encode("$$$#$$$") + "&";
+				strbud += URLEncoder.encode("empty=empty") + "&";
 			else{
 				strbud += "&";
 			}

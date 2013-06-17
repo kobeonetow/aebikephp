@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.aeenery.aebicycle.entry.BicycleUtil;
 import com.aeenery.aebicycle.model.ServerAPI;
 import com.aeenery.aebicycle.model.Useraccount;
 
@@ -48,7 +49,9 @@ public class LoginActivity extends BaseActivity {
     	
     	api = new ServerAPI(LoginActivity.this,user);
     	if(LoginActivity.user != null && LoginActivity.user.getId() != null && LoginActivity.login == true){
-    		this.toMainActivity();
+    		//this.toMainActivity();
+    		this.setResult(BicycleUtil.LoginSuccess);
+    		this.finish();
     	}else{
     		api.useSharedPreferencesInfoLogin(this);
     	}
@@ -130,9 +133,10 @@ public class LoginActivity extends BaseActivity {
     
     public void toMainActivity(){
     	if(LoginActivity.login){
-    		Intent intent = new Intent();
-    		intent.setClass(this, HomeActivity.class);
-    		this.startActivity(intent);
+//    		Intent intent = new Intent();
+//    		intent.setClass(this, HomeActivity.class);
+//    		this.startActivity(intent);
+    		this.setResult(BicycleUtil.LoginSuccess);
     		this.finish();
     	}
     }

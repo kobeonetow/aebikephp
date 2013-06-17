@@ -162,7 +162,6 @@ public class BatteryVersionActivity extends Activity{
 		String capacity = sharedPreferences.getString("0030-1", "0");
 		String totalvoltage = sharedPreferences.getString("0030-2", "0mv");
 		String numbattery = sharedPreferences.getString("0030-3", "0个电池");
-		
 		tvBatteryInfo.setText("电池容量:"+capacity + "A." + "总电压:"+totalvoltage+"V."+"电池:"+numbattery+"节.");
 	}
 

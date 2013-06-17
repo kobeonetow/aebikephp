@@ -6,11 +6,14 @@ import android.app.TabActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.TabHost;
 
+import com.aeenery.aebicycle.challenge.ViewPlanActivity;
 import com.aeenery.aebicycle.entry.BicycleUtil;
+import com.aeenery.aebicycle.model.Plan;
 import com.aeenery.aebicycle.model.netManager;
 
 public class MainTabActivity extends TabActivity {
@@ -18,108 +21,27 @@ public class MainTabActivity extends TabActivity {
 	private RadioGroup tabGroup;
 	private netManager wifimgr;
 	private int tabIdx = BicycleUtil.tabCommunity;
-//	@Override
-//	protected void onCreate(Bundle savedInstanceState) {
-//		// TODO Auto-generated method stub
-//		super.onCreate(savedInstanceState);
-//		setContentView(R.layout.activity_maintab);
-//		wifimgr = new netManager(this);
-//		//获取tabIdx
-//		Bundle bundle = getIntent().getExtras();
-//		//如果为空，获取一个默认值
-//		if (bundle != null) {
-//			tabIdx = bundle.getInt(BicycleUtil.curTab,BicycleUtil.tabCommunity);
-//		}
-//		//获取TabHost对象
-//		mTabHost = getTabHost();
-//		tabGroup = (RadioGroup)findViewById(R.id.tab_group);
-//		//设置其标签和图标setIndicator
-//		//设置内容setContent
-//		//因为在xml中已经把TabWidget隐藏了，显示不了效果,但还是要设置,通过setOnCheckedChangeListener
-//		//作为纽带
-//		mTabHost.addTab(mTabHost.newTabSpec("tab_community")
-//				.setIndicator(getResources().getText(R.string.maintab_community))
-//				.setContent(new Intent(MainTabActivity.this,MainActivity.class)));
-//		mTabHost.addTab(mTabHost.newTabSpec("tab_challenge")
-//				.setIndicator(getResources().getText(R.string.maintab_challenge))
-//				.setContent(new Intent(MainTabActivity.this,ChallengeActivity.class)));
-//		mTabHost.addTab(mTabHost.newTabSpec("tab_manage")
-//				.setIndicator(getResources().getText(R.string.maintab_manage))
-//				.setContent(new Intent(MainTabActivity.this,MainActivity.class)));
-//		mTabHost.addTab(mTabHost.newTabSpec("tab_weather")
-//				.setIndicator(getResources().getText(R.string.maintab_weather))
-//				.setContent(new Intent(MainTabActivity.this,WeatherActivity.class)));
-//		mTabHost.addTab(mTabHost.newTabSpec("tab_more")
-//				.setIndicator(getResources().getText(R.string.maintab_more))
-//				.setContent(new Intent(MainTabActivity.this,RouteMapActivity.class)));
-//		mTabHost.setCurrentTab(tabIdx);
-//		
-//		tabGroup.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-//			
-//			@Override
-//			public void onCheckedChanged(RadioGroup group, int checkedId) {
-//				// TODO Auto-generated method stub
-//				switch(checkedId){
-//				case R.id.tab_community:
-//					mTabHost.setCurrentTabByTag("tab_community");
-//					break;
-//				case R.id.tab_challenge:
-//					mTabHost.setCurrentTabByTag("tab_challenge");
-//					break;
-//				case R.id.tab_manage:
-//					mTabHost.setCurrentTabByTag("tab_manage");
-//					break;
-//				case R.id.tab_weather:
-//					mTabHost.setCurrentTabByTag("tab_weather");
-//					break;
-//				case R.id.tab_more:
-//					mTabHost.setCurrentTabByTag("tab_more");
-//					break;
-//				}
-//			}
-//		});
-//		
-//		if (!wifimgr.checkConnect()) {
-//			Builder dialog = new AlertDialog.Builder(this);
-//			dialog.setTitle("通知");
-//			dialog.setMessage("是否进行网络连接,若不连接,程序可能不能访问数据并强行退出");
-//			dialog.setPositiveButton("网络设置", new DialogInterface.OnClickListener() {
-//				
-//				@Override
-//				public void onClick(DialogInterface dialog, int which) {
-//					// TODO Auto-generated method stub
-//					startActivity(new Intent(android.provider.Settings.ACTION_WIRELESS_SETTINGS));
-//					dialog.dismiss();
-//				}
-//			});
-//			dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-//				
-//				@Override
-//				public void onClick(DialogInterface dialog, int which) {
-//					// TODO Auto-generated method stub
-//					dialog.dismiss();
-//					finish();
-//				}
-//			});
-//			dialog.show();
-//		}
-//	}
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
+		isNetwork();
+		login();
 		setContentView(R.layout.activity_maintab);
-		wifimgr = new netManager(this);
+		
 		//获取tabIdx
 		Bundle bundle = getIntent().getExtras();
+		
 		//如果为空，获取一个默认值
 		if (bundle != null) {
 			tabIdx = bundle.getInt(BicycleUtil.curTab,BicycleUtil.tabCommunity);
 		}
+		
 		//获取TabHost对象
 		mTabHost = getTabHost();
 		tabGroup = (RadioGroup)findViewById(R.id.tab_group);
+		
 		//设置其标签和图标setIndicator
 		//设置内容setContent
 		//因为在xml中已经把TabWidget隐藏了，显示不了效果,但还是要设置,通过setOnCheckedChangeListener
@@ -166,6 +88,18 @@ public class MainTabActivity extends TabActivity {
 			}
 		});
 		
+	}
+	
+	private void login(){
+		if(LoginActivity.login == false){
+			this.startActivityForResult(new Intent(this, LoginActivity.class), BicycleUtil.RequireLogin);
+		}
+	}
+	
+	private void isNetwork(){
+		if(wifimgr == null){
+			wifimgr = new netManager(this);
+		}
 		if (!wifimgr.checkConnect()) {
 			Builder dialog = new AlertDialog.Builder(this);
 			dialog.setTitle("通知");
@@ -192,4 +126,13 @@ public class MainTabActivity extends TabActivity {
 		}
 	}
 	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data){
+		super.onActivityResult(requestCode, resultCode, data);
+		if(requestCode == BicycleUtil.RequireLogin){
+			if(resultCode != BicycleUtil.LoginSuccess){
+				this.finish();
+			}
+		}
+	}
 }

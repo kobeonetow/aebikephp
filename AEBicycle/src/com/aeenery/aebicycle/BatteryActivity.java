@@ -115,10 +115,10 @@ public class BatteryActivity extends BaseActivity {
 		switch(requestCode){
 		case BicycleUtil.REQUEST_ENABLE_BT:
 			if(resultCode == RESULT_OK){
-				Toast.makeText(this, "蓝牙已启用", Toast.LENGTH_LONG).show();
+				Toast.makeText(this,"qiyong",Toast.LENGTH_LONG);
 				setupService();
 			}else if(resultCode == RESULT_CANCELED){
-				Toast.makeText(this, "蓝牙未启用，页面无法正常显示", Toast.LENGTH_LONG).show();
+				Toast.makeText(this, "钃濈墮鏈惎鐢紝椤甸潰鏃犳硶姝ｅ父鏄剧ず", Toast.LENGTH_LONG).show();
 				this.finish();
 				return;
 			}

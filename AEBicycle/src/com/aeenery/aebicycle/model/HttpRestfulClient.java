@@ -67,76 +67,7 @@ public class HttpRestfulClient {
 		this.postdata = new ArrayList<NameValuePair>();
 	}
 	
-	/**
-	 * call�����Ѳ�������post���͵���������web serviceȥ��
-	 * ����һ�����õ�Json Object��
-	 * @param suburl
-	 * �������ĺ�۵�ַ��û�ÿ�Ϊnull
-	 * @return
-	 * 
-	 * @throws Exception
-	 */
-//	public JSONObject call(String suburi){
-//		//��ʼ��httpclient ��post ��
-//		HttpClient httpclient = new DefaultHttpClient();
-//		HttpPost post = new HttpPost();
-//		
-//		//����post����
-//		try{
-//			post.setEntity(new UrlEncodedFormEntity(this.postdata));
-//		}catch (Exception e) {
-//			Log.i("POST","POST cannot be url encoded");
-//			return null;
-//		}
-//		
-//		//MD5 ��ϣֵ���������������֤
-//		String signature  = signatureMD5();
-//		
-//		//����request header
-//		post.setHeader("X-CapDyn-AppName", "aebike");
-//		post.setHeader("X-CapDyn-MACHASH", signature);
-//		post.setHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
-//		
-//		//���÷�������ַ
-//		try {
-////			post.setURI(new URI("http://ec2-54-251-17-187.ap-southeast-1.compute.amazonaws.com/bws/"));
-////			post.setURI(new URI("http://10.0.2.2/index/createuser"));
-//			post.setURI(new URI(uri+suburi));
-//			Log.i("URI","string is :" + uri+suburi);
-//		} catch (URISyntaxException e1) {
-//			Log.i("URI","Convert String to URI fail, string is :" + uri+suburi);
-//		}
-//		
-////		//����post request������������ȡresponce
-//		HttpResponse responce = null;
-//		try {
-//			responce = httpclient.execute(post);
-//		} catch (ClientProtocolException e) {
-//			Log.i("HTTPCLIENT Protocol" , e.getMessage());
-//		} catch (IOException e) {
-//			Log.i("HTTPCLIENT IO" , e.getMessage());
-//		}
-////		
-//		//��responceת��Ϊjson Obejct
-//		HttpEntity entity = responce.getEntity();
-//		String result=null;
-//		try {
-//			result = HttpRestfulClient.convertStreamToString(entity.getContent());
-//		} catch (Exception e) {
-//			Log.i("CONVERT RESPONCE","Cannot convert the responce content to string");
-//		}
-//		JSONObject json=null;
-//		try {
-//			json = new JSONObject(result);
-//		} catch (JSONException e) {
-//			Log.i("JSON","Convert json object fail from responce content");
-//			json = new JSONObject();
-//		}
-//		Log.i("JSON RESPONCE", json.toString());
-//		return json;
-//	}
-	
-	
+
 	/**
 	 * Test call httpclient
 	 * @throws IOException 
@@ -149,8 +80,8 @@ public class HttpRestfulClient {
 		HttpURLConnection  connection = null;
 		try{
 		
-		URL url = new URL("http://webservice.bike/"+suburi);
-//		URL url = new URL("http://aebike.alienpig.org/"+suburi);
+//		URL url = new URL("http://webservice.bike/"+suburi);
+		URL url = new URL("http://aebike.alienpig.org/"+suburi);
 //		URL url = new URL("http://ec2-54-251-17-187.ap-southeast-1.compute.com/bws/" + suburi);
 //		URL url = new URL("http://ec2-54-251-17-187.ap-southeast-1.compute.amazonaws.com");
 		URLConnection urlConnection = url.openConnection();

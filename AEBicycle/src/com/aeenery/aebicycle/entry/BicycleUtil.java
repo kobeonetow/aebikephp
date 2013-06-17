@@ -22,13 +22,15 @@ public interface BicycleUtil {
 	public final static int ibRouteSearchIgnoreView = 3;
 	
 	//验证信息
-	public final static int RequireUsername = 1;
-	public final static int RequirePassword = 2;
-	public final static int PasswordNotEqual = 3;
-	public final static int PasswordWrong = 4;
-	public final static int RequireEmail =5;
-	public final static int RequireName = 6;
-	public final static int Valid = 0;
+	public final static int RequireLogin = 0x01;
+	public final static int LoginSuccess = 0x11;
+	public final static int RequireUsername = 0x02;
+	public final static int RequirePassword = 0x03;
+	public final static int PasswordNotEqual = 0x04;
+	public final static int PasswordWrong = 0x04;
+	public final static int RequireEmail = 0x05;
+	public final static int RequireName = 0x06;
+	public final static int Valid = 0x07;
 	
 	//计划验证信息
 	public final static int RequirePlanName = 1;

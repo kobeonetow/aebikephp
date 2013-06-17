@@ -5,6 +5,7 @@ import java.io.IOException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -18,6 +19,7 @@ import com.aeenery.aebicycle.RegisterActivity;
 import com.aeenery.aebicycle.challenge.PlanDetailActivity;
 import com.aeenery.aebicycle.challenge.QuickPlanActivity;
 import com.aeenery.aebicycle.challenge.ViewPlanActivity;
+import com.aeenery.aebicycle.entry.BicycleUtil;
 
 public class ServerAPI {
 	
@@ -91,7 +93,7 @@ public class ServerAPI {
 			}else{
 				Intent intent = new Intent();
 				intent.setClass(context, LoginActivity.class);
-				context.startActivity(intent);
+				((Activity) context).startActivityForResult(intent, BicycleUtil.RequireLogin);
 				return;
 			}
 		}

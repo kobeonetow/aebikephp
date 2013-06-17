@@ -26,6 +26,7 @@ import android.widget.Toast;
 import com.aeenery.aebicycle.BaseActivity;
 import com.aeenery.aebicycle.R;
 import com.aeenery.aebicycle.entry.BicycleUtil;
+import com.aeenery.aebicycle.entry.UtilFunction;
 import com.aeenery.aebicycle.entry.WeatherInfo;
 import com.aeenery.aebicycle.model.HttpParseJsonUtil;
 import com.aeenery.aebicycle.model.HttpParseXmlUtil;
@@ -50,6 +51,9 @@ public class WeatherActivity extends BaseActivity {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_weather);
+		
+		//CheckNetworkConnection
+		UtilFunction.checkNetConnection(this);
 		
 		//获取默认城市
 		defCode = getSharedPreferences(BicycleUtil.fileDefaultCode, Context.MODE_PRIVATE);

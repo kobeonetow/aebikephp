@@ -135,22 +135,22 @@ public class BatteryDescriptionActivity extends Activity implements SenderContex
 		double power_now = Double.parseDouble(sharedPreferences.getString("00A6-3", ""));
 		double power_max = Double.parseDouble(sharedPreferences.getString("00A6-4", ""));
 		
-		tvsoc.setText("绝对SOC:" + socAbsolute+",相对SOC:" + socRelative);
+		tvsoc.setText("缁濆SOC:" + socAbsolute+",鐩稿SOC:" + socRelative);
 		double d = power_now/power_max * 100;
 		tvpowerremain.setText(power_now + " / " + power_max + " = " + (int)d + "%");
 	}
 
 	public void setTempHistory() {
-		String highest = sharedPreferences.getString("0080-1", "0 °C");
-		String lowest = sharedPreferences.getString("0080-2", "0 °C");
-		tvtemphistory.setText("最高温度:"+highest+"°C" + " , 最低温度:"+lowest+"°C");
+		String highest = sharedPreferences.getString("0080-1", "0 掳C");
+		String lowest = sharedPreferences.getString("0080-2", "0 掳C");
+		tvtemphistory.setText("鏈�珮娓╁害:"+highest+"掳C" + " , 鏈�綆娓╁害:"+lowest+"掳C");
 	}
 
 	public void setTempNow() {
-		String temp = sharedPreferences.getString("00A2-5", "0°C");
+		String temp = sharedPreferences.getString("00A2-5", "0掳C");
 		String[] sa = temp.split(",");
 		if(sa.length > 0){
-			tvtempnow.setText(sa[0] + "°C");
+			tvtempnow.setText(sa[0] + "掳C");
 		}
 	}
 

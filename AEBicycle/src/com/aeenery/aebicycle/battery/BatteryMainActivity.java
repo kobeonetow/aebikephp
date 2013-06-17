@@ -268,7 +268,7 @@ public class BatteryMainActivity extends Activity implements SenderContext{
 				}
 				
 				
-				String timeleft =  sharedPreferences.getString("00AA-1", "0") + "小时" +  sharedPreferences.getString("00AA-2", "0")+ "分";;
+				String timeleft =  sharedPreferences.getString("00AA-1", "0") + "小时" +  sharedPreferences.getString("00AA-2", "0")+ "分";
 				tvTimeLeft.setText("剩余:"+timeleft);
 			}
 		}

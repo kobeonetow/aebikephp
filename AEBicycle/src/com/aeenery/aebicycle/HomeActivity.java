@@ -95,8 +95,6 @@ public class HomeActivity extends BaseActivity {
 	}
 
 	public void init() {
-		wifimgr = new netManager(this); 
-		checkNetConnection();
 		btnZone = (ImageButton) findViewById(R.id.home_image_button_1);
 		btnWeather = (ImageButton) findViewById(R.id.home_image_button_2);
 		btnMap = (ImageButton) findViewById(R.id.home_image_button_3);
@@ -154,38 +152,7 @@ public class HomeActivity extends BaseActivity {
 		btnOthers.setOnClickListener(click);
 	}
 
-	public void checkNetConnection() {
-		if (wifimgr == null) {
-			wifimgr = new netManager(this);
-		}
-		if (!wifimgr.checkConnect()) {
-			Builder dialog = new AlertDialog.Builder(this);
-			dialog.setTitle("通知");
-			dialog.setMessage("是否进行网络连接,若不连接,程序可能不能访问数据并强行退出");
-			dialog.setPositiveButton("网络设置",
-					new DialogInterface.OnClickListener() {
-
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-							// TODO Auto-generated method stub
-							startActivity(new Intent(
-									android.provider.Settings.ACTION_WIRELESS_SETTINGS));
-							dialog.dismiss();
-						}
-					});
-			dialog.setNegativeButton("取消",
-					new DialogInterface.OnClickListener() {
-
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-							// TODO Auto-generated method stub
-							dialog.dismiss();
-							finish();
-						}
-					});
-			dialog.show();
-		}
-	}
+	
 	
 	private void enableBluetoothAdapter(){
 		if (!mBluetoothAdapter.isEnabled()) {
@@ -202,7 +169,6 @@ public class HomeActivity extends BaseActivity {
 //	            Context.BIND_AUTO_CREATE);
 	}
     
-	
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(D) Log.d(TAG, "onActivityResult " + resultCode);
         switch (requestCode) {

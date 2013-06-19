@@ -26,8 +26,9 @@ import com.aeenery.aebicycle.battery.BluetoothService;
 import com.aeenery.aebicycle.battery.DeviceListActivity;
 import com.aeenery.aebicycle.bms.BMSController;
 import com.aeenery.aebicycle.challenge.ChallengeActivity;
-import com.aeenery.aebicycle.challenge.RouteMapActivity;
+//import com.aeenery.aebicycle.challenge.RouteMapActivity;
 import com.aeenery.aebicycle.entry.BicycleUtil;
+import com.aeenery.aebicycle.map.MapActivity;
 import com.aeenery.aebicycle.model.netManager;
 import com.aeenery.aebicycle.weather.WeatherActivity;
 
@@ -39,7 +40,6 @@ public class HomeActivity extends BaseActivity {
     
     private BluetoothService s;
 	
-	private netManager wifimgr;
 	private ImageButton btnZone;
 	private ImageButton btnWeather;
 	private ImageButton btnMap;
@@ -118,9 +118,13 @@ public class HomeActivity extends BaseActivity {
 					intent = new Intent(HomeActivity.this,
 							WeatherActivity.class);
 					break;
+//				case R.id.home_image_button_3:
+//					intent = new Intent(HomeActivity.this,
+//							RouteMapActivity.class);
+//					break;
 				case R.id.home_image_button_3:
 					intent = new Intent(HomeActivity.this,
-							RouteMapActivity.class);
+							MapActivity.class);
 					break;
 				case R.id.home_image_button_4:
 					intent = new Intent(HomeActivity.this,

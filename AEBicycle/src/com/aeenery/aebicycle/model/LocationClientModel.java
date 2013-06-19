@@ -3,6 +3,7 @@ package com.aeenery.aebicycle.model;
 import android.app.Activity;
 import android.util.Log;
 
+import com.aeenery.aebicycle.map.MyLocationListener;
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.baidu.location.BDNotifyListener;

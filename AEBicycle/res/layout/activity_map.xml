@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+	<com.baidu.mapapi.map.MapView android:id="@+id/bmapsView"
+		android:layout_width="fill_parent" 
+		android:layout_height="fill_parent"
+		android:clickable="true" />
+    <LinearLayout 
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/map_search_bg_selector"
+        android:layout_marginTop="8dp"
+        android:orientation="horizontal">
+        <EditText
+            android:id="@+id/etMapDst" 
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:hint="@string/map_dst_hint"
+            android:background="@drawable/map_search_dst_edit"
+            android:singleLine="true"
+            android:textSize="16sp"/>
+        <ImageButton 
+            android:id="@+id/ibMapSearch" 
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:src="@drawable/map_search"
+            android:background="#00ffffff"/>
+         <ImageButton 
+            android:id="@+id/ibMapRoute" 
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:src="@drawable/map_route"
+            android:background="#00ffffff"/>
+         <ImageButton 
+            android:id="@+id/ibMapInfo" 
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:src="@drawable/map_list"
+            android:background="#00ffffff"/>
+    </LinearLayout>
+</FrameLayout>

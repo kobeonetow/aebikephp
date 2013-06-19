@@ -312,25 +312,25 @@ public class PlanDetailActivity extends BaseActivity {
 	class CheckRouteListener implements OnClickListener{
 		@Override
 		public void onClick(View arg0) {
-			Intent intent = new Intent(PlanDetailActivity.this, RouteSelectionActivity.class);
-			Bundle bundle = new Bundle();
-			bundle.putBoolean("checkRoute", true);
-			String start = p.getStartlocation();
-			String end = p.getEndlocation();
-			if(start.length() > 0){
-				bundle.putBoolean("hasStart", true);
-				bundle.putString("startPoiName", start.substring(0, start.indexOf("(")));
-				bundle.putInt("startPoiLat", Integer.parseInt(start.substring(start.indexOf("(")+1, start.indexOf(","))));
-				bundle.putInt("startPoiLon", Integer.parseInt(start.substring(start.indexOf(",")+1, start.indexOf(")"))));
-			}
-			if(end.length() > 0){
-				bundle.putBoolean("hasTerminate", true);
-				bundle.putString("terminatePoiName", end.substring(0, end.indexOf("(")));
-				bundle.putInt("terminatePoiLat", Integer.parseInt(end.substring(end.indexOf("(")+1, end.indexOf(","))));
-				bundle.putInt("terminatePoiLon", Integer.parseInt(end.substring(end.indexOf(",")+1, end.indexOf(")"))));
-			}
-			intent.putExtras(bundle);
-			PlanDetailActivity.this.startActivity(intent);
+//			Intent intent = new Intent(PlanDetailActivity.this, RouteSelectionActivity.class);
+//			Bundle bundle = new Bundle();
+//			bundle.putBoolean("checkRoute", true);
+//			String start = p.getStartlocation();
+//			String end = p.getEndlocation();
+//			if(start.length() > 0){
+//				bundle.putBoolean("hasStart", true);
+//				bundle.putString("startPoiName", start.substring(0, start.indexOf("(")));
+//				bundle.putInt("startPoiLat", Integer.parseInt(start.substring(start.indexOf("(")+1, start.indexOf(","))));
+//				bundle.putInt("startPoiLon", Integer.parseInt(start.substring(start.indexOf(",")+1, start.indexOf(")"))));
+//			}
+//			if(end.length() > 0){
+//				bundle.putBoolean("hasTerminate", true);
+//				bundle.putString("terminatePoiName", end.substring(0, end.indexOf("(")));
+//				bundle.putInt("terminatePoiLat", Integer.parseInt(end.substring(end.indexOf("(")+1, end.indexOf(","))));
+//				bundle.putInt("terminatePoiLon", Integer.parseInt(end.substring(end.indexOf(",")+1, end.indexOf(")"))));
+//			}
+//			intent.putExtras(bundle);
+//			PlanDetailActivity.this.startActivity(intent);
 		}
 	}
 	
@@ -342,8 +342,8 @@ public class PlanDetailActivity extends BaseActivity {
 	}
 	
 	public void runPlanActivity(){
-		Intent intent = new Intent(PlanDetailActivity.this,RunPlanActivity.class);
-		this.startActivityForResult(intent, BicycleUtil.RUN_PLAN);
+//		Intent intent = new Intent(PlanDetailActivity.this,RunPlanActivity.class);
+//		this.startActivityForResult(intent, BicycleUtil.RUN_PLAN);
 	}
 	
 	class EndPlanListener implements OnClickListener{

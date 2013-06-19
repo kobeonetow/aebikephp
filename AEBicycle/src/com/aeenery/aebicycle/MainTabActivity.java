@@ -13,21 +13,21 @@ import android.widget.TabHost;
 
 import com.aeenery.aebicycle.challenge.ViewPlanActivity;
 import com.aeenery.aebicycle.entry.BicycleUtil;
+import com.aeenery.aebicycle.entry.UtilFunction;
 import com.aeenery.aebicycle.model.Plan;
 import com.aeenery.aebicycle.model.netManager;
 
 public class MainTabActivity extends TabActivity {
 	public TabHost mTabHost;
 	private RadioGroup tabGroup;
-	private netManager wifimgr;
 	private int tabIdx = BicycleUtil.tabCommunity;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-		isNetwork();
-		login();
+		UtilFunction.checkNetConnection(this);
+		UtilFunction.login(this);
 		setContentView(R.layout.activity_maintab);
 		
 		//获取tabIdx
@@ -88,42 +88,6 @@ public class MainTabActivity extends TabActivity {
 			}
 		});
 		
-	}
-	
-	private void login(){
-		if(LoginActivity.login == false){
-			this.startActivityForResult(new Intent(this, LoginActivity.class), BicycleUtil.RequireLogin);
-		}
-	}
-	
-	private void isNetwork(){
-		if(wifimgr == null){
-			wifimgr = new netManager(this);
-		}
-		if (!wifimgr.checkConnect()) {
-			Builder dialog = new AlertDialog.Builder(this);
-			dialog.setTitle("通知");
-			dialog.setMessage("是否进行网络连接,若不连接,程序可能不能访问数据并强行退出");
-			dialog.setPositiveButton("网络设置", new DialogInterface.OnClickListener() {
-				
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-					// TODO Auto-generated method stub
-					startActivity(new Intent(android.provider.Settings.ACTION_WIRELESS_SETTINGS));
-					dialog.dismiss();
-				}
-			});
-			dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-				
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-					// TODO Auto-generated method stub
-					dialog.dismiss();
-					finish();
-				}
-			});
-			dialog.show();
-		}
 	}
 	
 	@Override

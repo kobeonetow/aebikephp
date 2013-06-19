@@ -119,5 +119,7 @@
     <string name="title_activity_virtual_battery">VirtualBatteryActivity</string>
     <string name="title_activity_battery_main">BatteryMainActivity</string>
     <string name="title_activity_battery_description">BatteryDescriptionActivity</string>
+    <string name="title_activity_map">MapActivity</string>
+    <string name="action_settings">Settings</string>
 
 </resources>

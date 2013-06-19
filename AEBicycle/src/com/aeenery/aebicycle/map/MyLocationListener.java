@@ -1,4 +1,4 @@
-package com.aeenery.aebicycle.model;
+package com.aeenery.aebicycle.map;
 
 import android.util.Log;
 

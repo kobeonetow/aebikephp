@@ -7,11 +7,18 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 
+import com.aeenery.aebicycle.LoginActivity;
 import com.aeenery.aebicycle.model.netManager;
 
 public class UtilFunction {
 
 	private static netManager wifimgr = null;
+	
+	public static  void login(Context context){
+		if(LoginActivity.login == false){
+			((Activity) context).startActivityForResult(new Intent(context, LoginActivity.class), BicycleUtil.RequireLogin);
+		}
+	}
 	
 	public static void checkNetConnection(final Context context) {
 		if (wifimgr == null) {

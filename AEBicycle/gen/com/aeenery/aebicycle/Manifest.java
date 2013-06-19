@@ -9,8 +9,6 @@ package com.aeenery.aebicycle;
 
 public final class Manifest {
     public static final class permission {
-        /**  百度地位SDK权限 
-         */
         public static final String BAIDU_LOCATION_SERVICE="android.permission.BAIDU_LOCATION_SERVICE";
     }
 }

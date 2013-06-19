@@ -1,5 +1,7 @@
 package com.aeenery.aebicycle.challenge;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -24,7 +26,7 @@ public class QuickPlanActivity extends BaseActivity {
 	private EditText etStartLocation = null;
 	private EditText etTerminateLocation = null;
 	private TextView tvExpectedTime;
-	private EditText etPplExpected;
+	private Button btPplExpected;
 	private EditText etRemark;
 	private EditText etSponsor;
 	private EditText etPrize;
@@ -52,7 +54,7 @@ public class QuickPlanActivity extends BaseActivity {
 		btnSubmit = (Button)findViewById(R.id.plan_submit);
 		tvEstimateDistance = (TextView)findViewById(R.id.plan_estimate_distance);
 		tvExpectedTime = (TextView)findViewById(R.id.plan_expected_time);
-		etPplExpected = (EditText)findViewById(R.id.pplexpected);
+		btPplExpected = (Button)findViewById(R.id.pplexpected);
 		etRemark = (EditText)findViewById(R.id.planremark);
 		etSponsor = (EditText)findViewById(R.id.plansponsor);
 		etPrize = (EditText)findViewById(R.id.planprize);
@@ -63,6 +65,8 @@ public class QuickPlanActivity extends BaseActivity {
 		btnSelectLoc.setOnClickListener(new ClickToMapListener());
 		etStartLocation.setOnClickListener(new ClickToMapListener());
 		etTerminateLocation.setOnClickListener(new ClickToMapListener());
+		
+		btPplExpected.setOnClickListener(new ButtonClickListener());
 		
 	}
 	
@@ -148,7 +152,7 @@ public class QuickPlanActivity extends BaseActivity {
 				
 				String distance = tvEstimateDistance.getText().toString().trim();
 				String expectedTime = tvExpectedTime.getText().toString().trim();
-				String pplExpected = etPplExpected.getEditableText().toString().trim();
+				String pplExpected = btPplExpected.getText().toString().trim();
 				String sponsor = etSponsor.getEditableText().toString().trim();
 				String prize = etPrize.getEditableText().toString().trim();
 				String remark = etRemark.getEditableText().toString().trim();
@@ -175,25 +179,48 @@ public class QuickPlanActivity extends BaseActivity {
 	class ClickToMapListener implements OnClickListener {
 		@Override
 		public void onClick(View v) {
-			Intent intent  = new Intent(QuickPlanActivity.this, RouteSelectionActivity.class);
-			Bundle bundle = new Bundle();
-			String start = etStartLocation.getText().toString();
-			if(start.length() > 0){
-				bundle.putBoolean("hasStart", true);
-				bundle.putString("startPoiName", start.substring(0, start.indexOf("(")));
-				bundle.putInt("startPoiLat", Integer.parseInt(start.substring(start.indexOf("(")+1, start.indexOf(","))));
-				bundle.putInt("startPoiLon", Integer.parseInt(start.substring(start.indexOf(",")+1, start.indexOf(")"))));
-			}
-			String end = etTerminateLocation.getText().toString();
-			if(end.length() > 0){
-				bundle.putBoolean("hasTerminate", true);
-				bundle.putString("terminatePoiName", end.substring(0, end.indexOf("(")));
-				bundle.putInt("terminatePoiLat", Integer.parseInt(end.substring(end.indexOf("(")+1, end.indexOf(","))));
-				bundle.putInt("terminatePoiLon", Integer.parseInt(end.substring(end.indexOf(",")+1, end.indexOf(")"))));
-			}
-			intent.putExtras(bundle);
-			QuickPlanActivity.this.startActivityForResult(intent, BicycleUtil.PLAN_SELECT_ROUTE);
+//			Intent intent  = new Intent(QuickPlanActivity.this, RouteSelectionActivity.class);
+//			Bundle bundle = new Bundle();
+//			String start = etStartLocation.getText().toString();
+//			if(start.length() > 0){
+//				bundle.putBoolean("hasStart", true);
+//				bundle.putString("startPoiName", start.substring(0, start.indexOf("(")));
+//				bundle.putInt("startPoiLat", Integer.parseInt(start.substring(start.indexOf("(")+1, start.indexOf(","))));
+//				bundle.putInt("startPoiLon", Integer.parseInt(start.substring(start.indexOf(",")+1, start.indexOf(")"))));
+//			}
+//			String end = etTerminateLocation.getText().toString();
+//			if(end.length() > 0){
+//				bundle.putBoolean("hasTerminate", true);
+//				bundle.putString("terminatePoiName", end.substring(0, end.indexOf("(")));
+//				bundle.putInt("terminatePoiLat", Integer.parseInt(end.substring(end.indexOf("(")+1, end.indexOf(","))));
+//				bundle.putInt("terminatePoiLon", Integer.parseInt(end.substring(end.indexOf(",")+1, end.indexOf(")"))));
+//			}
+//			intent.putExtras(bundle);
+//			QuickPlanActivity.this.startActivityForResult(intent, BicycleUtil.PLAN_SELECT_ROUTE);
 		}
+	}
+	
+	class ButtonClickListener implements OnClickListener{
+		@Override
+		public void onClick(View v) {
+			switch(v.getId()){
+			case R.id.pplexpected:
+				new AlertDialog.Builder(QuickPlanActivity.this)
+                .setTitle("最少参加人数")
+                .setItems(R.array.pplcount, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        /* User clicked so do some stuff */
+                        String[] items = getResources().getStringArray(R.array.pplcount);
+                        btPplExpected.setText(items[which]);
+                    }
+                })
+                .create().show();
+				break;
+			default:
+				break;
+			}
+		}
+		
 	}
 }
 

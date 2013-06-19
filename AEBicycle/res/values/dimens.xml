@@ -1,20 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
 
     <dimen name="padding_small">8dp</dimen>
     <dimen name="padding_medium">8dp</dimen>
     <dimen name="padding_large">16dp</dimen>
-    
     <dimen name="one_dp">1dp</dimen>
-    
     <dimen name="left">121dp</dimen>
     <dimen name="top">108dp</dimen>
     <dimen name="right">129.5dp</dimen>
     <dimen name="bottom">116.5dp</dimen>
-    
-    
     <dimen name="x37.5_dp">50dp</dimen>
     <dimen name="stroke_width">58dp</dimen>
     <dimen name="stroke_width_thermo">1dp</dimen>
     <dimen name="stroke_width_percentage">5dp</dimen>
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
 
 </resources>

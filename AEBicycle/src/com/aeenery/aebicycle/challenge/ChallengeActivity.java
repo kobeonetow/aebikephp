@@ -12,6 +12,7 @@ import com.aeenery.aebicycle.BaseListActivity;
 import com.aeenery.aebicycle.DevelopingActivity;
 import com.aeenery.aebicycle.R;
 import com.aeenery.aebicycle.entry.BicycleUtil;
+import com.aeenery.aebicycle.entry.UtilFunction;
 
 public class ChallengeActivity extends BaseListActivity{
 	
@@ -21,6 +22,7 @@ public class ChallengeActivity extends BaseListActivity{
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 //		setContentView(R.layout.activity_challenge);
+		UtilFunction.login(this);
 		init();
 		
 	}
@@ -128,9 +130,14 @@ public class ChallengeActivity extends BaseListActivity{
 	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data){
-		switch(resultCode){
+		switch(requestCode){
 		case BicycleUtil.CREATE_PLAN_SUCCESS:
-			//Do nothing
+			if(resultCode == BicycleUtil.CREATE_PLAN_SUCCESS)
+				//do nothing
+			break;
+		case BicycleUtil.RequireLogin:
+			if(resultCode != BicycleUtil.LoginSuccess)
+				this.finish();
 			break;
 		default:
 			break;

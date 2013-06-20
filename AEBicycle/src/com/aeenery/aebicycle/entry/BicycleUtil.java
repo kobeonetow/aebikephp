@@ -14,12 +14,15 @@ public interface BicycleUtil {
 	public final static String fileDefaultCode = "defcode";//记录默认城市的文件文件名
 	public final static String deCode = "default";//记录默认城市代码的KEY
 	public final static String fileWeahter = "placeCode";//记录所有城市的对应代码文件
+	
 	//routeMap常量
-	public final static String mapKey = "2BD0C4C35EB180C542AF40EAFC12CA48CD0D797D"; //百度地图API Key
-	public final static int ibSearchDst = 0;
-	public final static int ibRouteSearchSrc = 1;
-	public final static int ibRouteSearchDst = 2;
-	public final static int ibRouteSearchIgnoreView = 3;
+	public final static String mapKey = "94420D26D7D3D99ED1FCDFF07543A4049262EC73"; //百度地图API Key
+	public final static int RequestMapView = 0xf1;
+	public final static int ResultMapView = 0xf2;
+//	public final static int ibSearchDst = 0;
+//	public final static int ibRouteSearchSrc = 1;
+//	public final static int ibRouteSearchDst = 2;
+//	public final static int ibRouteSearchIgnoreView = 3;
 	
 	//验证信息
 	public final static int RequireLogin = 0x01;

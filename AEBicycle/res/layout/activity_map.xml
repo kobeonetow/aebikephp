@@ -37,7 +37,7 @@
             android:src="@drawable/map_route"
             android:background="#00ffffff"/>
          <ImageButton 
-            android:id="@+id/ibMapInfo" 
+            android:id="@+id/ibMapMyLoc" 
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"

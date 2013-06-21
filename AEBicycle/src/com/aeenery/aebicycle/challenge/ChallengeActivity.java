@@ -58,56 +58,10 @@ public class ChallengeActivity extends BaseListActivity{
 		}
 	}
 	
-//	public void setupPlan(){
-//		String[] options = {"快速私人","组队","挑战","路线查询","微博"};
-//		dialogBuilder.setTitle("").setItems(options, new DialogInterface.OnClickListener() {
-//			@Override
-//			public void onClick(DialogInterface dialog, int which) {
-//				Intent intent = new Intent();
-//				switch(which){
-//				case 0:
-//					intent.setClass(ChallengeActivity.this, QuickPlanActivity.class);
-//					ChallengeActivity.this.startActivity(intent);
-//					break;
-//				case 1:
-//					intent.setClass(ChallengeActivity.this, NormalPlanActivity.class);
-//					ChallengeActivity.this.startActivity(intent);
-//					break;
-//				case 2:
-//					intent.setClass(ChallengeActivity.this, ChallengePlanActivity.class);
-//					ChallengeActivity.this.startActivity(intent);
-//					break;
-//				case 3:
-//					Bundle bundle = new Bundle();
-//					//传递起点经纬度
-//					bundle.putInt("srcLatitudeE6", 23203189);
-//					bundle.putInt("srcLongitudeE6",113332441);
-//					//传递终点经纬度
-//					bundle.putInt("dstLatitudeE6", 23137897);
-//					bundle.putInt("dstLongitudeE6",113368286);
-//					//是否拥有分享按钮
-//					bundle.putBoolean("ifShareBt", false);
-//					intent.setClass(ChallengeActivity.this, RouteMapActivity.class);
-//					intent.putExtras(bundle);
-//					ChallengeActivity.this.startActivity(intent);
-//					break;
-//				case 4:
-//					
-//				default:
-//					intent.setClass(ChallengeActivity.this, QuickPlanActivity.class);
-//					ChallengeActivity.this.startActivity(intent);
-//					break;
-//				}
-//			}
-//		});
-//		dialogBuilder.create();
-//		dialogBuilder.show();
-//	}
-	
 	public void setupPlan(){
 		Intent intent = new Intent();
 		intent.setClass(ChallengeActivity.this, QuickPlanActivity.class);
-		ChallengeActivity.this.startActivityForResult(intent,BicycleUtil.CREATE_PLAN_SUCCESS);
+		ChallengeActivity.this.startActivityForResult(intent,BicycleUtil.CREATE_PLAN);
 	}
 
 	public void viewPlan() {

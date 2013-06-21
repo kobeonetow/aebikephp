@@ -44,4 +44,31 @@
             android:src="@drawable/map_list"
             android:background="#00ffffff"/>
     </LinearLayout>
+    <ImageButton
+        android:id="@+id/ibMarker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left|center_vertical"
+        android:src="@drawable/icon_marker"
+        android:contentDescription="标记地图"
+        />
+    <TextView 
+        android:id="@+id/tvMapHint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center_horizontal"
+        android:visibility="invisible"
+        android:textSize="30sp"
+        android:background="@color/Black"
+        android:textColor="@color/white"
+        />
+    <ImageButton
+        android:id="@+id/ibForwardResult"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right|center_vertical"
+        android:src="@drawable/icon_forward"
+        android:contentDescription="返回结果"
+        android:visibility="gone"
+        />
 </FrameLayout>

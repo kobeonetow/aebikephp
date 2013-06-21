@@ -118,10 +118,6 @@ public class HomeActivity extends BaseActivity {
 					intent = new Intent(HomeActivity.this,
 							WeatherActivity.class);
 					break;
-//				case R.id.home_image_button_3:
-//					intent = new Intent(HomeActivity.this,
-//							RouteMapActivity.class);
-//					break;
 				case R.id.home_image_button_3:
 					intent = new Intent(HomeActivity.this,
 							MapActivity.class);

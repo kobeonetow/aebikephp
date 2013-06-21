@@ -35,47 +35,6 @@
 	    android:layout_height="wrap_content"
 	    />
 	
-	<!-- Start Location -->
-	<LinearLayout 
-	    android:orientation="horizontal"
-	    android:layout_width="fill_parent"
-	    android:layout_height="wrap_content"
-	    >
-
-	<TextView
-	    android:text="@string/plan_start_location"
-        android:layout_width="100dp"
-        android:layout_height="35dp"
-        />
-	<EditText
-	    android:id="@+id/plan_start_location"
-	    android:singleLine="true"
-	    android:layout_width="fill_parent"
-	    android:layout_height="wrap_content"
-	    android:editable="false"
-	    android:textSize="12sp"
-	    />
-	</LinearLayout>
-	<!-- Target location -->
-	<LinearLayout 
-	    android:orientation="horizontal"
-	    android:layout_width="fill_parent"
-	    android:layout_height="wrap_content"
-	    >
-	<TextView
-	    android:text="@string/plan_terminate_location"
-        android:layout_width="100dp"
-        android:layout_height="35dp"
-        />
-	<EditText
-	    android:id="@+id/plan_terminate_location"
-	    android:singleLine="true"
-	    android:layout_width="fill_parent"
-	    android:layout_height="wrap_content"
-	    android:editable="false"
-	    android:textSize="12sp"
-	    />
-	</LinearLayout>
 	<!-- Distance -->
 	<LinearLayout 
 	    android:orientation="horizontal"
@@ -162,46 +121,46 @@
         />
 	</LinearLayout>
 	<!-- Sponsor -->
-	<LinearLayout 
-	    android:orientation="horizontal"
-	    android:layout_width="fill_parent"
-	    android:layout_height="wrap_content"
-	    >
-	    <TextView
-	        android:text="@string/plan_sponsor"
-	        android:layout_width="100dp"
-        	android:layout_height="35dp" 
-	        />	
-	    <EditText
-	    android:id="@+id/plansponsor"
-        android:layout_width="fill_parent"
-        android:layout_height="35dp"
-        android:visibility="visible"
-        android:paddingLeft="10dp"
-        android:textSize="12sp"
-        />
-	</LinearLayout>
+<!-- 	<LinearLayout  -->
+<!-- 	    android:orientation="horizontal" -->
+<!-- 	    android:layout_width="fill_parent" -->
+<!-- 	    android:layout_height="wrap_content" -->
+<!-- 	    > -->
+<!-- 	    <TextView -->
+<!-- 	        android:text="@string/plan_sponsor" -->
+<!-- 	        android:layout_width="100dp" -->
+<!--         	android:layout_height="35dp"  -->
+<!-- 	        />	 -->
+<!-- 	    <EditText -->
+<!-- 	    android:id="@+id/plansponsor" -->
+<!--         android:layout_width="fill_parent" -->
+<!--         android:layout_height="35dp" -->
+<!--         android:visibility="visible" -->
+<!--         android:paddingLeft="10dp" -->
+<!--         android:textSize="12sp" -->
+<!--         /> -->
+<!-- 	</LinearLayout> -->
 	
 	<!-- Prize -->
-	<LinearLayout 
-	    android:orientation="horizontal"
-	    android:layout_width="fill_parent"
-	    android:layout_height="wrap_content"
-	    >
-	    <TextView 
-	        android:text="@string/plan_prizes"
-	        android:layout_width="100dp"
-        	android:layout_height="35dp"
-	        />
-	    <EditText
-	    android:id="@+id/planprize"
-        android:layout_width="fill_parent"
-        android:layout_height="35dp"
-        android:visibility="visible"
-        android:paddingLeft="10dp"
-        android:textSize="12sp"
-        />
-	</LinearLayout>
+<!-- 	<LinearLayout  -->
+<!-- 	    android:orientation="horizontal" -->
+<!-- 	    android:layout_width="fill_parent" -->
+<!-- 	    android:layout_height="wrap_content" -->
+<!-- 	    > -->
+<!-- 	    <TextView  -->
+<!-- 	        android:text="@string/plan_prizes" -->
+<!-- 	        android:layout_width="100dp" -->
+<!--         	android:layout_height="35dp" -->
+<!-- 	        /> -->
+<!-- 	    <EditText -->
+<!-- 	    android:id="@+id/planprize" -->
+<!--         android:layout_width="fill_parent" -->
+<!--         android:layout_height="35dp" -->
+<!--         android:visibility="visible" -->
+<!--         android:paddingLeft="10dp" -->
+<!--         android:textSize="12sp" -->
+<!--         /> -->
+<!-- 	</LinearLayout> -->
 	
 	
 	<!-- 提交按钮 -->

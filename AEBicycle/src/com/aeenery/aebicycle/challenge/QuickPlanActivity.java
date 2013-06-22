@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.format.Time;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -42,6 +43,10 @@ public class QuickPlanActivity extends BaseActivity {
 	protected LocationData start, end;
 	protected int selectLocStatus = 0x00; //0=not set,1=start set, 2=end set, 3=all set
 	protected String selectLocString = "选择地点(未设置)";
+	
+	//Some attributes to store temp parameters
+	protected int distance;
+	protected int time;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState){
@@ -83,10 +88,12 @@ public class QuickPlanActivity extends BaseActivity {
 		super.onActivityResult(requestCode, resultCode, data);
 		switch(requestCode){
 		case BicycleUtil.RequestSetStartEndLoc:
+			//CHeck whether return result is back button pressed
 			if(resultCode != BicycleUtil.ResultSetStartEndLoc)
 				break;
 			int status = 0x00;
 			Bundle b = data.getExtras();
+			//Set start end point 
 			if(b.getDouble("startLocLat", 0) != 0){
 				if(start == null)
 					start = new LocationData();
@@ -117,6 +124,14 @@ public class QuickPlanActivity extends BaseActivity {
 				selectLocString = "选择地点(已设置)";
 			btnSelectLoc.setText(selectLocString);
 			this.selectLocStatus = (int)status;
+			
+			//Set the distance and estimated time
+			if(b.getInt("routeDistance",0) != 0){
+				distance  = b.getInt("routeDistance");
+				time = (int)((double)distance/(double)4.2);
+				tvEstimateDistance.setText(distance + "米");
+				tvExpectedTime.setText(time/3600 + "时" + (time % 3600) / 60 +"分"+ time % 60 +"秒");
+			}
 			break;
 		default:
 			//do nothing
@@ -124,6 +139,17 @@ public class QuickPlanActivity extends BaseActivity {
 		}
 	}
 	
+	/**
+	 * Set the plan model detail so that can submit to 
+	 * server
+	 */
+	protected void setPlanDetail(){
+		
+	}
+	
+	/**
+	 * Call back api from submit plan
+	 */
 	public void planCreated(){
 		Toast.makeText(this, this.getString(R.string.plan_create_success), Toast.LENGTH_LONG).show();
 		Intent result = new Intent();
@@ -170,6 +196,7 @@ public class QuickPlanActivity extends BaseActivity {
 				break;
 			case R.id.plan_submit:
 				if(checkValidatity()){
+					setPlanDetail();
 					api.createplan(QuickPlanActivity.this,this.p);
 				}
 				break;

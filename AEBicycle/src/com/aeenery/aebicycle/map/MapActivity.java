@@ -21,11 +21,14 @@ import com.baidu.mapapi.map.OverlayItem;
 import com.baidu.mapapi.map.PoiOverlay;
 import com.baidu.mapapi.map.PopupClickListener;
 import com.baidu.mapapi.map.PopupOverlay;
+import com.baidu.mapapi.map.RouteOverlay;
 import com.baidu.mapapi.search.MKAddrInfo;
 import com.baidu.mapapi.search.MKBusLineResult;
 import com.baidu.mapapi.search.MKDrivingRouteResult;
+import com.baidu.mapapi.search.MKPlanNode;
 import com.baidu.mapapi.search.MKPoiInfo;
 import com.baidu.mapapi.search.MKPoiResult;
+import com.baidu.mapapi.search.MKRoute;
 import com.baidu.mapapi.search.MKSearch;
 import com.baidu.mapapi.search.MKSearchListener;
 import com.baidu.mapapi.search.MKSuggestionResult;
@@ -71,7 +74,7 @@ public class MapActivity extends Activity {
 	protected MKSearch mMKSearch = null;
 	
 	//ImageButtons,Edittext
-	protected ImageButton ibMapMyLoc,ibMapSearch, ibMarker, ibForwardResult;
+	protected ImageButton ibMapMyLoc,ibMapSearch, ibMarker, ibForwardResult, ibMapRoute;
 	protected EditText etMapDst;
 	protected TextView tvMapHint;
 	protected boolean markerOn = false;
@@ -80,6 +83,7 @@ public class MapActivity extends Activity {
 	//My Location
 	protected LocationData myLocPoint = null;
 	protected LocationData startLoc, endLoc = null;
+	protected MKRoute route = null;
 	
 	//RequestCode
 	private int requestCode = BicycleUtil.RequestMapView;
@@ -269,7 +273,7 @@ public class MapActivity extends Activity {
 	}
 	
 	/**
-	 * Animate to my location geopoint
+	 * Animate to my location geo point
 	 */
 	protected void setMyLocationToCenter(){
 		if(myLocPoint != null){
@@ -291,12 +295,28 @@ public class MapActivity extends Activity {
 		tvMapHint  = (TextView)findViewById(R.id.tvMapHint);
 		ibMarker = (ImageButton)findViewById(R.id.ibMarker);
 		ibForwardResult = (ImageButton)findViewById(R.id.ibForwardResult);
+		ibMapRoute = (ImageButton)findViewById(R.id.ibMapRoute);
 		
 		ibMapMyLoc.setOnClickListener(new ButtonClickListener());
 		ibMapSearch.setOnClickListener(new ButtonClickListener());
 		ibMarker.setOnClickListener(new ButtonClickListener());
 		ibForwardResult.setOnClickListener(new ButtonClickListener());
+		ibMapRoute.setOnClickListener(new ButtonClickListener());
 		
+	}
+	
+	/**
+	 * Get the route from start point to end point
+	 * require startLoc and endLoc to be set.
+	 * @param planNum
+	 * @param routeNum
+	 */
+	protected void searchRoute(){
+		MKPlanNode startNode = new MKPlanNode();
+		MKPlanNode endNode = new MKPlanNode();
+		startNode.pt = new GeoPoint((int)(startLoc.latitude),(int)(startLoc.longitude));
+		endNode.pt = new GeoPoint((int)(endLoc.latitude),(int)(endLoc.longitude));
+		mMKSearch.walkingSearch(null, startNode, null, endNode);
 	}
 	
 	@Override
@@ -452,9 +472,17 @@ public class MapActivity extends Activity {
 		}
 
 		@Override
-		public void onGetWalkingRouteResult(MKWalkingRouteResult arg0, int arg1) {
-			// TODO Auto-generated method stub
-			
+		public void onGetWalkingRouteResult(MKWalkingRouteResult result, int error) {
+			if (result == null) {  
+                return;  
+			}  
+			RouteOverlay routeOverlay = new RouteOverlay(MapActivity.this, mMapView);
+			Log.i("MapActivity","Plans found:"+result.getNumPlan() + " and Routes found for plan 1 is "+result.getPlan(0).getNumRoutes());
+	        route = result.getPlan(0).getRoute(0);
+			routeOverlay.setData(route);  
+	        mMapView.getOverlays().add(routeOverlay);  
+	        mMapView.refresh();  
+	        
 		}
 
 	}
@@ -463,10 +491,10 @@ public class MapActivity extends Activity {
 		@Override
 		public void onClick(View v) {
 			switch(v.getId()){
-			case R.id.ibMapMyLoc:
+			case R.id.ibMapMyLoc: //Set the view center to my location
 				setMyLocationToCenter();
 				break;
-			case R.id.ibMapSearch:
+			case R.id.ibMapSearch: //Search a giving location string
 				String searchStr = etMapDst.getText().toString();
 				final String[] arrStr = searchStr.split(" ");// 通过空格间断字符串
 				if (arrStr.length > 1)
@@ -474,13 +502,13 @@ public class MapActivity extends Activity {
 				else if (arrStr.length == 1) // 当前城市搜索
 					mMKSearch.suggestionSearch(arrStr[0]);
 				break;
-			case R.id.ibMarker:
+			case R.id.ibMarker: //Put marker state, make the next click to put marker
 				tvMapHint.setText(markerHint);
 				if(tvMapHint.getVisibility() == View.INVISIBLE)
 					tvMapHint.setVisibility(View.VISIBLE);
 				markerOn = true;
 				break;
-			case R.id.ibForwardResult:
+			case R.id.ibForwardResult: //Forward result to plan activity with giving result code
 				Bundle b = new Bundle();
 				if(startLoc != null){
 					b.putDouble("startLocLat", startLoc.latitude);
@@ -490,10 +518,20 @@ public class MapActivity extends Activity {
 					b.putDouble("endLocLat", endLoc.latitude);
 					b.putDouble("endLocLong", endLoc.longitude);
 				}
+				if(route != null){
+					b.putInt("routeDistance", route.getDistance());
+				}
 				if(retData == null)
 					retData = new Intent();
 				retData.putExtras(b);
 				MapActivity.this.finish();
+				break;
+			case R.id.ibMapRoute://Search the route from start point to end point
+				if(startLoc == null || endLoc == null){
+					Toast.makeText(MapActivity.this, "请先设置起点和终点", Toast.LENGTH_LONG).show();
+				}else{
+					searchRoute();
+				}
 				break;
 			default:
 				Log.i("MapActivity","Unknow button clicked");
@@ -583,45 +621,69 @@ public class MapActivity extends Activity {
 		
 		public class PopupCustomClickListener implements PopupClickListener{
 			OverlayItem item = null;
+			LocationData preData = null;
 			@Override
 			public void onClickedPopup(int index) {
 				 switch(index){
 				 case 0:
+					 //Save previous starting point
 					 if(startLoc != null){
-						 int startIndex = getItemIdex(new GeoPoint((int)(startLoc.latitude), (int)(startLoc.longitude)));
-						 if(startIndex != -1){
-							 changeToNormalMarker(startIndex);
-						 }
+						 preData = new LocationData();
+						 preData.latitude = startLoc.latitude;
+						 preData.longitude = startLoc.longitude;
 					 }
 					 
+					 //Replace the marker to start marker and save current starting point
 					 if(startLoc == null)
 						 startLoc = new LocationData();
 					 startLoc.latitude = getItem(itemIndex).getPoint().getLatitudeE6();
 					 startLoc.longitude = getItem(itemIndex).getPoint().getLongitudeE6();
-					 
 					 item = getMarkerItem(1, startLoc.latitude, startLoc.longitude, "开始标记","");
 					 itemizedOverlay.removeItem(getItem(itemIndex));
 					 itemizedOverlay.addItem(item);
 					 item = null;
 					 
+					 //remove the previous starting point
+					 if(preData != null){
+						 int startIndex = getItemIdex(new GeoPoint((int)(preData.latitude), (int)(preData.longitude)));
+						 if(startIndex != -1){
+							 changeToNormalMarker(startIndex);
+						 }
+						 preData = null;
+					 }
+					 
 					 popOverlay.hidePop();
 					 break;
 				 case 1:
+					 //Save previous end location
 					 if(endLoc != null){
-						 int endIndex = getItemIdex(new GeoPoint((int)(endLoc.latitude), (int)(endLoc.longitude)));
-						 if(endIndex != -1){
-							 changeToNormalMarker(endIndex);
-						 }
+						 preData = new LocationData();
+						 preData.latitude = endLoc.latitude;
+						 preData.longitude = endLoc.longitude;
 					 }
+					 
+					 //set new end location
 					 if(endLoc == null)
 						 endLoc = new LocationData();
 					 endLoc.latitude = getItem(itemIndex).getPoint().getLatitudeE6();
 					 endLoc.longitude = getItem(itemIndex).getPoint().getLongitudeE6();
-					 
 					 item = getMarkerItem(2, endLoc.latitude, endLoc.longitude, "结束标记","");
 					 itemizedOverlay.removeItem(getItem(itemIndex));
 					 itemizedOverlay.addItem(item);
 					 item = null;
+					 
+					 //remove old end location
+					 if(preData != null){
+						 int endIndex = getItemIdex(new GeoPoint((int)(preData.latitude), (int)(preData.longitude)));
+						 if(endIndex != -1){
+							 changeToNormalMarker(endIndex);
+						 }
+						 preData = null;
+					 }
+					 
+					 //Update route
+					 searchRoute();
+					 
 					 popOverlay.hidePop();
 					 break;
 				 case 2:

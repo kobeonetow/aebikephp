@@ -48,6 +48,9 @@ public class QuickPlanActivity extends BaseActivity {
 	protected int distance;
 	protected int time;
 	
+	//Plan stores plan
+	protected Plan p = null;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
@@ -58,23 +61,17 @@ public class QuickPlanActivity extends BaseActivity {
 	
 	public void init(){
 		etPlanName = (EditText)findViewById(R.id.plan_name);
-//		etStartLocation = (EditText)findViewById(R.id.plan_start_location);
-//		etTerminateLocation = (EditText)findViewById(R.id.plan_terminate_location);
 		btnSubmit = (Button)findViewById(R.id.plan_submit);
 		tvEstimateDistance = (TextView)findViewById(R.id.plan_estimate_distance);
 		tvExpectedTime = (TextView)findViewById(R.id.plan_expected_time);
 		btPplExpected = (Button)findViewById(R.id.pplexpected);
 		etRemark = (EditText)findViewById(R.id.planremark);
-//		etSponsor = (EditText)findViewById(R.id.plansponsor);
-//		etPrize = (EditText)findViewById(R.id.planprize);
 		
 		btnSelectLoc = (Button)findViewById(R.id.plan_select_locations);
 		
 		btnSubmit.setOnClickListener(new ButtonClickListener());
 		btnSelectLoc.setOnClickListener(new ClickToMapListener());
 		btnSelectLoc.setText(selectLocString);
-//		etStartLocation.setOnClickListener(new ClickToMapListener());
-//		etTerminateLocation.setOnClickListener(new ClickToMapListener());
 		
 		btPplExpected.setOnClickListener(new ButtonClickListener());
 		
@@ -144,18 +141,28 @@ public class QuickPlanActivity extends BaseActivity {
 	 * server
 	 */
 	protected void setPlanDetail(){
-		
+		if(p == null)
+			p = new Plan();
+		String name = etPlanName.getText().toString().trim();
+		String pplExpected = btPplExpected.getText().toString().trim();
+		String remark = etRemark.getEditableText().toString().trim();
+		p.setName(name);
+		p.setStartlocation((int)start.latitude+"|"+(int)start.longitude);
+		p.setEndlocation((int)end.latitude + "|"+(int)end.longitude);
+		p.setDistance(distance +"");
+		p.setExpecttime(time+"");
+		if(pplExpected != null)
+			p.setPplexpected(pplExpected);
+		if(remark != null)
+			p.setDescription(remark);
 	}
 	
 	/**
 	 * Call back api from submit plan
 	 */
 	public void planCreated(){
-		Toast.makeText(this, this.getString(R.string.plan_create_success), Toast.LENGTH_LONG).show();
-		Intent result = new Intent();
-		result.putExtra("created", true);
-		this.setResult(BicycleUtil.CREATE_PLAN_SUCCESS, result);
-		this.finish();
+//		this.setResult(BicycleUtil.CREATE_PLAN_SUCCESS);
+//		this.finish();
 	}
 	
 	
@@ -179,7 +186,6 @@ public class QuickPlanActivity extends BaseActivity {
 	}
 	
 	class ButtonClickListener implements OnClickListener{
-		Plan p = new Plan();
 		@Override
 		public void onClick(View v) {
 			switch(v.getId()){
@@ -197,7 +203,7 @@ public class QuickPlanActivity extends BaseActivity {
 			case R.id.plan_submit:
 				if(checkValidatity()){
 					setPlanDetail();
-					api.createplan(QuickPlanActivity.this,this.p);
+					api.createplan(QuickPlanActivity.this,p);
 				}
 				break;
 			default:
@@ -219,28 +225,6 @@ public class QuickPlanActivity extends BaseActivity {
 				Toast.makeText(QuickPlanActivity.this, "请设置开始和结束地点", Toast.LENGTH_SHORT).show();
 				return false;
 			}
-			
-			String distance = tvEstimateDistance.getText().toString().trim();
-			String expectedTime = tvExpectedTime.getText().toString().trim();
-			String pplExpected = btPplExpected.getText().toString().trim();
-//			String sponsor = etSponsor.getEditableText().toString().trim();
-//			String prize = etPrize.getEditableText().toString().trim();
-			String remark = etRemark.getEditableText().toString().trim();
-			
-			p.setName(name);
-//			p.setStartlocation(startloc);
-//			p.setEndlocation(terminateloc);
-			if(distance != null && !distance.equals(""))
-				p.setDistance(distance);
-			if(expectedTime != null && !expectedTime.equals(""))
-				p.setExpecttime(expectedTime);
-			if(pplExpected != null && !pplExpected.equals(""))
-				p.setPplexpected(pplExpected);
-//			if(sponsor != null && !sponsor.equals(""))
-//				p.setSponsor(sponsor);
-			if(remark != null && !remark.equals(""))
-				p.setDescription(remark);
-			
 			return true;
 		}
 		

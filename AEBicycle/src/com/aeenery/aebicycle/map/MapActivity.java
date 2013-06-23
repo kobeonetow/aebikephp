@@ -109,8 +109,6 @@ public class MapActivity extends Activity {
 		setContentView(R.layout.activity_map);
 		mMapView=(MapView)findViewById(R.id.bmapsView);
 		mMapView.setBuiltInZoomControls(true);
-//		mMapView.setLongClickable(true);
-//		mMapView.setOnLongClickListener(new ButtonLongClickListener());
 		mMapView.setOnTouchListener(new MapViewTouchListener());
 		
 		//设置启用内置的缩放控件

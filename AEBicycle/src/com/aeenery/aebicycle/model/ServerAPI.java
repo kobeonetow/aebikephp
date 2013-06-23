@@ -52,11 +52,6 @@ public class ServerAPI {
 			Log.e("Json Error","Return type is not a json object");
 			return null;
 		} 
-//		catch (IOException e) {
-//			e.printStackTrace();
-//			Log.i("Output Stream Error","The output is not a proper http request :"+e.getCause().getMessage());
-//			return null;
-//		}
 	}
 	
 	protected boolean checkResult(AsyncTask<String,String,JSONObject> asynctask,JSONObject json, Context context, String msg){
@@ -152,8 +147,7 @@ public class ServerAPI {
 			@Override
 			protected JSONObject doInBackground(String... params) {
 				httpClient.setNameValuePair(NameValuePairReflect.__getNameValuePair("com.aeenery.aebicycle.model.Plan",plan), true);
-//				httpClient.addNameValuePair("userid", user.getId());
-				httpClient.addNameValuePair("plantype", "C");
+				httpClient.addNameValuePair("plantype", BicycleUtil.PLAN_TYPE_CHALLENGE);
 				return callServer("index/createplan");
 			}
 			

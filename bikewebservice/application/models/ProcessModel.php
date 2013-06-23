@@ -48,28 +48,31 @@ class Application_Model_ProcessModel extends Application_Model_DbAdapter
                 'userid' => $arr['userid'],
                 'name' => $arr['name'],
                 'distance' => $this->getAttribute($arr, "distance", ""),
-                'expecttime' => $this->getAttribute($arr, "expectedtime", "")
+                'expecttime' => $this->getAttribute($arr, "expecttime", "")
             );
-            if (strcmp($arr['plantype'], 'N') == 0) {
-                $dataN = array(
-                    'pplgoing' => $this->getAttribute($arr, "pplgoing", ""),
-                    'pplexpected' => $this->getAttribute($arr, "pplexpected", ""),
-                    'description' => $this->getAttribute($arr, "remark", ""),
-                    'starttime' => $this->getAttribute($arr, "starttime", ""),
-                    'endtime' => $this->getAttribute($arr, "endtime", "")
-                );
-                $data = array_merge($data, $dataN);
-            } else if (strcmp($arr['plantype'], 'C') == 0) {
-                $dataC = array(
-                    'pplgoing' => $this->getAttribute($arr, "pplgoing", ""),
-                    'pplexpected' => $this->getAttribute($arr, "pplexpected", ""),
-                    'description' => $this->getAttribute($arr, "remark", ""),
-                    'starttime' => $this->getAttribute($arr, "starttime", ""),
-                    'endtime' => $this->getAttribute($arr, "endtime", ""),
-                    'sponsor' => $this->getAttribute($arr,"sponsor","")
-                );
-                $data = array_merge($data, $dataC);
-            }
+            
+//            if (strcmp($arr['plantype'], 'N') == 0) {
+//                $dataN = array(
+//                    'pplgoing' => $this->getAttribute($arr, "pplgoing", ""),
+//                    'pplexpected' => $this->getAttribute($arr, "pplexpected", ""),
+//                    'description' => $this->getAttribute($arr, "remark", ""),
+//                    'starttime' => $this->getAttribute($arr, "starttime", ""),
+//                    'endtime' => $this->getAttribute($arr, "endtime", "")
+//                );
+//                $data = array_merge($data, $dataN);
+//            } else 
+            
+//             if (strcmp($arr['plantype'], 'C') == 0) {
+//                $dataC = array(
+//                    'pplgoing' => $this->getAttribute($arr, "pplgoing", 1),
+//                    'pplexpected' => $this->getAttribute($arr, "pplexpected", 2),
+//                    'description' => $this->getAttribute($arr, "remark", ""),
+//                    'starttime' => $this->getAttribute($arr, "starttime", ""),
+//                    'endtime' => $this->getAttribute($arr, "endtime", ""),
+//                    'sponsor' => $this->getAttribute($arr,"sponsor","")
+//                );
+//                $data = array_merge($data, $dataC);
+//            }
             if (!empty($arr['achievementid'])) {
                 $data['achievementid'] = $arr['achievementid'];
             }

@@ -74,16 +74,10 @@ public class HttpRestfulClient {
 	 * @throws JSONException 
 	 */
 	public JSONObject callUrl(String suburi) throws JSONException{
-//		URL url = new URL(uri+suburi);
-//		String link = "http://ec2-54-251-17-187.ap-southeast-1.compute.amazonaws.com/bws/" + suburi;
-		
 		HttpURLConnection  connection = null;
 		try{
-		
-//		URL url = new URL("http://webservice.bike/"+suburi);
-		URL url = new URL("http://aebike.alienpig.org/"+suburi);
-//		URL url = new URL("http://ec2-54-251-17-187.ap-southeast-1.compute.com/bws/" + suburi);
-//		URL url = new URL("http://ec2-54-251-17-187.ap-southeast-1.compute.amazonaws.com");
+		URL url = new URL("http://webservice.bike/"+suburi);
+//		URL url = new URL("http://aebike.alienpig.org/"+suburi);
 		URLConnection urlConnection = url.openConnection();
 		connection = (HttpURLConnection)urlConnection;
 		Log.i("Calling url", url.getHost() + url.getPath());
@@ -103,7 +97,6 @@ public class HttpRestfulClient {
 		connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
 		connection.setRequestProperty("X-CapDyn-AppName", "aebike");
 		connection.setRequestProperty("X-CapDyn-MACHASH", signature);
-//		connection.setRequestProperty("User-Agent", "");
 		
 		//д��http�ļ�����
 		OutputStream outStrm = connection.getOutputStream();

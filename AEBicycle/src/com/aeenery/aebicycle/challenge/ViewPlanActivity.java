@@ -32,7 +32,6 @@ public class ViewPlanActivity extends BaseActivity {
 	private ListView lv = null;
 	private Plan[] plans;
 	
-	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -44,9 +43,6 @@ public class ViewPlanActivity extends BaseActivity {
 
 	private void init(){
 		api.getCurrentPlanList(this, "1", "10");
-		TextView title = (TextView)findViewById(R.id.view_plan_activity_title);
-		title.setText("第一页");
-		
 		lv = (ListView)findViewById(R.id.view_plan_listview);
 		lv.setOnItemClickListener(new PlanClickListener());
 	}
@@ -98,7 +94,6 @@ public class ViewPlanActivity extends BaseActivity {
 	}
 	
 	class PlanClickListener implements OnItemClickListener{
-
 		@Override
 		public void onItemClick(AdapterView<?> parent, View view, int position,
 				long id) {
@@ -107,10 +102,9 @@ public class ViewPlanActivity extends BaseActivity {
 			intent.setClass(ViewPlanActivity.this, PlanDetailActivity.class);
 			Bundle bundle = new Bundle();
 			bundle.putSerializable("plan", plan);
-			intent.putExtra("position",position);
+			bundle.putInt("position",position);
 			intent.putExtras(bundle);
-//			ViewPlanActivity.this.startActivity(intent);
-			ViewPlanActivity.this.startActivityForResult(intent, BicycleUtil.BACK_TO_VIEW_PLAN);
+			ViewPlanActivity.this.startActivityForResult(intent, BicycleUtil.VIEW_PLAN);
 		}
 		
 	}

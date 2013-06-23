@@ -74,6 +74,7 @@ class IndexController extends Mylibrary_Controller_Action
 //        );
         try{
             $result = $this->_service->createPlan($this->_postdata);
+            $this->logger->info($this->_postdata['expecttime']);
             $arr['result'] = $result;
         }  catch (Exception $e){
             $arr['result'] = 0;

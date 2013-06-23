@@ -19,6 +19,7 @@ class Application_Model_Planmapper
             $data['status'] = STATUS_NEW;
             return $this->table->insert($data);
         } catch (Exception $e) {
+            Zend_Registry::get("logger")->info($e->getMessage());
             throw new Exception("M020000 Create plan fail. ".$e->getMessage());
         }
     }

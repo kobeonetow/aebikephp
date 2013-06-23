@@ -7,6 +7,8 @@ import java.util.List;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
+import android.util.Log;
+
 public class NameValuePairReflect {
 	public static List<NameValuePair> __getNameValuePair(String _className, Object _obj) {
 		List<NameValuePair> list = new ArrayList<NameValuePair>();
@@ -22,6 +24,9 @@ public class NameValuePairReflect {
 						NameValuePair pair = new BasicNameValuePair(name,value);
 						list.add(pair);
 					}
+//					else{
+//						Log.i("NameValuePair","is empty "+name);
+//					}
 				}
 			}
 		} catch (Exception e) {

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.aeenery.aebicycle.BaseListActivity;
 import com.aeenery.aebicycle.DevelopingActivity;
@@ -85,9 +86,9 @@ public class ChallengeActivity extends BaseListActivity{
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data){
 		switch(requestCode){
-		case BicycleUtil.CREATE_PLAN_SUCCESS:
+		case BicycleUtil.CREATE_PLAN:
 			if(resultCode == BicycleUtil.CREATE_PLAN_SUCCESS)
-				//do nothing
+				Toast.makeText(this, this.getString(R.string.plan_create_success), Toast.LENGTH_LONG).show();
 			break;
 		case BicycleUtil.RequireLogin:
 			if(resultCode != BicycleUtil.LoginSuccess)

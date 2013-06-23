@@ -49,8 +49,9 @@ public interface BicycleUtil {
 	public final static int InviteFriend = 2;
 	public final static int ViewHistory = 3;
 	
-	//Activity return codes
-	public final static int BACK_TO_VIEW_PLAN = 1;
+	//View Plan
+	public final static int VIEW_PLAN = 0xa1;
+	public final static int VIEW_PLAN_FINISH = 0xa2;
 	
 	
 	//Server Parameters

@@ -1,215 +1,118 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:scrollbars="vertical" >
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
     tools:context=".PlanDetailActivity" >
-
-    <!-- 标题 -->
-    <TextView
-        android:id="@+id/plan_detail_name"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:textSize="40sp"
-         />
     
-    <!-- 起点 -->
+     <com.baidu.mapapi.map.MapView 
+        android:id="@+id/bmapsViewNoneEditable"
+		android:layout_width="match_parent" 
+		android:layout_height="250dp"
+		android:clickable="true" 
+		android:paddingBottom="20dp"
+		></com.baidu.mapapi.map.MapView>
+    
+    <!-- 创建人-->
     <LinearLayout
         android:layout_width="fill_parent"
-    	android:layout_height="wrap_content"
-    	android:orientation="horizontal">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+        
         <TextView 
-        android:text="@string/plan_start_location"
-        android:layout_width="150sp"
-        android:layout_height="wrap_content"
-        android:textSize="20sp"
+        android:text="@string/plan_creator"
+        android:layout_width="100dp"
+        android:layout_height="35dp"
         />
-    <TextView 
-        android:id="@+id/plan_detail_start_location"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:textSize="20sp"
+        
+    	<TextView 
+        android:id="@+id/plan_detail_creator"
+        android:layout_width="wrap_content"
+        android:paddingLeft="10dp"
+        android:layout_height="35dp"
         />
     </LinearLayout>
     
-	
-    <!-- 终点 -->
-    <LinearLayout
+   <!-- Distance -->
+	<LinearLayout 
+	    android:orientation="horizontal"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    >
+	    <TextView
+	        android:text="@string/plan_expected_distance"
+	        android:layout_width="100dp"
+        	android:layout_height="35dp"
+	        />
+	    <TextView
+	    android:id="@+id/view_plan_estimate_distance"
         android:layout_width="fill_parent"
-    	android:layout_height="wrap_content"
-    	android:orientation="horizontal">
-    <TextView 
-        android:text="@string/plan_terminate_location"
-        android:layout_width="150sp"
-        android:layout_height="wrap_content"
-        android:textSize="20sp"
+        android:layout_height="35dp"
+        android:paddingLeft="10dp"
+        android:textSize="12sp"
         />
-    <TextView 
-        android:id="@+id/plan_detail_terminate_location"
+	    
+	</LinearLayout>
+	
+	<!-- Expected Time -->
+	<LinearLayout 
+	    android:orientation="horizontal"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    >
+	    <TextView
+	         android:text="@string/plan_expected_time"
+	        android:layout_width="100dp"
+        	android:layout_height="35dp"
+	        />
+	    	<TextView
+	    android:id="@+id/view_plan_expected_time"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:textSize="20sp"
+        android:layout_height="35dp"
+        android:visibility="visible"
+        android:paddingLeft="10dp"
+        android:textSize="12sp"
         />
 	</LinearLayout>
-    
-    <!-- 路程 -->
-    <LinearLayout
-        android:layout_width="fill_parent"
-    	android:layout_height="wrap_content"
-    	android:orientation="horizontal">
-    <TextView 
-        android:text="@string/plan_expected_distance"
-        android:layout_width="150sp"
-        android:layout_height="wrap_content"
-        android:textSize="20sp"
-        />
-    <TextView 
-        android:id="@+id/plan_detail_expected_distance"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:textSize="20sp"
-        />
-    </LinearLayout>
-    
-    <!-- 预计时间-->
-    <LinearLayout
-        android:layout_width="fill_parent"
-    	android:layout_height="wrap_content"
-    	android:orientation="horizontal">
-    <TextView 
-        android:text="@string/plan_expected_time"
-        android:layout_width="150sp"
-        android:layout_height="wrap_content"
-        android:textSize="20sp"
-        />
-    <TextView 
-        android:id="@+id/plan_detail_expected_time"
+	
+	<!-- People expected -->
+	<LinearLayout 
+	    android:orientation="horizontal"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    >
+	    <TextView
+	        android:text="@string/plan_ppl_expected"
+	        android:layout_width="100dp"
+        	android:layout_height="35dp" 
+	        />	
+	    <TextView 
+	        android:id="@+id/view_pplexpected"
+	        android:layout_width="70dp" 
+	        android:layout_height="35dp"
+	        android:paddingLeft="10dp"
+	        android:textSize="12sp"
+	        />
+	</LinearLayout>
+	
+	<!-- Remark -->
+	<TextView
+	    android:id="@+id/view_planremark"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:textSize="20sp"
+        android:visibility="visible"
+        android:paddingLeft="10dp"
+        android:textSize="12sp"
+        android:textColor="@color/Yellow"
         />
-    </LinearLayout>
-    
-    <!-- 参加人数 -->
-    <LinearLayout
-        android:layout_width="fill_parent"
-    	android:layout_height="wrap_content"
-    	android:orientation="horizontal">
-    <TextView 
-        android:text="@string/plan_ppl_going"
-        android:layout_width="150sp"
-        android:layout_height="wrap_content"
-        android:textSize="20sp"
-        />
-    <TextView 
-        android:id="@+id/plan_detail_ppl_going"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:textSize="20sp"
-        />
-    </LinearLayout>
-    
-    <!-- 估计人数-->
-    <LinearLayout
-        android:layout_width="fill_parent"
-    	android:layout_height="wrap_content"
-    	android:orientation="horizontal">
-    <TextView 
-        android:text="@string/plan_ppl_expected"
-        android:layout_width="150sp"
-        android:layout_height="wrap_content"
-        android:textSize="20sp"
-        />
-    <TextView 
-        android:id="@+id/plan_detail_ppl_expected"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:textSize="20sp"
-        />
-    </LinearLayout>
-    
-    <!-- 开始时间-->
-    <LinearLayout
-        android:layout_width="fill_parent"
-    	android:layout_height="wrap_content"
-    	android:orientation="horizontal">
-    <TextView 
-        android:text="@string/plan_start_time"
-        android:layout_width="150sp"
-        android:layout_height="wrap_content"
-        android:textSize="20sp"
-        />
-    <TextView 
-        android:id="@+id/plan_detail_start_time"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:textSize="20sp"
-        />
-    </LinearLayout>
-    
-    <!-- 结束时间-->
-    <LinearLayout
-        android:layout_width="fill_parent"
-    	android:layout_height="wrap_content"
-    	android:orientation="horizontal">
-    <TextView
-        android:text="@string/plan_end_time"
-        android:layout_width="150sp"
-        android:layout_height="wrap_content"
-        android:textSize="20sp"
-        />
-    <TextView 
-        android:id="@+id/plan_detail_end_time"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:textSize="20sp"
-        />
-    </LinearLayout>
-    
-    <!-- 赞助商-->
-    <LinearLayout
-        android:layout_width="fill_parent"
-    	android:layout_height="wrap_content"
-    	android:orientation="horizontal">
-    <TextView 
-        android:text="@string/plan_sponsor"
-        android:layout_width="150sp"
-        android:layout_height="wrap_content"
-        android:textSize="20sp"
-        />
-    <TextView 
-        android:id="@+id/plan_detail_sponsor"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:textSize="20sp"
-        />
-    </LinearLayout>
-    
-    <!-- 附言-->
-    <LinearLayout
-        android:layout_width="fill_parent"
-    	android:layout_height="wrap_content"
-    	android:orientation="vertical">
-    <TextView 
-        android:text="@string/plan_remark"
-        android:layout_width="150sp"
-        android:layout_height="wrap_content"
-        android:textSize="20sp"
-        />
-    <TextView 
-        android:id="@+id/plan_detail_remark"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:textSize="20sp"
-        />
-    </LinearLayout>
+	
     
     <!-- 计划状态-->
     <LinearLayout
@@ -218,31 +121,18 @@
     	android:orientation="horizontal">
     <TextView 
         android:text="@string/plan_status"
-        android:layout_width="150sp"
-        android:layout_height="wrap_content"
-        android:textSize="20sp"
+        android:layout_width="100dp"
+        android:layout_height="35dp"
         />
     <TextView 
         android:id="@+id/plan_detail_status"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:textSize="20sp"
+        android:layout_width="wrap_content"
+        android:layout_height="35dp"
+        android:textSize="12sp"
         />
     </LinearLayout>
     
-    <!-- 创建人-->
-    <TextView 
-        android:text="@string/plan_creator"
-        android:layout_width="150sp"
-        android:layout_height="wrap_content"
-        android:textSize="20sp"
-        />
-    <TextView 
-        android:id="@+id/plan_detail_creator"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:textSize="20sp"
-        />
+    
     
     <!-- 计划ID-->
     <TextView 
@@ -253,6 +143,7 @@
         android:visibility="invisible"
         />
     
+	<!--   clickable buttons -->
     <LinearLayout 
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -291,12 +182,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/plan_update"
-            ></Button>
-        <Button
-            android:id="@+id/plan_detail_check_route"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/plan_check_route"
             ></Button>
         
         <Button

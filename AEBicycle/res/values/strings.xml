@@ -71,8 +71,9 @@
 
     <!-- 计划的参数 -->
     <string name="plan_select_locations">选择地点</string>
+    <string name="view_plan_select_locations">查看地点</string>
     <string name="plan_update">更新</string>
-    <string name="plan_creator">创建人</string>
+    <string name="plan_creator">创建人:</string>
     <string name="plan_start_location">起点</string>
     <string name="plan_terminate_location">终点 </string>
     <string name="plan_name">计划名字</string>

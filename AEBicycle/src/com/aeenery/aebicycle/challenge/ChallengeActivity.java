@@ -23,7 +23,6 @@ public class ChallengeActivity extends BaseListActivity{
 	@Override
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
-//		setContentView(R.layout.activity_challenge);
 		UtilFunction.login(this);
 		init();
 		
@@ -35,7 +34,6 @@ public class ChallengeActivity extends BaseListActivity{
 		String[] challengeList = res.getStringArray(R.array.challengemainlist);
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,android.R.id.text1,challengeList);
 		setListAdapter(adapter);	
-		
 		dialogBuilder = new AlertDialog.Builder(this);
 	}
 	
@@ -53,10 +51,14 @@ public class ChallengeActivity extends BaseListActivity{
 			ChallengeActivity.this.startActivity(intent);
 			break;
 		case BicycleUtil.MyPlans:
+			intent.setClass(ChallengeActivity.this, );
+			ChallengeActivity.this.startActivity(intent);
 			break;
 		case BicycleUtil.JoinedPlans:
+			ChallengeActivity.this.startActivity(intent);
 			break;
 		case BicycleUtil.FinishedPlans:
+			ChallengeActivity.this.startActivity(intent);
 			break;
 		}
 	}

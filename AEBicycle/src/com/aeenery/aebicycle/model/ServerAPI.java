@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.aeenery.aebicycle.LoginActivity;
 import com.aeenery.aebicycle.R;
 import com.aeenery.aebicycle.RegisterActivity;
+import com.aeenery.aebicycle.challenge.MyPlansActivity;
 import com.aeenery.aebicycle.challenge.PlanDetailActivity;
 import com.aeenery.aebicycle.challenge.QuickPlanActivity;
 import com.aeenery.aebicycle.challenge.ViewPlanActivity;
@@ -186,6 +187,28 @@ public class ServerAPI {
 		}.execute("");
 	} 
 	
+	/**
+	 * Get all plans that created by user
+	 * @param myPlansActivity
+	 */
+	public void getMyOwnPlans(final MyPlansActivity myPlansActivity) {
+		new AsyncTask<String,String,JSONObject>(){
+			@Override
+			protected JSONObject doInBackground(String... params) {
+				return callServer("index/getuserplanlist");
+			}
+			
+			@Override
+			protected void onPostExecute(JSONObject json){
+				if (checkResult(this, json, myPlansActivity,
+						myPlansActivity.getString(R.string.server_busy))) {
+					myPlansActivity.setPlansToView(json);
+				}
+			}
+			
+		}.execute("");
+	}
+	
 	public void joinPlan(final Context context, final Plan p){
 		new AsyncTask<String,String,JSONObject>(){
 			@Override
@@ -283,4 +306,5 @@ public class ServerAPI {
 			
 		}.execute("");
 	}
+
 }

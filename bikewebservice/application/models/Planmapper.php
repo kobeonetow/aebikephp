@@ -171,5 +171,27 @@ class Application_Model_Planmapper
             throw new Exception("M020006 delete plan fail for planid $planid. " . $e->getMessage());
         }
     }
+    
+    public function joinPlan($planid){
+        try{
+           $model  = $this->findPlan($planid);
+           $model->setPplgoing($model->getPplgoing()+1);
+           $this->table->update($model->toKeyValueArray(), "id=$planid");
+        }catch (Exception $e){
+            throw new Exception("M020007 join plan fail for adding pplgoing.".$e->getMessage());
+        }
+    }
+    
+    public function quitPlan($planid){
+        try{
+           $model  = $this->findPlan($planid);
+           if($model->getPplgoing()> 0){
+            $model->setPplgoing($model->getPplgoing()-1);
+            $this->table->update($model->toKeyValueArray(), "id=$planid");
+           }
+        }catch (Exception $e){
+            throw new Exception("M020008 quit plan fail for adding pplgoing.".$e->getMessage());
+        }
+    }
 }
 

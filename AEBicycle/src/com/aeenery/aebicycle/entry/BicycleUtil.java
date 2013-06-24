@@ -46,12 +46,14 @@ public interface BicycleUtil {
 	//Plan Page Position
 	public final static int SetupPlan = 0;
 	public final static int ViewPlan = 1;
-	public final static int InviteFriend = 2;
-	public final static int ViewHistory = 3;
+	public final static int MyPlans = 2;
+	public final static int JoinedPlans = 3;
+	public final static int FinishedPlans = 4;
 	
 	//View Plan
 	public final static int VIEW_PLAN = 0xa1;
 	public final static int VIEW_PLAN_FINISH = 0xa2;
+	public final static int VIEW_PLAN_DELETE = 0xa3;
 	
 	
 	//Server Parameters

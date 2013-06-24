@@ -32,25 +32,19 @@ import org.json.JSONObject;
 import android.util.Log;
 
 /**
- * ���ӵ�Զ��web services����Ҫ�ṩURI
- * �ͷ��������ṩ���ܳס�
- * �ܳ׿ɷ�ֹ������ʷ������ڲ����ݡ�
- * 
- * �������call�����Ѳ�����post�����ύ����������
- * ������ͨ����֤����request,Ȼ�󷵻�
- * һ��json Object��
+
  * 
  * @author J-Liang
  *
  */
 public class HttpRestfulClient {
 	
-	//����������ַ
+	//
 	private String uri;
-	//�������ܳ�
+	//
 	private String key;
 	
-	//���֣�ֵ pair�����洢Ҫ�ύ�Ĳ���
+	//
 	private List<NameValuePair> postdata;
 	
 	/**
@@ -76,7 +70,8 @@ public class HttpRestfulClient {
 	public JSONObject callUrl(String suburi) throws JSONException{
 		HttpURLConnection  connection = null;
 		try{
-		URL url = new URL("http://webservice.bike/"+suburi);
+//		URL url = new URL("http://webservice.bike/"+suburi);
+		URL url = new URL("http://10.0.2.2/"+suburi);
 //		URL url = new URL("http://aebike.alienpig.org/"+suburi);
 		URLConnection urlConnection = url.openConnection();
 		connection = (HttpURLConnection)urlConnection;

@@ -56,13 +56,11 @@ class Application_Model_Planassignmentmapper
      */
     public function getMemberCount($planid){
         try {
-            $query = "SELECT status, count(userid)
+            $query = "SELECT *
                 FROM planassignment
-                WHERE planid = $planid
-                GROUP BY status
-                ";
+                WHERE planid = $planid";
             $rows = $this->table->getAdapter()->query($query)->fetchAll();
-            return $rows;
+            return count($rows);
         } catch (Exception $e) {
             Zend_Registry::get('logger')->err($e->getTraceAsString());
             throw new Exception("M040003 Get status count for plan $planid fail. ".$e->getMessage());

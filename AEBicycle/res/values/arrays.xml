@@ -25,5 +25,12 @@
         <item>20</item>
     </string-array>
 
-
+	<!-- Strings For ChallengeActivity List -->
+    <string-array name="challengemainlist">
+        <item>新建计划</item>
+        <item>查看现有计划</item>
+        <item>我的计划</item>
+        <item>我参加了的计划</item>
+        <item>完成的计划</item>
+    </string-array>
 </resources>

@@ -56,25 +56,8 @@ class IndexController extends Mylibrary_Controller_Action
     }
     
     public function createplanAction(){
-//        $data = array(
-//            'plantype' => 'C',
-//            'startlocation' => '101.03,3.001',
-//            'endlocation' => '101.03,3.500',
-//            'userid' => 7,
-//            'name' => 'Test Plan',
-//            'distance' => 132423423,
-//            'expectedtime' => 3123123,
-//            'pplgoing' => 40,
-//            'pplexpected' => 50,
-//            'remark' => 'remarks',
-//            'starttime' => '2012-10-09',
-//            'endtime' => '2012-10-15',
-//            'sponsor' => 'sopner ni ma',
-//            'prizes' => '1000'
-//        );
         try{
             $result = $this->_service->createPlan($this->_postdata);
-            $this->logger->info($this->_postdata['expecttime']);
             $arr['result'] = $result;
         }  catch (Exception $e){
             $arr['result'] = 0;
@@ -92,6 +75,27 @@ class IndexController extends Mylibrary_Controller_Action
             $arr['result'] = 0;
             $arr['msg'] = $e->getMessage();
             $this->logger->info($e->getMessage());
+        }
+        $this->_helper->json->sendJson($arr);
+    }
+    
+       
+    public function getfriendlistAction(){
+        try{
+            if(empty($this->_postdata['userid'])){
+                throw new Exception("userid is not provided");
+            }
+            $result = $this->_service->getFriendList($this->_postdata);
+            if(count($result) > 0){
+                $arr['result'] = 1;//got something
+                $arr['data'] = $result;
+            }else{
+                $arr['result'] = 2;//empty
+            }
+        }  catch (Exception $e){
+            $arr['result'] = 0;
+            $arr['msg'] = $e->getMessage();
+            $this->logger->err($e->getMessage());
         }
         $this->_helper->json->sendJson($arr);
     }
@@ -131,15 +135,33 @@ class IndexController extends Mylibrary_Controller_Action
     
     public function acceptplanAction(){
         try{
+            if(empty($this->_postdata['planid']) || empty($this->_postdata['userid']))
+                throw new Exception ("Planid, userid not set");
             $result['accpeted'] = $this->_service->accpetPlan($this->_postdata);
             $result['memebers'] = $this->_service->getMemberForPlan($this->_postdata);
-            $arr['result'] = $result;
-            $this->_helper->json->sendJson($arr);
+            $arr['data'] = $result;
+            $arr['result'] = 1;
         }  catch (Exception $e){
             $arr['result'] = "0";
             $arr['msg'] = $e->getMessage();
-            $this->_helper->json->sendJson($arr);
         }
+        $this->_helper->json->sendJson($arr);
+    }
+    
+        
+    public function quitplanAction(){
+        try{
+             if(empty($this->_postdata['planid']) || empty($this->_postdata['userid']))
+                throw new Exception ("Planid, userid not set");
+            $this->_service->quitPlan($this->_postdata);
+            $result['memebers'] = $this->_service->getMemberForPlan($this->_postdata);
+            $arr['result'] = 1;
+            $arr['data'] = $result;
+        }catch(Exception $e){
+            $arr['result'] = 0;
+            $arr['msg'] = $e->getMessage();
+        }
+        $this->_helper->json->sendJson($arr);
     }
     
     public function startplanAction(){
@@ -160,8 +182,11 @@ class IndexController extends Mylibrary_Controller_Action
     
     public function getplanbyidAction(){
         try{
+            if(empty($this->_postdata['planid']))
+                throw new Exception("planid is empty");
             $result = $this->_service->getPlanById($this->_postdata);
-            $arr["result"] = $result;
+            $arr['data'] = $result;
+            $arr["result"] = 1;
         }catch(Exception $e){
             $arr['result'] = 0;
             $arr['msg'] = $e->getMessage();
@@ -313,14 +338,7 @@ class IndexController extends Mylibrary_Controller_Action
         $result = $this->_service->updateUserTravelExp($data);
         $this->_helper->json->sendJson($result);
     }
-    
-    public function getfriendlistAction(){
-        $data = array(
-            'userid'=>1
-        );
-        $result = $this->_service->getFriendList($data);
-        $this->_helper->json->sendJson($result);
-    }
+ 
     
     public function confirmplansummaryAction(){
         $data = array(
@@ -360,24 +378,12 @@ class IndexController extends Mylibrary_Controller_Action
     public function deleteplanAction(){
         try{
             $result = $this->_service->deletePlan($this->_postdata);
-            $arr['result'] = $result;
-            $this->_helper->json->sendJson($arr);
+            $arr['result'] = 1;
         }catch(Exception $e){
             $arr['result'] = 0;
             $arr['msg'] = $e->getMessage();
-            $this->_helper->json->sendJson($arr);
         }
+        $this->_helper->json->sendJson($arr);
     }
-    
-    public function quitplanAction(){
-        try{
-            $result = $this->_service->quitPlan($this->_postdata);
-            $arr['result'] = $result;
-            $this->_helper->json->sendJson($arr);
-        }catch(Exception $e){
-            $arr['result'] = 0;
-            $arr['msg'] = $e->getMessage();
-            $this->_helper->json->sendJson($arr);
-        }
-    }
+
 }

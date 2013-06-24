@@ -48,6 +48,8 @@ class Application_Model_ProcessModel extends Application_Model_DbAdapter
                 'userid' => $arr['userid'],
                 'name' => $arr['name'],
                 'distance' => $this->getAttribute($arr, "distance", ""),
+                'pplgoing' => $this->getAttribute($arr, "pplgoing", 0),
+                'pplexpected' => $this->getAttribute($arr, "pplexpected", 2),
                 'expecttime' => $this->getAttribute($arr, "expecttime", "")
             );
             
@@ -189,15 +191,20 @@ class Application_Model_ProcessModel extends Application_Model_DbAdapter
      * @throws Exception
      */
     public function accpetPlan($arr){
+        $this->beginTxn();
         try {
             $assignmapper = new Application_Model_Planassignmentmapper();
+            $plan = new Application_Model_Planmapper();
             $data = array(
                 'userid' => $arr['userid'],
                 'planid' => $arr['planid']
             );
             $id = $assignmapper->assignPlan($data);
+            $plan->joinPlan($data['planid']);
+            $this->commitTxn();
             return $id;
         } catch (Exception $e) {
+            $this->rollbackTxn();
             Zend_Registry::get('logger')->err($e->getTraceAsString());
             throw new Exception("P000007 accept plan fail. ".$e->getMessage());
         }
@@ -415,7 +422,10 @@ class Application_Model_ProcessModel extends Application_Model_DbAdapter
         try {
             $friendmapper = new Application_Model_Friendmapper();
             $userid = $arr['userid'];
-            $result = $friendmapper->getFriends($userid);
+            $startRow = 0;
+            if(!empty($arr['startRow']))
+                $startRow = $arr['startRow'];
+            $result = $friendmapper->getFriends($userid, $startRow);
             return $result;
         } catch (Exception $e) {
             Zend_Registry::get('logger')->err($e->getTraceAsString());
@@ -786,10 +796,13 @@ class Application_Model_ProcessModel extends Application_Model_DbAdapter
     public function quitPlan($arr){
         $this->beginTxn();
         try{
-            $planid = $this->getAttribute($arr, "planid", "0");
-            $userid = $this->getAttribute($arr, "userid", "0");
+            $planid = $this->getAttribute($arr, "planid", 0);
+            $userid = $this->getAttribute($arr, "userid", 0);
             $planassignmentmapper = new Application_Model_Planassignmentmapper();
+            $plan = new Application_Model_Planmapper();
             $planassignmentmapper->deleteAssignment($planid,$userid);
+            
+            $plan->quitPlan($planid);
             $this->commitTxn();
             return 1;
         }catch(Exception $e){

@@ -2,21 +2,24 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.aeenery.aebicycle"
     android:versionCode="1"
-    android:versionName="1.0" >
+    android:versionName="1.0" 
+    android:screenOrientation="portrait"
+    >
 
-    
-    <supports-screens android:largeScreens="true"
+    <supports-screens
+        android:anyDensity="true"
+        android:largeScreens="true"
         android:normalScreens="true"
-        android:smallScreens="true"
         android:resizeable="true"
-        android:anyDensity="true"/>
-    
+        android:smallScreens="true" />
+
     <uses-sdk
         android:minSdkVersion="8"
-        android:targetSdkVersion="19"
-        />
+        android:targetSdkVersion="19" />
 
-     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-feature android:name="android.hardware.screen.portrait"/>
+    
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
     <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
     <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
@@ -64,9 +67,6 @@
     </uses-permission>
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
-    
-
-    
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" >
     </uses-permission>
     <uses-permission android:name="android.permission.READ_LOGS" >
@@ -98,11 +98,7 @@
         </activity>
         <activity android:name="com.aeenery.aebicycle.challenge.ChallengeActivity" >
         </activity>
-        <activity android:name="com.aeenery.aebicycle.challenge.NormalPlanActivity" >
-        </activity>
         <activity android:name="com.aeenery.aebicycle.challenge.QuickPlanActivity" >
-        </activity>
-        <activity android:name="com.aeenery.aebicycle.challenge.ChallengePlanActivity" >
         </activity>
         <activity android:name="com.aeenery.aebicycle.MainActivity" >
         </activity>
@@ -114,10 +110,6 @@
         </activity>
         <activity android:name="com.aeenery.aebicycle.battery.BatteryDetailActivity" >
         </activity>
-
-
-        <activity android:name="com.aeenery.aebicycle.challenge.RouteMapActivity" >
-        </activity>
         <activity
             android:name="com.aeenery.aebicycle.challenge.ViewPlanActivity"
             android:label="@string/title_activity_view_plan" >
@@ -125,18 +117,6 @@
         <activity
             android:name="com.aeenery.aebicycle.challenge.PlanDetailActivity"
             android:label="@string/title_activity_plan_detail" >
-        </activity>
-        <activity
-            android:name="com.aeenery.aebicycle.challenge.RouteSelectionActivity"
-            android:label="@string/title_activity_route_selection" >
-        </activity>
-        <!-- <activity -->
-        <!-- android:name="com.aeenery.aebicycle.HomeActivity" -->
-        <!-- android:label="@string/title_activity_home" > -->
-        <!-- </activity> -->
-        <activity
-            android:name="com.aeenery.aebicycle.challenge.RunPlanActivity"
-            android:label="@string/title_activity_run_plan" >
         </activity>
         <activity
             android:name="com.aeenery.aebicycle.DevelopingActivity"
@@ -160,8 +140,6 @@
             android:name="com.aeenery.aebicycle.VirtualBatteryActivity"
             android:label="@string/title_activity_virtual_battery" >
         </activity>
-
-        
         <activity
             android:name="com.aeenery.aebicycle.battery.BatteryMainActivity"
             android:label="@string/title_activity_battery_main" >
@@ -176,21 +154,30 @@
         </activity>
         <activity
             android:name="com.aeenery.aebicycle.map.MapActivity"
-            android:label="@string/title_activity_map" 
-            android:screenOrientation="sensor"
-        	android:configChanges="orientation|keyboardHidden">
-            >
+            android:configChanges="orientation|keyboardHidden"
+            android:label="@string/title_activity_map"
+            android:screenOrientation="sensor" >
         </activity>
-        
-        
+         <activity
+            android:name="com.aeenery.aebicycle.friend.FriendListActivity"
+            android:label="@string/title_activity_friend_list" >
+        </activity>
+            <activity
+            android:name="com.aeenery.aebicycle.challenge.PlanListActivity"
+            android:label="@string/title_activity_view_plan" >
+        </activity>
+
         <service
             android:name="com.aeenery.aebicycle.battery.BluetoothService"
             android:icon="@drawable/bike"
             android:label="btservice" >
         </service>
+        <service
+            android:name="com.baidu.location.f"
+            android:enabled="true"
+            android:process=":remote" >
+        </service>
 
-        <service android:name="com.baidu.location.f" android:enabled="true" android:process=":remote">
-		</service>
     </application>
 
 </manifest>

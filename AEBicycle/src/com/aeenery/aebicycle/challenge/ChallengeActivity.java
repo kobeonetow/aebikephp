@@ -14,6 +14,7 @@ import com.aeenery.aebicycle.DevelopingActivity;
 import com.aeenery.aebicycle.R;
 import com.aeenery.aebicycle.entry.BicycleUtil;
 import com.aeenery.aebicycle.entry.UtilFunction;
+import com.aeenery.aebicycle.friend.FriendListActivity;
 
 public class ChallengeActivity extends BaseListActivity{
 	
@@ -41,46 +42,23 @@ public class ChallengeActivity extends BaseListActivity{
 	@Override
 	protected void onListItemClick(ListView l, View v, final int position, final long id){
 		super.onListItemClick(l, v, position, id);
+		Intent intent = new Intent();
 		switch(position){
 		case BicycleUtil.SetupPlan:
-			setupPlan();
+			intent.setClass(ChallengeActivity.this, QuickPlanActivity.class);
+			ChallengeActivity.this.startActivityForResult(intent,BicycleUtil.CREATE_PLAN);
 			break;
 		case BicycleUtil.ViewPlan:
-			viewPlan();
+			intent.setClass(ChallengeActivity.this, ViewPlanActivity.class);
+			ChallengeActivity.this.startActivity(intent);
 			break;
-		case BicycleUtil.InviteFriend:
-			inviteFriend();
+		case BicycleUtil.MyPlans:
 			break;
-		case BicycleUtil.ViewHistory:
-			viewHistory();
+		case BicycleUtil.JoinedPlans:
 			break;
-		default:
+		case BicycleUtil.FinishedPlans:
 			break;
 		}
-	}
-	
-	public void setupPlan(){
-		Intent intent = new Intent();
-		intent.setClass(ChallengeActivity.this, QuickPlanActivity.class);
-		ChallengeActivity.this.startActivityForResult(intent,BicycleUtil.CREATE_PLAN);
-	}
-
-	public void viewPlan() {
-		Intent intent  = new Intent();
-		intent.setClass(ChallengeActivity.this, ViewPlanActivity.class);
-		ChallengeActivity.this.startActivity(intent);
-	}
-
-	public void inviteFriend() {
-		Intent intent  = new Intent();
-		intent.setClass(ChallengeActivity.this, DevelopingActivity.class);
-		ChallengeActivity.this.startActivity(intent);
-	}
-
-	public void viewHistory() {
-		Intent intent  = new Intent();
-		intent.setClass(ChallengeActivity.this, DevelopingActivity.class);
-		ChallengeActivity.this.startActivity(intent);
 	}
 	
 	@Override

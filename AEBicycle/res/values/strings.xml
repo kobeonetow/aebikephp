@@ -49,22 +49,13 @@
         <item>重庆</item>
     </string-array>
 
-    <!-- Strings For ChallengeActivity List -->
-    <string-array name="challengemainlist">
-        <item>新建计划</item>
-        <item>查看计划</item>
-        <item>邀请朋友</item>
-        <item>计划历史</item>
-    </string-array>
 
     <string name="btAdvance">高级</string>
     <string name="map_dst_hint">城市 目的地</string>
     <string name="route_my_location">我的位置</string>
 
     <!-- Strings for server connection status -->
-    <!-- <string name="servername">http://192.168.1.103/</string> -->
     <string name="servername">http://10.0.2.2/</string>
-    <!-- <string name="servername">http://ec2&#8211;54&#8211;251&#8211;17&#8211;187.ap&#8211;southeast&#8211;1.compute.amazonaws.com/bws/</string> -->
     <string name="serverkey">aebike</string>
     <string name="waitingforconnect">等待创建用户</string>
     <string name="createusersuccess">用户创建成功</string>
@@ -81,7 +72,7 @@
     <string name="plan_expected_time">预计所需时间</string>
     <string name="plan_start_time">开始时间</string>
     <string name="plan_end_time">结束时间</string>
-    <string name="plan_ppl_expected">预计人数</string>
+    <string name="plan_ppl_expected">参加/预计 人数</string>
     <string name="plan_ppl_going">参加人数</string>
     <string name="plan_remark">描述</string>
     <string name="plan_sponsor">赞助商</string>
@@ -122,5 +113,6 @@
     <string name="title_activity_battery_description">BatteryDescriptionActivity</string>
     <string name="title_activity_map">MapActivity</string>
     <string name="action_settings">Settings</string>
+    <string name="title_activity_friend_list">FriendListActivity</string>
 
 </resources>

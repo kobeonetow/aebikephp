@@ -15,12 +15,13 @@ class Application_Model_Friendmapper
      * (friendid, name)
      * @throws Exception
      */
-    public function getFriends($userid){
+    public function getFriends($userid, $startRow){
         try {
             $statusid= STATUS_NEW_FRIEND;
             $query = "SELECT f.friendid as friendid, u.name as name 
                 FROM friend as f, useraccount as u
-                WHERE f.userid = $userid and f.friendid = u.id and f.status = $statusid";
+                WHERE f.userid = $userid and f.friendid = u.id and f.status = $statusid 
+                LIMIT 30 OFFSET $startRow";
             $rows  = $this->table->getAdapter()->query($query)->fetchAll();
             return $rows;
         } catch (Exception $e) {

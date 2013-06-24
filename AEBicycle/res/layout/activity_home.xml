@@ -1,174 +1,175 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"  
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"  xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"  
     android:layout_height="match_parent" 
     android:scrollbars="vertical">   
     
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+<RelativeLayout
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
     tools:context=".HomeActivity" 
     >
 
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="60dp"
-        android:text="欢迎使用本产品" 
-        android:gravity="center"
-        android:textSize="35sp"
-        />
-    
-    <LinearLayout
-        android:orientation="horizontal"
-    	android:layout_width="fill_parent"
-    	android:layout_height="wrap_content"
-    	android:layout_gravity="center_vertical"
-    	android:paddingTop="50dp"
-    	android:paddingBottom="50dp"
-        >
-        <LinearLayout
+    <LinearLayout 
+        android:id="@+id/linear_left_top"
+        android:layout_width="180dp"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
-    	android:layout_width="0dip"
-    	android:layout_height="wrap_content"
-    	android:layout_weight="0.5"
+        android:layout_alignParentLeft="true"
+        android:padding="20dp"
+        
         >
-        <ImageButton
+         <ImageButton
             android:id="@+id/home_image_button_1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/buttons_home"
-            android:layout_gravity="center"
-            android:background="@null"
-            />
-        <TextView 
-            android:text="社区"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
+            android:src="@drawable/icon_zone"
+            android:background="@null"
+            android:layout_gravity="center_horizontal"
             />
-        </LinearLayout>
-       <LinearLayout
+
+         <TextView
+             android:id="@+id/home_image_button_1_text"
+             android:layout_width="fill_parent"
+             android:gravity="center_horizontal"
+             android:layout_height="wrap_content"
+             android:text="社区" />
+
+    </LinearLayout>
+   
+    <LinearLayout 
+        android:id="@+id/linear_right_top"
+        android:layout_width="180dp"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
-    	android:layout_width="0dip"
-    	android:layout_height="wrap_content"
-    	android:layout_weight="0.5"
+        android:layout_alignParentRight="true"
+        android:padding="20dp"
         >
+        
         <ImageButton
             android:id="@+id/home_image_button_2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/buttons_home"
-            android:layout_gravity="center"
-            android:background="@null"
-            />
-        <TextView 
-            android:text="天气"
             android:layout_width="fill_parent"
+            android:layout_gravity="center_horizontal"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal"/>
-        </LinearLayout>
-    </LinearLayout>
-
-    <LinearLayout
-        android:orientation="horizontal"
-    	android:layout_width="fill_parent"
-    	android:layout_height="wrap_content"
-    	    	android:paddingTop="50dp"
-    	android:paddingBottom="50dp"
-        >
-        <LinearLayout
-        android:orientation="vertical"
-    	android:layout_width="0dip"
-    	android:layout_height="wrap_content"
-    	android:layout_weight="0.5"
-        >
-        <ImageButton
-            android:id="@+id/home_image_button_3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/buttons_home"
-            android:layout_gravity="center"
+            android:src="@drawable/icon_whether"
             android:background="@null"
             />
         <TextView 
+            android:id="@+id/home_image_button_2_text"
+            android:text="天气"
+           	android:layout_width="fill_parent"
+            android:gravity="center_horizontal"
+            android:layout_height="wrap_content"
+            />
+        </LinearLayout>
+    
+    
+   <LinearLayout 
+        android:id="@+id/linear_left_middle"
+        android:layout_width="180dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/linear_left_top"
+        android:padding="20dp"
+        >
+     <ImageButton
+            android:id="@+id/home_image_button_3"
+           android:layout_width="fill_parent"
+            android:layout_gravity="center_horizontal"
+            android:layout_height="wrap_content"
+            android:src="@drawable/icon_map"
+            android:background="@null"
+            />
+        <TextView 
+            android:id="@+id/home_image_button_3_text"
             android:text="地图"
             android:layout_width="fill_parent"
+            android:gravity="center_horizontal"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal"/>
+            />
+        
         </LinearLayout>
-       <LinearLayout
+      
+   
+   <LinearLayout 
+        android:id="@+id/linear_right_middle"
+        android:layout_width="180dp"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
-    	android:layout_width="0dip"
-    	android:layout_height="wrap_content"
-    	android:layout_weight="0.5"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/linear_right_top"
+        android:padding="20dp"
         >
-        <ImageButton
+      <ImageButton
             android:id="@+id/home_image_button_4"
-            android:layout_width="wrap_content"
+           android:layout_width="fill_parent"
+            android:layout_gravity="center_horizontal"
             android:layout_height="wrap_content"
-            android:src="@drawable/buttons_home"
-            android:layout_gravity="center"
+            android:src="@drawable/icon_plan"
             android:background="@null"
             />
         <TextView 
+            android:id="@+id/home_image_button_4_text"
             android:text="骑车"
             android:layout_width="fill_parent"
+            android:gravity="center_horizontal"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal"/>
+            />
         </LinearLayout>
-    </LinearLayout>
-    
-    <LinearLayout
-        android:orientation="horizontal"
-    	android:layout_width="fill_parent"
-    	android:layout_height="wrap_content"
-    	    	android:paddingTop="50dp"
-    	android:paddingBottom="50dp"
-        >
-        <LinearLayout
+     
+   <LinearLayout 
+        android:id="@+id/linear_left_bottom"
+        android:layout_width="180dp"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
-    	android:layout_width="0dip"
-    	android:layout_height="wrap_content"
-    	android:layout_weight="0.5"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/linear_left_middle"
+        android:padding="20dp"
         >
-        <ImageButton
+          <ImageButton
             android:id="@+id/home_image_button_5"
-            android:layout_width="wrap_content"
+           android:layout_width="fill_parent"
+            android:layout_gravity="center_horizontal"
             android:layout_height="wrap_content"
-            android:src="@drawable/buttons_home"
-            android:layout_gravity="center"
+            android:src="@drawable/icon_logout"
             android:background="@null"
             />
-        <TextView 
+        <TextView
+            android:id="@+id/home_image_button_5_text" 
             android:text="排名"
             android:layout_width="fill_parent"
+            android:gravity="center_horizontal"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal"/>
-        </LinearLayout>
-       <LinearLayout
+            />
+        
+       </LinearLayout>
+   
+     <LinearLayout 
+        android:id="@+id/linear_right_bottom"
+        android:layout_width="180dp"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
-    	android:layout_width="0dip"
-    	android:layout_height="wrap_content"
-    	android:layout_weight="0.5"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/linear_right_middle"
+        android:padding="20dp"
         >
         <ImageButton
             android:id="@+id/home_image_button_6"
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
+            android:layout_gravity="center_horizontal"
             android:layout_height="wrap_content"
-            android:src="@drawable/buttons_home"
-            android:layout_gravity="center"
+            android:src="@drawable/icon_battery_config"
             android:background="@null"
             />
         <TextView 
+            android:id="@+id/home_image_button_6_text"
             android:text="电池信息"
             android:layout_width="fill_parent"
+            android:gravity="center_horizontal"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal"/>
-        </LinearLayout>
-    </LinearLayout>
-        
+            />
+		</LinearLayout>
     
-</LinearLayout>
+</RelativeLayout>
 </ScrollView>

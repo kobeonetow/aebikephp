@@ -29,14 +29,14 @@
         <TextView 
         android:text="@string/plan_creator"
         android:layout_width="100dp"
-        android:layout_height="35dp"
+        android:layout_height="wrap_content"
         />
         
     	<TextView 
         android:id="@+id/plan_detail_creator"
         android:layout_width="wrap_content"
         android:paddingLeft="10dp"
-        android:layout_height="35dp"
+        android:layout_height="wrap_content"
         />
     </LinearLayout>
     
@@ -49,12 +49,12 @@
 	    <TextView
 	        android:text="@string/plan_expected_distance"
 	        android:layout_width="100dp"
-        	android:layout_height="35dp"
+        	android:layout_height="wrap_content"
 	        />
 	    <TextView
 	    android:id="@+id/view_plan_estimate_distance"
         android:layout_width="fill_parent"
-        android:layout_height="35dp"
+        android:layout_height="wrap_content"
         android:paddingLeft="10dp"
         android:textSize="12sp"
         />
@@ -70,12 +70,12 @@
 	    <TextView
 	         android:text="@string/plan_expected_time"
 	        android:layout_width="100dp"
-        	android:layout_height="35dp"
+        	android:layout_height="wrap_content"
 	        />
 	    	<TextView
 	    android:id="@+id/view_plan_expected_time"
         android:layout_width="fill_parent"
-        android:layout_height="35dp"
+        android:layout_height="wrap_content"
         android:visibility="visible"
         android:paddingLeft="10dp"
         android:textSize="12sp"
@@ -91,12 +91,12 @@
 	    <TextView
 	        android:text="@string/plan_ppl_expected"
 	        android:layout_width="100dp"
-        	android:layout_height="35dp" 
+        	android:layout_height="wrap_content" 
 	        />	
 	    <TextView 
 	        android:id="@+id/view_pplexpected"
 	        android:layout_width="70dp" 
-	        android:layout_height="35dp"
+	        android:layout_height="wrap_content"
 	        android:paddingLeft="10dp"
 	        android:textSize="12sp"
 	        />
@@ -107,7 +107,6 @@
 	    android:id="@+id/view_planremark"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:visibility="visible"
         android:paddingLeft="10dp"
         android:textSize="12sp"
         android:textColor="@color/Yellow"
@@ -122,12 +121,12 @@
     <TextView 
         android:text="@string/plan_status"
         android:layout_width="100dp"
-        android:layout_height="35dp"
+        android:layout_height="wrap_content"
         />
     <TextView 
         android:id="@+id/plan_detail_status"
         android:layout_width="wrap_content"
-        android:layout_height="35dp"
+        android:layout_height="wrap_content"
         android:textSize="12sp"
         />
     </LinearLayout>
@@ -139,8 +138,7 @@
         android:id="@+id/plan_detail_id"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:textSize="20sp"
-        android:visibility="invisible"
+        android:visibility="gone"
         />
     
 	<!--   clickable buttons -->
@@ -164,13 +162,6 @@
             ></Button>
         
         <Button
-            android:id="@+id/plan_detail_interest_plan"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/btn_plan_detail_interest_plan"
-            ></Button>
-        
-        <Button
             android:id="@+id/plan_detail_cancel_plan"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -183,20 +174,7 @@
             android:layout_height="wrap_content"
             android:text="@string/plan_update"
             ></Button>
-        
-        <Button
-            android:id="@+id/plan_detail_start_plan"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="开始"
-            ></Button>
-            
-        <Button
-            android:id="@+id/plan_detail_end_plan"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="結束"
-            ></Button>
+      
     </LinearLayout>
     
 </LinearLayout>

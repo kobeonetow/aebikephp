@@ -46,6 +46,12 @@ import com.aeenery.aebicycle.AEApplication;
 
 public class PlanDetailActivity extends BaseActivity {
 
+	
+	public static final int JOIN_PLAN = 1;
+	public static final int QUIT_PLAN = 2;
+	public static final int UPDATE_PLAN = 3;
+	public static final int DELETE_PLAN = 4;
+	
 	private Plan p;
 	private int position;
 //	private TextView tvName;s
@@ -54,17 +60,12 @@ public class PlanDetailActivity extends BaseActivity {
 	private TextView tvExpectedPpl;
 	private TextView tvRemark;
 	private TextView tvPlanId;
-	private TextView tvStartTime;
-	private TextView tvEndTime;
 	private TextView tvStatus;
 	private TextView tvUserid;
 	private Button btnJoin;
 	private Button btnQuit;
-	private Button btnInterest;
 	private Button btnDelete;
 	private Button btnUpdate;
-	private Button btnStartPlan;
-	private Button btnEndPlan;
 	
 	private ServerAPI api;
 	
@@ -114,19 +115,13 @@ public class PlanDetailActivity extends BaseActivity {
 		
 		btnJoin = (Button)findViewById(R.id.plan_detail_join_plan);
 		btnQuit = (Button)findViewById(R.id.plan_detail_quit_plan);
-		btnInterest = (Button)findViewById(R.id.plan_detail_interest_plan);
 		btnDelete = (Button)findViewById(R.id.plan_detail_cancel_plan);
 		btnUpdate = (Button)findViewById(R.id.plan_detail_update_plan);
-		btnStartPlan = (Button)findViewById(R.id.plan_detail_start_plan);
-		btnEndPlan = (Button)findViewById(R.id.plan_detail_end_plan);
 		
-		btnJoin.setOnClickListener(new JoinListener());
-		btnQuit.setOnClickListener(new QuitListener());
-		btnInterest.setOnClickListener(new InterestListener());
-		btnDelete.setOnClickListener(new DeleteListener());
-		btnUpdate.setOnClickListener(new UpdateListener());
-		btnStartPlan.setOnClickListener(new StartPlanListener());
-		btnEndPlan.setOnClickListener(new EndPlanListener());
+		btnJoin.setOnClickListener(new PlanDetailButtonClickListener());
+		btnQuit.setOnClickListener(new PlanDetailButtonClickListener());
+		btnDelete.setOnClickListener(new PlanDetailButtonClickListener());
+		btnUpdate.setOnClickListener(new PlanDetailButtonClickListener());
 		
 		//Show route on map
 		initailiseMapView();
@@ -167,7 +162,7 @@ public class PlanDetailActivity extends BaseActivity {
 		if(p.getExpecttime() != null) time = Integer.parseInt(p.getExpecttime());
 		tvExpectedTime.setText(time/3600 + "时" + (time % 3600) / 60 +"分"+ time % 60 +"秒");
 		
-		tvExpectedPpl.setText(p.getPplgoing() +"/"+p.getPplexpected());
+		tvExpectedPpl.setText((Integer.parseInt(p.getPplgoing())+1) +"/"+p.getPplexpected());
 		tvRemark.setText(p.getDescription());
 		tvPlanId.setText(p.getId());
 		
@@ -183,49 +178,30 @@ public class PlanDetailActivity extends BaseActivity {
 	}
 	
 	
-	public void setButtonsInvisibleAndDisable(){
+	public void displayUserView(){
+		//Enable update button
+		btnUpdate.setVisibility(View.VISIBLE);
+		btnUpdate.setEnabled(true);
+		
+		//First make all invisible then filter out step by step
 		btnJoin.setVisibility(View.GONE);
 		btnQuit.setVisibility(View.GONE);
-		btnInterest.setVisibility(View.GONE);
 		btnDelete.setVisibility(View.GONE);
-		btnUpdate.setVisibility(View.VISIBLE);
-		btnStartPlan.setVisibility(View.GONE);
+//		btnStartPlan.setVisibility(View.GONE);
+//		btnEndPlan.setVisibility(View.GONE);
 		
-		btnJoin.setEnabled(false);
-		btnQuit.setEnabled(false);
-//		btnInterest.setEnabled(false);
-		btnDelete.setEnabled(false);
-		btnUpdate.setEnabled(true);
-	}
-	
-	public void hideStartPlanBtn(){
-		btnStartPlan.setVisibility(View.GONE);
-		btnStartPlan.setEnabled(false);
-	}
-	
-	public void showEndPlanBtn(){
-		btnEndPlan.setVisibility(View.VISIBLE);
-		btnEndPlan.setEnabled(true);
-	}
-	
-	public void hideEndPlanBtn(){
-		btnEndPlan.setVisibility(View.GONE);
-		btnEndPlan.setEnabled(false);
-	}
-	
-	public void displayUserView(){
-		setButtonsInvisibleAndDisable();
+		//If viewing own plan
 		if(p.getUserid() != null && p.getUserid().equals(LoginActivity.user.getId())){
-			this.creatorView();
+			btnDelete.setVisibility(View.VISIBLE);
 			return;
 		}
 		
 		switch(Integer.parseInt(p.__getAssignStatus())){
 		case BicycleUtil.STATUS_PLAN_NOT_ASSIGN:
-			this.notJoinView();
+			btnJoin.setVisibility(View.VISIBLE);
 			break;
 		case BicycleUtil.STATUS_PLAN_ACCEPT:
-			this.joinedView();
+			btnQuit.setVisibility(View.VISIBLE);
 			break;
 		case BicycleUtil.STATUS_PLAN_FINISH:
 //			this.setButtonsInvisibleAndDisable();
@@ -236,81 +212,60 @@ public class PlanDetailActivity extends BaseActivity {
 		case BicycleUtil.STATUS_PLAN_START:
 //			this.setButtonsInvisibleAndDisable();
 			break;
-		case BicycleUtil.STATUS_PLAN_INTEREST:
-			this.notJoinView();
+		}
+		
+	}
+			
+	public void callBackAfterClick(JSONObject json, String id, int request){
+		try{
+		switch(request){
+		case JOIN_PLAN:
+			if(id.equals(this.p.getId())){
+				p.__setAssignStatus(BicycleUtil.STATUS_PLAN_ACCEPT +"");
+				btnJoin.setEnabled(true);
+				btnJoin.setVisibility(View.GONE);
+				btnQuit.setVisibility(View.VISIBLE);
+				String members  = json.getJSONObject("data").getString("memebers");
+				p.setPplgoing(members);
+				setContents();
+			}
+			break;
+		case QUIT_PLAN:
+			if(id.equals(this.p.getId())){
+				p.__setAssignStatus(BicycleUtil.STATUS_PLAN_NOT_ASSIGN +"");
+				btnQuit.setEnabled(true);
+				btnQuit.setVisibility(View.GONE);
+				btnJoin.setVisibility(View.VISIBLE);
+				String members  = json.getJSONObject("data").getString("memebers");
+				p.setPplgoing(members);
+				setContents();
+			}
+			break;
+		case UPDATE_PLAN:
+			if(id.equals(this.p.getId())){
+				JSONObject result = json.optJSONObject("data");
+					if(result != null){
+						if(result.has("id")){
+							p.__setPlanFromJSONObject(result);
+						setContents();
+					}
+				}
+				btnUpdate.setEnabled(true);
+			}
+			break;
+		case DELETE_PLAN:
+			Intent ret = new Intent();
+			Bundle bundle = new Bundle();
+			bundle.putInt("position", position);
+			bundle.putString("planid", p.getId());
+			ret.putExtras(bundle);
+			this.setResult(BicycleUtil.VIEW_PLAN_DELETE, ret);
+			this.finish();
 			break;
 		}
-	}
-	
-	public void joinedView(){
-		btnQuit.setEnabled(true);
-		btnQuit.setVisibility(View.VISIBLE);
-	}
-	
-	public void notJoinView(){
-		btnJoin.setEnabled(true);
-		btnJoin.setVisibility(View.VISIBLE);
-	}
-	
-	public void creatorView(){
-		btnDelete.setEnabled(true);
-		btnDelete.setVisibility(View.VISIBLE);
-		if(p.getStarttime().equals("-")){
-			btnStartPlan.setEnabled(true);
-			btnStartPlan.setVisibility(View.VISIBLE);
-		}else if(p.getEndtime().equals("-")){
-			this.showEndPlanBtn();
-		}
-	}
-	
-	public void close(JSONObject json){
-		String result = null;
-		try {
-			result = json.getString("result");
-			if(result.equals("1")){
-				this.finish();
-			}
-		} catch (JSONException e) {
-			Log.i("PlanDetailActivity","JSON result return fail:"+result);
-			e.printStackTrace();
-		}
-	}
-	
-	public void joinAPlan(String planid){
-		if(planid.equals(this.p.getId())){
-			p.__setAssignStatus(BicycleUtil.STATUS_PLAN_ACCEPT +"");
-			this.setButtonsInvisibleAndDisable();
-			this.joinedView();
-		}
-	}
-	
-	public void quitAPlan(String planid,JSONObject json){
-		if(planid.equals(this.p.getId())){
-			String result = null;
-			try {
-				result = json.getString("result");
-				if(result.equals("1")){
-					p.__setAssignStatus(BicycleUtil.STATUS_PLAN_NOT_ASSIGN +"");
-					this.setButtonsInvisibleAndDisable();
-					this.notJoinView();
-				}
-			} catch (JSONException e) {
-				Log.i("PlanDetailActivity","JSON result return fail:"+result);
-				e.printStackTrace();
-			}
-		}
-	}
-	
-	public void updateAPlan(String planid, JSONObject json){
-		if(planid.equals(this.p.getId())){
-			JSONObject result = null;
-				result = json.optJSONObject("result");
-				if(result != null){
-				if(result.has("id")){
-					p.__setPlanFromJSONObject(result);
-					setContents();
-				}
-			}
+		}catch(Exception e){
+			Log.e("PlanDetailActivity","Json return has error."+e.getMessage());
+			return;
 		}
 	}
 	
@@ -318,11 +273,10 @@ public class PlanDetailActivity extends BaseActivity {
 	public void onBackPressed(){
 		Intent ret = new Intent();
 		Bundle bundle = new Bundle();
+		bundle.putInt("position", position);
 		bundle.putSerializable("plan", p);
 		ret.putExtras(bundle);
-		ret.putExtra("position", position);
 		this.setResult(BicycleUtil.VIEW_PLAN_FINISH, ret);
-//		Log.i("PLANDETAIL","BACK TO VIEW PLAN");
 		this.finish();
 	}
 	
@@ -351,57 +305,30 @@ public class PlanDetailActivity extends BaseActivity {
 	        super.onResume();
 	}
 	
-	class JoinListener implements OnClickListener{
-		@Override
-		public void onClick(View arg0) {
-			api.joinPlan(PlanDetailActivity.this, p);
-		}
-	}
-	class QuitListener implements OnClickListener{
-		@Override
-		public void onClick(View arg0) {
-			api.quitPlan(PlanDetailActivity.this, p);
-		}
-	}
-	class InterestListener implements OnClickListener{
-		@Override
-		public void onClick(View arg0) {
-//			api.interestPlan(PlanDetailActivity.this, p);
-		}
-		
-	}
-	class DeleteListener implements OnClickListener{
-		@Override
-		public void onClick(View arg0) {
-			api.detelePlan(PlanDetailActivity.this, p);
-		}
-	}
-	class UpdateListener implements OnClickListener{
-		@Override
-		public void onClick(View arg0) {
-			api.updatePlan(PlanDetailActivity.this, p);
-		}
-	}
-	class StartPlanListener implements OnClickListener{
+	class PlanDetailButtonClickListener implements OnClickListener{
 		@Override
 		public void onClick(View v) {
-			api.startPlan(PlanDetailActivity.this,p);
+			switch(v.getId()){
+			case R.id.plan_detail_join_plan:
+				btnJoin.setEnabled(false);
+				api.joinPlan(PlanDetailActivity.this, p);
+				break;
+			case R.id.plan_detail_quit_plan:
+				btnQuit.setEnabled(false);
+				api.quitPlan(PlanDetailActivity.this, p);
+				break;
+			case R.id.plan_detail_update_plan:
+				btnUpdate.setEnabled(false);
+				api.updatePlan(PlanDetailActivity.this, p);
+				break;
+			case R.id.plan_detail_cancel_plan:
+				btnDelete.setEnabled(false);
+				api.detelePlan(PlanDetailActivity.this, p);
+				break;
+			}
 		}
 	}
-	
-	public void runPlanActivity(){
-//		Intent intent = new Intent(PlanDetailActivity.this,RunPlanActivity.class);
-//		this.startActivityForResult(intent, BicycleUtil.RUN_PLAN);
-	}
-	
-	class EndPlanListener implements OnClickListener{
-		@Override
-		public void onClick(View v) {
-			api.endPlan(PlanDetailActivity.this,p);
-			
-		}
-	}
-	
+
 	public class AESearchListener implements MKSearchListener {
 
 		@Override

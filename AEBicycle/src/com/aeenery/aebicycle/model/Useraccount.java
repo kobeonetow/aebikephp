@@ -163,6 +163,9 @@ public class Useraccount implements Serializable{
 			if (json.has("id")) {
 				this.setId(json.getString("id"));
 			}
+			if(json.has("friendid")){
+				this.setId(json.getString("friendid"));
+			}
 			if (json.has("username")) {
 				this.setUsername(json.getString("username"));
 			}

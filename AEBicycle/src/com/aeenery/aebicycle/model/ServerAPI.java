@@ -20,6 +20,7 @@ import com.aeenery.aebicycle.challenge.PlanDetailActivity;
 import com.aeenery.aebicycle.challenge.QuickPlanActivity;
 import com.aeenery.aebicycle.challenge.ViewPlanActivity;
 import com.aeenery.aebicycle.entry.BicycleUtil;
+import com.aeenery.aebicycle.friend.FriendListActivity;
 
 public class ServerAPI {
 	
@@ -65,6 +66,9 @@ public class ServerAPI {
 			result = json.getString("result");
 			if(result == null || result.equals("0")){
 				Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
+				return false;
+			}else if(result.equals("2")){
+				Toast.makeText(context, "没有新信息", Toast.LENGTH_SHORT).show();
 				return false;
 			}
 		} catch (JSONException e) {
@@ -187,14 +191,13 @@ public class ServerAPI {
 			@Override
 			protected JSONObject doInBackground(String... params) {
 				httpClient.addNameValuePair("planid", p.getId());
-//				httpClient.addNameValuePair("userid", user.getId());
 				return callServer("index/acceptplan");
 			}
 			
 			@Override
 			protected void onPostExecute(JSONObject json){
-				if(checkResult(this,json,context, "����ʧ�ܣ����Ժ�����")){
-					((PlanDetailActivity)context).joinAPlan(p.getId());
+				if(checkResult(this,json,context, "参加失败，稍后再试")){
+					((PlanDetailActivity)context).callBackAfterClick(json , p.getId(),PlanDetailActivity.JOIN_PLAN);
 				}
 			}
 			
@@ -211,8 +214,8 @@ public class ServerAPI {
 			
 			@Override
 			protected void onPostExecute(JSONObject json){
-				if(checkResult(this,json,context, "ɾ��ʧ�ܣ����Ժ�����")){
-					((PlanDetailActivity)context).close(json);
+				if(checkResult(this,json,context, "取消计划失败，请稍后再试")){
+					((PlanDetailActivity)context).callBackAfterClick(json, p.getId(),PlanDetailActivity.DELETE_PLAN);
 				}
 			}
 			
@@ -229,8 +232,8 @@ public class ServerAPI {
 			
 			@Override
 			protected void onPostExecute(JSONObject json){
-				if(checkResult(this,json,context, "�˳�ʧ�ܣ����Ժ�����")){
-					((PlanDetailActivity)context).quitAPlan(p.getId(),json);
+				if(checkResult(this,json,context, "退出失败，请稍后再试")){
+					((PlanDetailActivity)context).callBackAfterClick(json, p.getId(),PlanDetailActivity.QUIT_PLAN);
 				}
 			}
 			
@@ -247,47 +250,34 @@ public class ServerAPI {
 			
 			@Override
 			protected void onPostExecute(JSONObject json){
-				if(checkResult(this,json,context, "����ʧ�ܣ����Ժ�����")){
-					((PlanDetailActivity)context).updateAPlan(p.getId(),json);
+				if(checkResult(this,json,context, "更新失败，请稍后再试")){
+					((PlanDetailActivity)context).callBackAfterClick(json,p.getId(),PlanDetailActivity.UPDATE_PLAN);
 				}
 			}
 			
 		}.execute("");
 	}
 	
-	public void startPlan(final Context context, final Plan p){
-		new AsyncTask<String,String,JSONObject>(){
-			@Override
-			protected JSONObject doInBackground(String... params) {
-				httpClient.addNameValuePair("planid", p.getId());
-				return callServer("index/startplan");
-			}
-			
-			@Override
-			protected void onPostExecute(JSONObject json){
-				if(checkResult(this,json,context, "开始失败,请稍后尝试")){
-					((PlanDetailActivity)context).updateAPlan(p.getId(),json);
-					((PlanDetailActivity)context).hideStartPlanBtn();
-					((PlanDetailActivity)context).runPlanActivity();
-				}
-			}
-			
-		}.execute("");
-	}
 	
-	public void endPlan(final Context context, final Plan p){
+	/**
+	 * Get friend starting from number index
+	 * Each time load maximum 30 friends
+	 * @param context
+	 * @param number
+	 */
+	public void getFriendList(final Context context, final String number){
 		new AsyncTask<String,String,JSONObject>(){
 			@Override
 			protected JSONObject doInBackground(String... params) {
-				httpClient.addNameValuePair("planid", p.getId());
-				return callServer("index/submitsummary");
+				httpClient.addNameValuePair("startRow", number);
+				return callServer("index/getfriendlist");
 			}
 			
 			@Override
 			protected void onPostExecute(JSONObject json){
-				if(checkResult(this,json,context, "开始失败,请稍后尝试")){
-					((PlanDetailActivity)context).updateAPlan(p.getId(),json);
-					((PlanDetailActivity)context).hideEndPlanBtn();
+				if (checkResult(this, json, context,
+						context.getString(R.string.server_busy))) {
+					((FriendListActivity) context).setFriendsToView(json);
 				}
 			}
 			

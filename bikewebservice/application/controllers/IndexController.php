@@ -32,18 +32,6 @@ class IndexController extends Mylibrary_Controller_Action
     }
     
     public function createuserAction(){
-//        $data = array(
-//          'username'=>'jianxing',
-//            'password'=>'jianxing',
-//            'name'=>'Kobeonetow',
-//            'emailaddress'=>'jianxing@aebike.com'
-//        );
-//        $data = array(
-//          'username'=>'jianxing2',
-//            'password'=>'jianxing',
-//            'name'=>'Kobeonetow',
-//            'emailaddress'=>'jianxing@aebike.com'
-//        );
         try{
             $result  = $this->_service->createUser($this->_postdata);
             $arr['result'] = $result;
@@ -69,8 +57,17 @@ class IndexController extends Mylibrary_Controller_Action
     
     public function getcurrentplanlistAction(){
         try{
+            if(empty($this->_postdata['userid']))
+                throw new Exception("user id and start index not specify");
+            if(empty($this->_postdata['start']))
+                $this->_postdata['start'] = 0;
             $result = $this->_service->getCurrentPlanList($this->_postdata);
-            $arr['result'] = $result;
+            if(count($result) > 0){
+                $arr['data'] = $result;
+                $arr['result'] = 1;
+            }else{
+                $arr['result'] =2;
+            }
         }  catch (Exception $e){
             $arr['result'] = 0;
             $arr['msg'] = $e->getMessage();
@@ -86,6 +83,46 @@ class IndexController extends Mylibrary_Controller_Action
                 throw new Exception("userid is not provided");
             }
             $result = $this->_service->getFriendList($this->_postdata);
+            if(count($result) > 0){
+                $arr['result'] = 1;//got something
+                $arr['data'] = $result;
+            }else{
+                $arr['result'] = 2;//empty
+            }
+        }  catch (Exception $e){
+            $arr['result'] = 0;
+            $arr['msg'] = $e->getMessage();
+            $this->logger->err($e->getMessage());
+        }
+        $this->_helper->json->sendJson($arr);
+    }
+    
+    public function getuserplanlistAction(){
+        try{
+            if(empty($this->_postdata['userid'])){
+                throw new Exception("userid is not provided");
+            }
+            $result = $this->_service->getMyPlanList($this->_postdata['userid']);
+            if(count($result) > 0){
+                $arr['result'] = 1;//got something
+                $arr['data'] = $result;
+            }else{
+                $arr['result'] = 2;//empty
+            }
+        }  catch (Exception $e){
+            $arr['result'] = 0;
+            $arr['msg'] = $e->getMessage();
+            $this->logger->err($e->getMessage());
+        }
+        $this->_helper->json->sendJson($arr);
+    }
+    
+    public function getjoinedplanlistAction(){
+        try{
+            if(empty($this->_postdata['userid'])){
+                throw new Exception("userid is not provided");
+            }
+            $result = $this->_service->getJoinedPlanList($this->_postdata['userid']);
             if(count($result) > 0){
                 $arr['result'] = 1;//got something
                 $arr['data'] = $result;

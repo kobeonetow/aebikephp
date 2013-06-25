@@ -51,14 +51,15 @@ public class ChallengeActivity extends BaseListActivity{
 			ChallengeActivity.this.startActivity(intent);
 			break;
 		case BicycleUtil.MyPlans:
-			intent.setClass(ChallengeActivity.this, );
+			intent.setClass(ChallengeActivity.this, MyPlansActivity.class);
 			ChallengeActivity.this.startActivity(intent);
 			break;
 		case BicycleUtil.JoinedPlans:
+			intent.setClass(ChallengeActivity.this, JoinPlansActivity.class);
 			ChallengeActivity.this.startActivity(intent);
 			break;
 		case BicycleUtil.FinishedPlans:
-			ChallengeActivity.this.startActivity(intent);
+//			ChallengeActivity.this.startActivity(intent);
 			break;
 		}
 	}

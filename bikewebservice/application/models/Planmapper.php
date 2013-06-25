@@ -113,13 +113,13 @@ class Application_Model_Planmapper
      * 如果有，返回planModels，否则否会False
      * @throws Exception
      */
-     public function getCurrentPlanList($pagenumber, $lotsize){
+     public function getCurrentPlanList($userid, $start){
         try{
-            $start = ($pagenumber - 1) * $lotsize;
+            $lotsize = 30;
             $statusid = STATUS_NEW;
             $query = "SELECT *
                 FROM plan as p 
-                WHERE p.status = $statusid and p.type != '" . PLAN_TYPE_QUICK . "'
+                WHERE p.status = $statusid AND userid!=$userid 
                 LIMIT $lotsize OFFSET $start";
             $rows = $this->table->getAdapter()->query($query)->fetchAll();
             if ($rows !== False && count($rows) > 0) {
@@ -191,6 +191,33 @@ class Application_Model_Planmapper
            }
         }catch (Exception $e){
             throw new Exception("M020008 quit plan fail for adding pplgoing.".$e->getMessage());
+        }
+    }
+    
+     /**
+     * 获取用户创建的计划list
+     * @return array|boolean
+     * 如果有，返回planModels，否则否会False
+     * @throws Exception
+     */
+     public function getMyPlanList($userid){
+        try{
+            $query = "SELECT *
+                FROM plan 
+                WHERE userid=$userid";
+            $rows = $this->table->getAdapter()->query($query)->fetchAll();
+            if ($rows !== False && count($rows) > 0) {
+                $models = array();
+                foreach ($rows as $row) {
+                    $model = new Application_Model_Plan($row);
+                    array_push($models, $model);
+                }
+                return $models;
+            } else {
+                return False;
+            }
+        }  catch (Exception $e){
+            throw new Exception("M020009 get my plan list fail for user $userid. " . $e->getMessage());
         }
     }
 }

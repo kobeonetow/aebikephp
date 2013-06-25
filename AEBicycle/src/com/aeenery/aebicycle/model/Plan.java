@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 
 import org.json.JSONObject;
@@ -27,8 +29,8 @@ public class Plan implements Serializable{
 	private String pplgoing;
 	private String pplexpected;
 	private String description;
-	private Timestamp starttime;
-	private Timestamp endtime;
+	private Timestamp plandate;
+	private Date createdate;
 	private String sponsor;
 	private String status;
 	private String assignStatus;
@@ -93,41 +95,27 @@ public class Plan implements Serializable{
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	public String getStarttime() {
-		if(starttime == null) return "-";
+	public String getPlandate() {
+		if(plandate == null) return "";
 		else
-			return (starttime.getYear()+1900)+"/"+(starttime.getMonth()+1)+"/"+starttime.getDate() + " " + starttime.getHours() + ":"+ starttime.getMinutes()+":"+starttime.getSeconds();
+			return (plandate.getYear()+1900)+"/"+(plandate.getMonth()+1)+"/"+plandate.getDate() + " " + plandate.getHours() + ":"+ plandate.getMinutes()+":"+plandate.getSeconds();
 	}
-	public void setStarttime(String starttime) {
+	public void setPlandate(String plandate) {
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss",Locale.CHINA);
 		try {
-			Log.i("Starttime is",starttime);
-			Log.i("Starttime subsrring is",starttime.substring(0, 4));
-			if(starttime.substring(0, 4).equals("0000")) {
-				this.starttime = null;
-				return;
-			}else
-				this.starttime = new Timestamp(format.parse(starttime).getTime());
+			this.plandate = new Timestamp(format.parse(plandate).getTime());
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
 	}
-	public String getEndtime() {
-		if(endtime == null) return "-";
-		else
-			return (endtime.getYear()+1900)+"/"+(endtime.getMonth()+1)+"/"+endtime.getDate() + " " + endtime.getHours() + ":"+ endtime.getMinutes()+":"+endtime.getSeconds();
+	public String getCreatedate() {
+		if(createdate == null) return "";
+		Calendar c = Calendar.getInstance();
+		c.setTime(createdate);
+		return c.get(Calendar.YEAR)+"-"+(c.get(Calendar.MONTH)+1)+"-"+c.get(Calendar.DAY_OF_MONTH);
 	}
-	public void setEndtime(String endtime) {
-		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss",Locale.CHINA);
-		try {
-			if(endtime.substring(0, 4).equals("0000")){
-				this.endtime = null;
-				return;
-			}
-			this.endtime = new Timestamp(format.parse(endtime).getTime());
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
+	public void setCreatedate(Date date) {
+		this.createdate = date;
 	}
 	public String getSponsor() {
 		return sponsor;
@@ -186,14 +174,19 @@ public class Plan implements Serializable{
 			if (json.has("description")) {
 				this.setDescription(json.getString("description"));
 			}
-			if (json.has("starttime")) {
-				this.setStarttime(json.getString("starttime"));
+			if (json.has("plandate")) {
+				this.setPlandate(json.getString("plandate"));
 			}
-			if (json.has("endtime")) {
-				this.setEndtime(json.getString("endtime"));
+			if (json.has("createdate")) {
+				String date  = json.getString("createdate");
+				SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd",Locale.CHINA);
+				this.setCreatedate(format.parse(date));
 			}
 			if (json.has("sponsor")) {
 				this.setSponsor(json.getString("sponsor"));
+			}
+			if(json.has("assignstatus")){
+				this.__setAssignStatus(json.getString("assignstatus"));
 			}
 		} catch (Exception e) {
 			Log.i("Plan Object",

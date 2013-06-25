@@ -59,23 +59,19 @@ public class PlanListActivity extends BaseActivity {
 	
 	public void setPlansToView(JSONObject json){
 		try{
-		JSONArray json2 = json.getJSONArray("result");
-		if(json2.length() <= 1){
-				if(json2.length() == 1 && !((JSONObject)json2.get(0)).has("id")){
-					Toast.makeText(this, "No plans found", Toast.LENGTH_LONG).show();
-					return;
+			JSONArray json2 = json.getJSONArray("data");
+			if(json.getString("result").equals("2")){
+				Toast.makeText(this, "No plans found", Toast.LENGTH_LONG).show();
+				return;
 			}
-		}
-		plans = new Plan[json2.length()];
-		for(int i=0; i<json2.length(); i++){
-			JSONObject curIndex = ((JSONObject)json2.get(i));
-			Plan p = new Plan();
-			p.__setPlanFromJSONObject(curIndex);
-			p.__setAssignStatus(curIndex.getString("assignstatus"));
-			plans[i] = p;
-			
-		}
-		lv.setAdapter(new PlanViewAdapter(PlanListActivity.this, R.layout.listview_plan_adapter, plans));
+			plans = new Plan[json2.length()];
+			for(int i=0; i<json2.length(); i++){
+				JSONObject curIndex = ((JSONObject)json2.get(i));
+				Plan p = new Plan();
+				p.__setPlanFromJSONObject(curIndex);
+				plans[i] = p;
+			}
+			lv.setAdapter(new PlanViewAdapter(PlanListActivity.this, R.layout.listview_plan_adapter, plans));
 		}catch(Exception e){
 			Log.i("PlanListActivity",e.getMessage());
 		}
@@ -130,7 +126,7 @@ public class PlanListActivity extends BaseActivity {
 			
 			name.setText(p.getName());
 			distance.setText("路程:" + p.getDistance());
-			if(p.getStarttime().substring(0, 1).equals("-"))
+			if(p.getPlandate().equals(""))
 				started.setText("N");
 			else
 				started.setText("Y");

@@ -30,7 +30,11 @@ public class ViewPlanActivity extends PlanListActivity {
 
 	@Override
 	protected void loadPlans(){
-		api.getCurrentPlanList(this, "1", "10");
+		if(plans == null)
+			api.getCurrentPlanList(this, "0");
+		else{
+			api.getCurrentPlanList(this, plans.length+"");
+		}
 	}
 	
 	@Override

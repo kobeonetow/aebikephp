@@ -172,6 +172,12 @@ class Application_Model_Planassignmentmapper
         }
     }
     
+    /**
+     * Check whether assignment deletable, if started or finish, not deletable
+     * @param type $planid
+     * @return boolean
+     * @throws Exception
+     */
     public function isAssignmentDeletable($planid){
         try {
             $query = "SELECT count(*) as count FROM planassignment as p 
@@ -188,6 +194,12 @@ class Application_Model_Planassignmentmapper
         }
     }
     
+    /**
+     * Delete assignments for given $planid
+     * @param type $planid
+     * @return type
+     * @throws Exception
+     */
     public function deleteAssignment($planid){
         try {
             $query = "DELETE FROM planassignment 
@@ -197,6 +209,24 @@ class Application_Model_Planassignmentmapper
         } catch (Exception $e) {
             Zend_Registry::get('logger')->err($e->getTraceAsString());
             throw new Exception("M040010 delete plan fail planid $planid. ".$e->getMessage());
+        }
+    }
+    
+    /**
+     * Get joined plans by $userid
+     * @param type $userid
+     */
+    public function getJoinedPlanList($userid){
+         try {
+            $query = "SELECT p.*, s.userid as joinuserid, s.starttime as planstarttime, s.endtime as planendtime, s.status as assignstatus  
+                FROM plan as p, planassignment as s 
+                WHERE p.id = s.planid AND s.userid = $userid 
+                ORDER BY plandate DESC";
+            $rows = $this->table->getAdapter()->query($query)->fetchAll();
+            return $rows;
+        } catch (Exception $e) {
+            Zend_Registry::get('logger')->err($e->getTraceAsString());
+            throw new Exception("M040011 Get joined plans fail by userid $userid. ".$e->getMessage());
         }
     }
 }

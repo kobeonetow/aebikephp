@@ -4,8 +4,8 @@ class Application_Model_Plan extends Application_Model_GetSetModel
 {
     private $_id;
     private $_name;
-    private $_starttime;
-    private $_endtime;
+    private $_plandate;
+    private $_createdate;
     private $_startlocation;
     private $_endlocation;
     private $_expecttime;
@@ -46,22 +46,22 @@ class Application_Model_Plan extends Application_Model_GetSetModel
         return $this->_name;
     }
     
-    public function setStarttime($starttime){
-        $this->_starttime = $starttime;
+    public function setPlandate($starttime){
+        $this->_plandate = $starttime;
         return $this;
     }
     
-    public function getStarttime(){
-        return $this->_starttime;
+    public function getPlandate(){
+        return $this->_plandate;
     }
     
-    public function setEndtime($endtime){
-        $this->_endtime = $endtime;
+    public function setCreatedate($createdate){
+        $this->_createdate = $createdate;
         return $this;
     }
     
-    public function getEndtime(){
-        return $this->_endtime;
+    public function getCreatedate(){
+        return $this->_createdate;
     }
     
     public function setStartlocation($startlocation){

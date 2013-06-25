@@ -26,6 +26,27 @@
 	    android:layout_width="fill_parent"
 	    android:layout_height="wrap_content"
 	    />
+	<LinearLayout
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="horizontal"
+	    android:weightSum="2"
+	    >
+		<Button
+		    android:id="@+id/btn_date_picker"
+		    android:layout_width="0dip"
+		    android:layout_height="match_parent"
+		    android:text="设置日期"
+		    android:layout_weight="1"
+		    />
+		<Button
+		    android:id="@+id/btn_time_picker"
+		    android:layout_width="0dip"
+		    android:layout_height="match_parent"
+		    android:text="设置时间"
+		    android:layout_weight="1"
+		    />
+	</LinearLayout>
 	
 	<!-- Selection button -->
 	<Button 
@@ -171,5 +192,7 @@
     	android:layout_height="wrap_content"
     	android:visibility="visible"
     	/>  
+    	
+
 </LinearLayout>
 </ScrollView> 

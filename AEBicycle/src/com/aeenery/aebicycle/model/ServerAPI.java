@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.aeenery.aebicycle.LoginActivity;
 import com.aeenery.aebicycle.R;
 import com.aeenery.aebicycle.RegisterActivity;
+import com.aeenery.aebicycle.challenge.JoinPlansActivity;
 import com.aeenery.aebicycle.challenge.MyPlansActivity;
 import com.aeenery.aebicycle.challenge.PlanDetailActivity;
 import com.aeenery.aebicycle.challenge.QuickPlanActivity;
@@ -167,12 +168,11 @@ public class ServerAPI {
 		}.execute("");
 	}
 	
-	public void getCurrentPlanList(final Context context, final String pagenumber, final String lotsize){
+	public void getCurrentPlanList(final Context context, final String startRow){
 		new AsyncTask<String,String,JSONObject>(){
 			@Override
 			protected JSONObject doInBackground(String... params) {
-				httpClient.addNameValuePair("pagenumber", pagenumber);
-				httpClient.addNameValuePair("lotsize", lotsize);
+				httpClient.addNameValuePair("start", startRow);
 				return callServer("index/getcurrentplanlist");
 			}
 			
@@ -301,6 +301,31 @@ public class ServerAPI {
 				if (checkResult(this, json, context,
 						context.getString(R.string.server_busy))) {
 					((FriendListActivity) context).setFriendsToView(json);
+				}
+			}
+			
+		}.execute("");
+	}
+
+	/**
+	 * Get joined plans by user
+	 * @param joinPlansActivity
+	 * @param string
+	 */
+	public void getJoinedPlans(final JoinPlansActivity joinPlansActivity,
+			final String startRow) {
+		new AsyncTask<String,String,JSONObject>(){
+			@Override
+			protected JSONObject doInBackground(String... params) {
+				httpClient.addNameValuePair("start", startRow);
+				return callServer("index/getjoinedplanlist");
+			}
+			
+			@Override
+			protected void onPostExecute(JSONObject json){
+				if (checkResult(this, json, joinPlansActivity,
+						joinPlansActivity.getString(R.string.server_busy))) {
+					joinPlansActivity.setPlansToView(json);
 				}
 			}
 			

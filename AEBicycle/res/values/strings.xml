@@ -68,9 +68,9 @@
     <string name="plan_start_location">起点</string>
     <string name="plan_terminate_location">终点 </string>
     <string name="plan_name">计划名字</string>
-    <string name="plan_expected_distance">预计路程</string>
-    <string name="plan_expected_time">预计所需时间</string>
-    <string name="plan_start_time">开始时间</string>
+    <string name="plan_expected_distance">预计路程:</string>
+    <string name="plan_expected_time">预计所需时间:</string>
+    <string name="plan_start_time">集合时间:</string>
     <string name="plan_end_time">结束时间</string>
     <string name="plan_ppl_expected">参加/预计 人数</string>
     <string name="plan_ppl_going">参加人数</string>

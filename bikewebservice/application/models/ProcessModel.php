@@ -3,6 +3,14 @@
 class Application_Model_ProcessModel extends Application_Model_DbAdapter
 {
 
+    public function getAttribute(Array $arr, $name, $default){
+        if(isset($arr[$name])){
+            return $arr[$name];
+        }else{
+            return $default;
+        }
+    }
+    
     /**
      * 创建一个用户
      * @param Array $arr  Need to provide username,password,name,emailaddress
@@ -50,31 +58,12 @@ class Application_Model_ProcessModel extends Application_Model_DbAdapter
                 'distance' => $this->getAttribute($arr, "distance", ""),
                 'pplgoing' => $this->getAttribute($arr, "pplgoing", 0),
                 'pplexpected' => $this->getAttribute($arr, "pplexpected", 2),
-                'expecttime' => $this->getAttribute($arr, "expecttime", "")
+                'expecttime' => $this->getAttribute($arr, "expecttime", ""),
+                'description' => $this->getAttribute($arr, 'description', ""),
+                'createdate' =>$this->getAttribute($arr, 'createdate', date("Y-m-d")),
+                'plandate' =>$this->getAttribute($arr, 'plandate', date('Y-m-d H:i:s'))
             );
-            
-//            if (strcmp($arr['plantype'], 'N') == 0) {
-//                $dataN = array(
-//                    'pplgoing' => $this->getAttribute($arr, "pplgoing", ""),
-//                    'pplexpected' => $this->getAttribute($arr, "pplexpected", ""),
-//                    'description' => $this->getAttribute($arr, "remark", ""),
-//                    'starttime' => $this->getAttribute($arr, "starttime", ""),
-//                    'endtime' => $this->getAttribute($arr, "endtime", "")
-//                );
-//                $data = array_merge($data, $dataN);
-//            } else 
-            
-//             if (strcmp($arr['plantype'], 'C') == 0) {
-//                $dataC = array(
-//                    'pplgoing' => $this->getAttribute($arr, "pplgoing", 1),
-//                    'pplexpected' => $this->getAttribute($arr, "pplexpected", 2),
-//                    'description' => $this->getAttribute($arr, "remark", ""),
-//                    'starttime' => $this->getAttribute($arr, "starttime", ""),
-//                    'endtime' => $this->getAttribute($arr, "endtime", ""),
-//                    'sponsor' => $this->getAttribute($arr,"sponsor","")
-//                );
-//                $data = array_merge($data, $dataC);
-//            }
+    
             if (!empty($arr['achievementid'])) {
                 $data['achievementid'] = $arr['achievementid'];
             }
@@ -731,7 +720,7 @@ class Application_Model_ProcessModel extends Application_Model_DbAdapter
         try{
             $planmapper = new Application_Model_Planmapper();
             $planassignmapper = new Application_Model_Planassignmentmapper();
-            $list = $planmapper->getCurrentPlanList($arr['pagenumber'],$arr['lotsize']);
+            $list = $planmapper->getCurrentPlanList($arr['userid'],$arr['start']);
             $plans = array();
             if($list !== False){
                 foreach ($list as $model){
@@ -753,6 +742,8 @@ class Application_Model_ProcessModel extends Application_Model_DbAdapter
             throw new Exception("P000033 Get current plan list fail. ".$e->getMessage());
         }
     }
+    
+    
     
     /**
      * 删除一个计划和所有关于这个计划的人员
@@ -811,11 +802,43 @@ class Application_Model_ProcessModel extends Application_Model_DbAdapter
         }
     }
     
-    public function getAttribute(Array $arr, $name, $default){
-        if(isset($arr[$name])){
-            return $arr[$name];
-        }else{
-            return $default;
+     /**
+     * 提取用户建的计划
+     * @param Array $arr 需要userid
+     * @return $plans 返回计划数组，每一个$plans[n]是一个计划
+     */
+    public function getMyPlanList($userid){
+        try{
+            $planmapper = new Application_Model_Planmapper();
+            $list = $planmapper->getMyPlanList($userid);
+            $plans = array();
+            if($list !== False){
+                foreach ($list as $model){
+                    $str = $model->toKeyValueArray();
+                    array_push($plans, $str);
+                }
+            }
+            return $plans;
+        }catch(Exception $e){
+            Zend_Registry::get('logger')->err($e->getTraceAsString());
+            throw new Exception("P000036 Get my plan list fail. ".$e->getMessage());
+        }
+    }
+    
+    /**
+     * 获取用户参加了的计划
+     * @param type $userid
+     * @return array
+     * @throws Exception
+     */
+    public function getJoinedPlanList($userid){
+        try{
+            $planassignmapper = new Application_Model_Planassignmentmapper();
+            $list = $planassignmapper->getJoinedPlanList($userid);
+            return $list;
+        }catch(Exception $e){
+            Zend_Registry::get('logger')->err($e->getTraceAsString());
+            throw new Exception("P000037 Get joined plan list fail. ".$e->getMessage());
         }
     }
 }

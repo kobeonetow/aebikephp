@@ -54,7 +54,7 @@ public class PlanDetailActivity extends BaseActivity {
 	
 	private Plan p;
 	private int position;
-//	private TextView tvName;s
+	private TextView tvStartTime;
 	private TextView tvExpectedDistance;
 	private TextView tvExpectedTime;
 	private TextView tvExpectedPpl;
@@ -109,6 +109,7 @@ public class PlanDetailActivity extends BaseActivity {
 		tvExpectedPpl = (TextView)findViewById(R.id.view_pplexpected);
 		tvRemark = (TextView)findViewById(R.id.view_planremark);
 		tvStatus = (TextView)findViewById(R.id.plan_detail_status);
+		tvStartTime = (TextView)findViewById(R.id.plan_detail_start_time);
 		
 		tvPlanId = (TextView)findViewById(R.id.plan_detail_id); //hide
 		
@@ -165,7 +166,7 @@ public class PlanDetailActivity extends BaseActivity {
 		tvExpectedPpl.setText((Integer.parseInt(p.getPplgoing())+1) +"/"+p.getPplexpected());
 		tvRemark.setText(p.getDescription());
 		tvPlanId.setText(p.getId());
-		
+		tvStartTime.setText(p.getPlandate());
 		tvStatus.setText(p.getStatus());
 		tvUserid.setText(p.getUserid());
 	}

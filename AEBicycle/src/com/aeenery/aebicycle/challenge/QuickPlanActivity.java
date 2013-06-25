@@ -1,38 +1,52 @@
 package com.aeenery.aebicycle.challenge;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+
 import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.TimePickerDialog;
+import android.app.TimePickerDialog.OnTimeSetListener;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.app.DatePickerDialog;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentActivity;
 import android.text.format.Time;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.aeenery.aebicycle.BaseActivity;
 import com.aeenery.aebicycle.LoginActivity;
 import com.aeenery.aebicycle.R;
 import com.aeenery.aebicycle.entry.BicycleUtil;
+import com.aeenery.aebicycle.entry.UtilFunction;
 import com.aeenery.aebicycle.map.MapActivity;
 import com.aeenery.aebicycle.model.Plan;
 import com.aeenery.aebicycle.model.ServerAPI;
 import com.baidu.mapapi.map.LocationData;
 
-public class QuickPlanActivity extends BaseActivity {
+public class QuickPlanActivity extends FragmentActivity {
+	
+	//Attributes
+	private Button btnDatePicker;
+	private Button btnTimePicker;
 	
 	private TextView tvEstimateDistance = null;
 	private EditText etPlanName = null;
-//	private EditText etStartLocation = null;
-//	private EditText etTerminateLocation = null;
 	private TextView tvExpectedTime;
 	private Button btPplExpected;
 	private EditText etRemark;
-//	private EditText etSponsor;
-//	private EditText etPrize;
 	private Button  btnSubmit = null;
 	private Button btnSelectLoc = null;
 	
@@ -67,13 +81,19 @@ public class QuickPlanActivity extends BaseActivity {
 		btPplExpected = (Button)findViewById(R.id.pplexpected);
 		etRemark = (EditText)findViewById(R.id.planremark);
 		
+		btnDatePicker = (Button)findViewById(R.id.btn_date_picker);
+		btnTimePicker = (Button)findViewById(R.id.btn_time_picker);
 		btnSelectLoc = (Button)findViewById(R.id.plan_select_locations);
+		
+		
 		
 		btnSubmit.setOnClickListener(new ButtonClickListener());
 		btnSelectLoc.setOnClickListener(new ClickToMapListener());
 		btnSelectLoc.setText(selectLocString);
-		
+		btnDatePicker.setOnClickListener(new ButtonClickListener());
+		btnTimePicker.setOnClickListener(new ButtonClickListener());
 		btPplExpected.setOnClickListener(new ButtonClickListener());
+		
 		
 	}
 	
@@ -146,6 +166,14 @@ public class QuickPlanActivity extends BaseActivity {
 		String name = etPlanName.getText().toString().trim();
 		String pplExpected = btPplExpected.getText().toString().trim();
 		String remark = etRemark.getEditableText().toString().trim();
+
+		Date date = UtilFunction.convertDateString(btnDatePicker.getText().toString());
+		Calendar timeHourMin = UtilFunction.convertStringToHourMinute(btnTimePicker.getText().toString());
+		Calendar plandate = Calendar.getInstance();
+		plandate.setTime(date);
+		plandate.set(Calendar.HOUR_OF_DAY, timeHourMin.get(Calendar.HOUR_OF_DAY));
+		plandate.set(Calendar.MINUTE, timeHourMin.get(Calendar.MINUTE));
+		
 		p.setName(name);
 		p.setStartlocation((int)start.latitude+"|"+(int)start.longitude);
 		p.setEndlocation((int)end.latitude + "|"+(int)end.longitude);
@@ -155,14 +183,19 @@ public class QuickPlanActivity extends BaseActivity {
 			p.setPplexpected(pplExpected);
 		if(remark != null)
 			p.setDescription(remark);
+		
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss",Locale.CHINA);
+		p.setPlandate(format.format(plandate.getTime()));
+		
+		p.setCreatedate(Calendar.getInstance(Locale.CHINA).getTime());
 	}
 	
 	/**
 	 * Call back api from submit plan
 	 */
 	public void planCreated(){
-//		this.setResult(BicycleUtil.CREATE_PLAN_SUCCESS);
-//		this.finish();
+		this.setResult(BicycleUtil.CREATE_PLAN_SUCCESS);
+		this.finish();
 	}
 	
 	
@@ -206,10 +239,26 @@ public class QuickPlanActivity extends BaseActivity {
 					api.createplan(QuickPlanActivity.this,p);
 				}
 				break;
+			case R.id.btn_date_picker:
+				Calendar c = Calendar.getInstance();
+				Date date = UtilFunction.convertDateString(btnDatePicker.getText().toString());
+				if(date != null)
+					c.setTime(date);
+				DateSelectionDialogFragment datePicker = DateSelectionDialogFragment.getInstance(QuickPlanActivity.this,c, datePickerListener);
+				datePicker.show(getSupportFragmentManager(), "日期选择");
+				break;
+			case R.id.btn_time_picker:
+				Calendar time = UtilFunction.convertStringToHourMinute(btnTimePicker.getText().toString());
+				if(time == null)
+					time = Calendar.getInstance();
+				TimeSelectionDialogFragment timePicker = TimeSelectionDialogFragment.getInstance(QuickPlanActivity.this, time, timePickerListener);
+				timePicker.show(getSupportFragmentManager(), "时间选择");
+				break;
 			default:
 				break;
 			}
 		}
+		
 		
 		/**
 		 * Check whether the plan detail entered is valid
@@ -225,9 +274,31 @@ public class QuickPlanActivity extends BaseActivity {
 				Toast.makeText(QuickPlanActivity.this, "请设置开始和结束地点", Toast.LENGTH_SHORT).show();
 				return false;
 			}
+			Date date = UtilFunction.convertDateString(btnDatePicker.getText().toString());
+			Calendar time = UtilFunction.convertStringToHourMinute(btnTimePicker.getText().toString());
+			if(date == null || time == null){
+				Toast.makeText(QuickPlanActivity.this, "请设置出发时间", Toast.LENGTH_SHORT).show();
+				return false;
+			}
 			return true;
 		}
 		
+		
 	}
+	
+	protected DatePickerDialog.OnDateSetListener datePickerListener = new DatePickerDialog.OnDateSetListener(){
+		@Override
+		public void onDateSet(DatePicker view, int year, int monthOfYear,
+				int dayOfMonth) {
+			btnDatePicker.setText(year+"-"+monthOfYear+"-"+dayOfMonth);
+		}
+	};
+	
+	protected TimePickerDialog.OnTimeSetListener timePickerListener = new OnTimeSetListener(){
+		@Override
+		public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+			btnTimePicker.setText(hourOfDay +":"+minute);
+		}
+	};
 }
 

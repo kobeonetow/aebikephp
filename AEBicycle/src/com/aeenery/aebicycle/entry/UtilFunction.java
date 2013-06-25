@@ -1,5 +1,10 @@
 package com.aeenery.aebicycle.entry;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
@@ -50,5 +55,34 @@ public class UtilFunction {
 					});
 			dialog.show();
 		}
+	}
+	
+	public static Date convertDateString(String date){
+		try{
+			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd",Locale.CHINA);
+			return format.parse(date);
+		}catch(Exception e){
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	/**
+	 * String passed must in format MM:SS
+	 * @param time
+	 * @return
+	 */
+	public static Calendar convertStringToHourMinute(String time){
+		Calendar c = Calendar.getInstance();
+		if(time == null || !time.contains(":"))
+			return null;
+		String[] nums = time.split(":");
+		if(nums.length != 2)
+			return null;
+		int hour = Integer.parseInt(nums[0]);
+		int min = Integer.parseInt(nums[1]);
+		c.set(Calendar.HOUR_OF_DAY, hour);
+		c.set(Calendar.MINUTE, min);
+		return c;
 	}
 }

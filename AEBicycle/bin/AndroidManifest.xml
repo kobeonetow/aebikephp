@@ -162,11 +162,19 @@
             android:name="com.aeenery.aebicycle.friend.FriendListActivity"
             android:label="@string/title_activity_friend_list" >
         </activity>
+            
             <activity
             android:name="com.aeenery.aebicycle.challenge.PlanListActivity"
             android:label="@string/title_activity_view_plan" >
         </activity>
 
+       <activity
+            android:name="com.aeenery.aebicycle.challenge.MyPlansActivity"
+            android:label="@string/title_activity_view_plan" />
+       <activity
+            android:name="com.aeenery.aebicycle.challenge.JoinPlansActivity"
+            android:label="@string/title_activity_view_plan" /> 
+       
         <service
             android:name="com.aeenery.aebicycle.battery.BluetoothService"
             android:icon="@drawable/bike"

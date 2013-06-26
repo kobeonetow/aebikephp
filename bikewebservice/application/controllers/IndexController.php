@@ -137,21 +137,24 @@ class IndexController extends Mylibrary_Controller_Action
         $this->_helper->json->sendJson($arr);
     }
     
-    public function getplanlistAction(){
-        $data = array(
-           'pagenumber'=>'1',
-           'lotsize'=>'10'
-        );
-        $result = $this->_service->getPlanList($data);
-        $this->_helper->json->sendJson($result);
-    }
-    
-    public function getownplanlistAction(){
-         $data = array(
-           'userid'=>'1'
-        );
-        $result = $this->_service->getOwnPlanList($data);
-        $this->_helper->json->sendJson($result);
+    public function getfinishplanlistAction(){
+        try{
+            if(empty($this->_postdata['userid'])){
+                throw new Exception("userid is not provided");
+            }
+            $result = $this->_service->getFinishedPlanList($this->_postdata['userid']);
+            if(count($result) > 0){
+                $arr['result'] = 1;//got something
+                $arr['data'] = $result;
+            }else{
+                $arr['result'] = 2;//empty
+            }
+        }  catch (Exception $e){
+            $arr['result'] = 0;
+            $arr['msg'] = $e->getMessage();
+            $this->logger->err($e->getMessage());
+        }
+        $this->_helper->json->sendJson($arr);
     }
     
     public function submitsummaryAction(){

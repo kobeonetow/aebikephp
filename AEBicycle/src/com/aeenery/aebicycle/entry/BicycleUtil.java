@@ -54,6 +54,7 @@ public interface BicycleUtil {
 	public final static int VIEW_PLAN = 0xa1;
 	public final static int VIEW_PLAN_FINISH = 0xa2;
 	public final static int VIEW_PLAN_DELETE = 0xa3;
+	public final static int VIEW_PLAN_QUIT = 0xa4;
 	
 	
 	//Server Parameters
@@ -100,6 +101,8 @@ public interface BicycleUtil {
 	public final static String STOP_CONNECT_DEVICE = "com.aeenergy.aebicycle.battery.STOP_CONNECTING";
 	public final static String RECONNECT_BT = "com.aeenergy.aebicycle.battery.RECONNECT_BT";
 	public final static String CONNECT_DEVICE = "com.aeenergy.aebicycle.battery.ConnectDevice";
+	public final static String DEVICE_CONNECTED = "com.aeenergy.aebicycle.battery.Device_CONNECTED";
+	public final static String DEVICE_DISCONNECTED = "com.aeenergy.aebicycle.battery.DEVICE_DISCONNECTED";
 	public final static String BT_SEND_MSG = "com.aeenergy.aebicycle.battery.BT_SEND_MSG";
 	public final static String BT_SEND_MSG_ID = "com.aeenergy.aebicycle.battery.BT_SEND_MSG.ID";
 	public final static String STOP_BT_SERVICE = "com.aeenergy.aebicycle.battery.STOP_BT_SERVICE";

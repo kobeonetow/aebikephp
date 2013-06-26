@@ -3,7 +3,7 @@ package com.aeenery.aebicycle.bms;
 import android.content.Context;
 
 public class SendPacketThread extends Thread{
-	public int PERIOD = 10000;
+	public int PERIOD = 1000;
 	SenderContext context;
 	boolean run = true;
 	
@@ -18,7 +18,6 @@ public class SendPacketThread extends Thread{
 			try {
 				this.sleep(PERIOD);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}

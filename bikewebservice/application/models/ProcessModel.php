@@ -82,47 +82,34 @@ class Application_Model_ProcessModel extends Application_Model_DbAdapter
      * @param Array $arr 需要pagenumber,lotsize
      * @return $plans 返回计划数组，每一个$plans[n]是一个计划
      */
-    public function getPlanList($arr){
+    public function getFinishedPlanList($userid){
         try{
             $planmapper = new Application_Model_Planmapper();
-            $list = $planmapper->getFinishedPlanList($arr['pagenumber'],$arr['lotsize']);
+            $planassignmapper = new Application_Model_Planassignmentmapper();
+            $list = $planmapper->getFinishedPlanList($userid);
+            $assginList = $planassignmapper->getFinishedPlanList($userid);
             $plans = array();
             if($list !== False){
-                foreach ($list as $model){
+                foreach($list as $model){
                     $str = $model->toKeyValueArray();
+                    $str['assignstatus'] = STATUS_PLAN_FINISH;
+                    array_push($plans, $str);
+                }
+            }
+            if($assginList !== False){
+                foreach($assginList as $model){
+                    $str = $model->toKeyValueArray();
+                    $str['assignstatus'] = STATUS_PLAN_FINISH;
                     array_push($plans, $str);
                 }
             }
             return $plans;
         }catch(Exception $e){
             Zend_Registry::get('logger')->err($e->getTraceAsString());
-            throw new Exception("P000003 Get completed plan list fail. ".$e->getMessage());
+            throw new Exception("P000003 Get finished plan list fail. ".$e->getMessage());
         }
     }
-    
-    /**
-     * 提取用户创建的计划
-     * @param Array $arr 需要userid
-     * @return $plans 返回计划数组，每一个$plans[n]是一个计划
-     */
-    public function getOwnPlanList($arr){
-        try{
-            $planmapper = new Application_Model_Planmapper();
-            $list = $planmapper->getOwnPlanList($arr['userid']);
-            $plans = array();
-            if($list !== False){
-                foreach ($list as $model){
-                    $str = $model->toKeyValueArray();
-                    array_push($plans, $str);
-                }
-            }
-            return $plans;
-        }catch(Exception $e){
-            Zend_Registry::get('logger')->err($e->getTraceAsString());
-            throw new Exception("P000004 Get own plan list fail. ".$e->getMessage());
-        }
-    }
-    
+
     /**
      * 提交计划总结
      * @param Array $arr 需要提供以下数据<br>

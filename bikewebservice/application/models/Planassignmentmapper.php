@@ -220,13 +220,41 @@ class Application_Model_Planassignmentmapper
          try {
             $query = "SELECT p.*, s.userid as joinuserid, s.starttime as planstarttime, s.endtime as planendtime, s.status as assignstatus  
                 FROM plan as p, planassignment as s 
-                WHERE p.id = s.planid AND s.userid = $userid 
+                WHERE p.id = s.planid AND s.userid = $userid AND s.status!=".STATUS_PLAN_FINISH."
                 ORDER BY plandate DESC";
             $rows = $this->table->getAdapter()->query($query)->fetchAll();
             return $rows;
         } catch (Exception $e) {
             Zend_Registry::get('logger')->err($e->getTraceAsString());
             throw new Exception("M040011 Get joined plans fail by userid $userid. ".$e->getMessage());
+        }
+    }
+    
+    /**
+     * Return user finished plans
+     * @param type $userid
+     */
+    public function getFinishedPlanList($userid){
+        try {
+            $statusid = STATUS_PLAN_FINISH;
+            $query = "SELECT p.*   
+                FROM plan as p, planassignment as s 
+                WHERE p.id = s.planid AND s.userid = $userid AND s.status=$statusid 
+                ORDER BY plandate DESC";
+            $rows = $this->table->getAdapter()->query($query)->fetchAll();
+             if ($rows !== False && count($rows) > 0) {
+                $plans = array();
+                foreach ($rows as $row){
+                    $model = new Application_Model_Plan($row);
+                    array_push($plans, $model);
+                }
+                return $plans;
+            } else {
+                return False;
+            }
+        } catch (Exception $e) {
+            Zend_Registry::get('logger')->err($e->getTraceAsString());
+            throw new Exception("M040012 Get finished plans fail by userid $userid. ".$e->getMessage());
         }
     }
 }

@@ -49,18 +49,6 @@ public class RequestController{
 		}
 	}
 
-//	private Handler mHandler = new Handler(){
-//		@Override
-//		public void handleMessage(Message msg) {
-//			switch (msg.what) {
-//			case BMSUtil.COMMAND_GET_DEVICE_SERIAL_NUMBER:
-//				//if request approved
-//				//or not, do something
-//				break;
-//			}
-//		}
-//	};
-
 	public void sendEmptyByte() {
 		controller.sendEmptyByte();
 	}

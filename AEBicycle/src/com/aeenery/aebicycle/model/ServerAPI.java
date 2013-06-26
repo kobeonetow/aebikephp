@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.aeenery.aebicycle.LoginActivity;
 import com.aeenery.aebicycle.R;
 import com.aeenery.aebicycle.RegisterActivity;
+import com.aeenery.aebicycle.challenge.FinishedPlansActivity;
 import com.aeenery.aebicycle.challenge.JoinPlansActivity;
 import com.aeenery.aebicycle.challenge.MyPlansActivity;
 import com.aeenery.aebicycle.challenge.PlanDetailActivity;
@@ -326,6 +327,28 @@ public class ServerAPI {
 				if (checkResult(this, json, joinPlansActivity,
 						joinPlansActivity.getString(R.string.server_busy))) {
 					joinPlansActivity.setPlansToView(json);
+				}
+			}
+			
+		}.execute("");
+	}
+
+	/**
+	 * Get all finished plans by userid
+	 * @param finishedPlansActivity
+	 */
+	public void getFinishedPlans(final FinishedPlansActivity finishedPlansActivity) {
+		new AsyncTask<String,String,JSONObject>(){
+			@Override
+			protected JSONObject doInBackground(String... params) {
+				return callServer("index/getfinishplanlist");
+			}
+			
+			@Override
+			protected void onPostExecute(JSONObject json){
+				if (checkResult(this, json, finishedPlansActivity,
+						finishedPlansActivity.getString(R.string.server_busy))) {
+					finishedPlansActivity.setPlansToView(json);
 				}
 			}
 			

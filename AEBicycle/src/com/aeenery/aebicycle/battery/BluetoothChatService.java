@@ -51,13 +51,13 @@ public class BluetoothChatService {
     private static final String NAME = "BluetoothChat";
 
     // Unique UUID for this application
-//    private static final UUID MY_UUID = UUID.fromString("fa87c0d0-afac-11de-8a39-0800200c9a66");
     private static final UUID MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
 
     // Member fields
     private final BluetoothAdapter mAdapter;
     private final Handler mHandler;
-//    private AcceptThread mAcceptThread;
+    
+    
     private ConnectThread mConnectThread;
     private ConnectedThread mConnectedThread;
     private int mState;
@@ -145,7 +145,7 @@ public class BluetoothChatService {
         Message msg = mHandler.obtainMessage(BicycleUtil.MESSAGE_DEVICE_NAME);
         Bundle bundle = new Bundle();
         bundle.putString(BicycleUtil.DEVICE_NAME, device.getName());
-        bundle.putString("batteryAddress", device.getAddress());
+        bundle.putString("device Address", device.getAddress());
         msg.setData(bundle);
         mHandler.sendMessage(msg);
 
@@ -204,9 +204,6 @@ public class BluetoothChatService {
         bundle.putString(BicycleUtil.TOAST, "Device connection was lost");
         msg.setData(bundle);
         mHandler.sendMessage(msg);
-        
-        //restart listening
-//        this.start();
     }
     
     /**
@@ -261,8 +258,6 @@ public class BluetoothChatService {
             synchronized (BluetoothChatService.this) {
                 mConnectThread = null;
             }
-
-            
             
             // Start the connected thread
             connected(mmSocket, mmDevice);
@@ -344,8 +339,10 @@ public class BluetoothChatService {
 
         public void cancel() {
             try {
+            	mmInStream.close();
+            	mmOutStream.close();
                 mmSocket.close();
-//                setState(STATE_DISCONNECT);
+                setState(STATE_DISCONNECT);
             } catch (IOException e) {
                 Log.e(TAG, "close() of connect socket failed", e);
             }

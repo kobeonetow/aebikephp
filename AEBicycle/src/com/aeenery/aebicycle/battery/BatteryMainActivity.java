@@ -16,6 +16,7 @@ import com.aeenery.aebicycle.entry.BicycleUtil;
 
 import android.os.Bundle;
 import android.app.Activity;
+import android.bluetooth.BluetoothAdapter;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -39,7 +40,14 @@ public class BatteryMainActivity extends Activity implements SenderContext{
 	private static String TAG = "BatteryMainActivity";
 	private static boolean D = true;
 	
-//	private Button btn_temp; 
+	
+	//Bluetooth hardwares
+	public static BluetoothAdapter mBluetoothAdapter = null;
+	public static boolean deviceConnected = false;
+	
+	//Notification textview
+	private TextView tvNotify;
+	
 	private Thermometer thermo;
 	private Tachometer tach;
 	private BatteryContainer battery;
@@ -56,49 +64,147 @@ public class BatteryMainActivity extends Activity implements SenderContext{
 	
 	private static final int PERIOD = 1000; //miliseconds
 	
-	private MenuItem menu_detail;
+//	private MenuItem menu_detail;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_battery_main);
-		setup();
+		
+		//Load views
+		startService(new Intent(BluetoothService.ServiceAction));
+		loadAndGoneViews();
+		if(openBluetooth()){
+			if(connectDevice()){
+				showBatteryInfo();
+			}else{
+				tvNotify.setVisibility(View.VISIBLE);
+			}
+		}else{
+			tvNotify.setVisibility(View.VISIBLE);
+		}
 	}
 
-	private void setup() {
+	/**
+	 * Load all views and set to invisible
+	 */
+	protected void loadAndGoneViews(){
 		controller = RequestController.getRequestController();
 		sharedPreferences = this.getSharedPreferences("aebt", MODE_PRIVATE);
-//		btn_temp = (Button)findViewById(R.id.buttonTemp);
+		
+		tvNotify = (TextView)findViewById(R.id.notification_battery_main_activity);
+		tvNotify.setVisibility(View.GONE);
 		thermo = (Thermometer)findViewById(R.id.thermometer);
-//		thermo.setLayoutParams(new ViewGroup.LayoutParams((int)BMSUtil.convertPixelsToDp(100, this), (int)BMSUtil.convertPixelsToDp(700, this)));
-		
+		thermo.setVisibility(View.GONE);
 		battery = (BatteryContainer)findViewById(R.id.batterycontainer);
-		
+		battery.setVisibility(View.GONE);
 		tach = (Tachometer)findViewById(R.id.tachometer);
+		tach.setVisibility(View.GONE);
 		power = (TextView)findViewById(R.id.bpowernow);
+		power.setVisibility(View.GONE);
 		tvCurrentNow = (TextView)findViewById(R.id.currentnow);
+		tvCurrentNow.setVisibility(View.GONE);
 		tvVoltageNow = (TextView)findViewById(R.id.voltagenow);
+		tvVoltageNow.setVisibility(View.GONE);
 		tvTimeLeft = (TextView)findViewById(R.id.batterytimeremain);
+		tvTimeLeft.setVisibility(View.GONE);
 		tvTemperature = (TextView)findViewById(R.id.batterytemperature);
+		tvTemperature.setVisibility(View.GONE);
 		
-		menu_detail = (MenuItem)findViewById(R.id.menu_batteryDetail);
+//		menu_detail = (MenuItem)findViewById(R.id.menu_batteryDetail);
 		
-		setAdapters();
-		registerReceiver();
-		
-		thread = new SendPacketThread(this,PERIOD);
-		thread.start();
-	}
-
-	private void registerReceiver() {
-		receiver = new StateReceiver();
+		//Register receivers for broadcast actions
 		IntentFilter filter = new IntentFilter();
 		filter.addAction(BicycleUtil.BATTERY_STATE_UPDATE);
 		filter.addAction(BMSUtil.BATTERY_UPDATE_FAIL_OVER_TIMEOUT);
-		this.registerReceiver(receiver, filter);
+		filter.addAction(BicycleUtil.DEVICE_CONNECTED);
+		filter.addAction(BicycleUtil.DEVICE_DISCONNECTED);
+		registerReceiver(new StateReceiver(), filter);
 	}
-
+	
+	/**
+	 * Open and enable bluetooth, if bluetooth was not on, reutrn false
+	 * @return
+	 */
+	protected boolean openBluetooth(){
+		if(mBluetoothAdapter == null)
+			mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+		if(mBluetoothAdapter == null){
+			tvNotify.setText("没找到本机的蓝牙设备,请确定本机支持蓝牙");
+		}else{
+			if(!mBluetoothAdapter.isEnabled())
+				startActivityForResult(new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE), BicycleUtil.REQUEST_ENABLE_BT);
+			else
+				return true;
+		}
+		return false;
+	}
+	
+	/**
+	 * Check whether device is connected
+	 * @return
+	 */
+	protected boolean connectDevice(){
+		if(deviceConnected)
+			return true;
+		else{
+			tvNotify.setText("未连接上支持蓝牙的电池,请按菜单键进行连接.");
+			return false;
+		}
+	}
+	
+	/**
+	 * Re show all views and enable synchronization between devices
+	 */
+	protected void showBatteryInfo(){
+		tvNotify.setVisibility(View.GONE);
+		thermo.setVisibility(View.VISIBLE);
+		battery.setVisibility(View.VISIBLE);
+		tach.setVisibility(View.VISIBLE);
+		power.setVisibility(View.VISIBLE);
+		tvCurrentNow.setVisibility(View.VISIBLE);
+		tvVoltageNow.setVisibility(View.VISIBLE);
+		tvTimeLeft.setVisibility(View.VISIBLE);
+		tvTemperature.setVisibility(View.VISIBLE);
+		
+		startSynchronize();
+	}
+	
+	/**
+	 * Start exchanging data vie bluetooth
+	 */
+	private void startSynchronize() {
+		//Start the send packer theard for data exchange
+		thread = new SendPacketThread(this,PERIOD);
+		thread.start();
+	}
+	
+	/**
+	 * Stop exchanging data vie bluetooth
+	 */
+	private void stopSynchronize(){
+		if(thread != null){
+			thread.cancel();
+		}
+	}
+	
+	/**
+	 * Get back the notification if connection lost
+	 */
+	protected void connectionLost(){
+		tvNotify.setText("未连接上支持蓝牙的电池,请按菜单键进行连接.");
+		tvNotify.setVisibility(View.VISIBLE);
+		thermo.setVisibility(View.GONE);
+		battery.setVisibility(View.GONE);
+		tach.setVisibility(View.GONE);
+		power.setVisibility(View.GONE);
+		tvCurrentNow.setVisibility(View.GONE);
+		tvVoltageNow.setVisibility(View.GONE);
+		tvTimeLeft.setVisibility(View.GONE);
+		tvTemperature.setVisibility(View.GONE);
+	}
+	
 	public synchronized void sendPackets(){
 			try{
 				controller.sendRequestPacket(new BMSCommand(BMSUtil.COMMAND_GET_BATTERY_CAPACITY_AND_SOC_STATUS,
@@ -121,57 +227,17 @@ public class BatteryMainActivity extends Activity implements SenderContext{
 	public synchronized void receivedPackets(){
 		notify();
 	}
-	
-	private void setAdapters() {
-//		btn_temp.setOnClickListener(new OnClickListener(){
-//			@Override
-//			public void onClick(View v) {
-//				controller.sendRequestPacket(new BMSCommand(BMSUtil.COMMAND_GET_BATTERY_CAPACITY_AND_SOC_STATUS,
-//						BMSUtil.COMMAND_GET_BATTERY_CAPACITY_AND_SOC_STATUS_REPLY),false);
-//				controller.sendRequestPacket(new BMSCommand(BMSUtil.COMMAND_GET_BATTERY_VOLTAGE_CURRENT,
-//						BMSUtil.COMMAND_GET_BATTERY_VOLTAGE_CURRENT_REPLY),false);
-//				controller.sendRequestPacket(new BMSCommand(BMSUtil.COMMAND_GET_BATTERY_TEMPERATURE_NOW_DETAIL,
-//						BMSUtil.COMMAND_GET_BATTERY_TEMPERATURE_NOW_DETAIL_REPLY),true);
-//			}
-//		});
-		
-//		menu_detail.setOnMenuItemClickListener(new OnMenuItemClickListener(){
-//			@Override
-//			public boolean onMenuItemClick(MenuItem item) {
-//				Intent intent = new Intent(BatteryMainActivity.this, BatteryDescriptionActivity.class);
-//				BatteryMainActivity.this.startActivity(intent);
-//				return true;
-//			}
-//		});
-	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
 		 MenuInflater inflater = getMenuInflater();
 	     inflater.inflate(R.menu.activity_battery_main, menu);
 	     return true;
 	}
 
-	 @Override
-	    public boolean onOptionsItemSelected(MenuItem item) {
-		 	Intent intent;
-	        switch (item.getItemId()) {
-	        case R.id.menu_batteryDetail:
-	        	intent = new Intent(BatteryMainActivity.this, BatteryDescriptionActivity.class);
-	        	this.startActivity(intent);
-	        	return true;
-	        case R.id.menu_batteryversion:
-	        	intent  = new Intent(BatteryMainActivity.this, BatteryVersionActivity.class);
-	        	this.startActivity(intent);
-	        	return true;
-	        }
-	        return false;
-	    }
 
 	@Override
 	public void onBackPressed() {
-		
 		super.onBackPressed();
 	}
 	
@@ -218,7 +284,12 @@ public class BatteryMainActivity extends Activity implements SenderContext{
 			receivedPackets();
 			String action = intent.getAction();
 			if(D) Log.i(TAG, "Action received:"+action);
-			if(action.equals(BMSUtil.BATTERY_UPDATE_FAIL_OVER_TIMEOUT)){
+			if(action.equals(BicycleUtil.DEVICE_CONNECTED)){
+				showBatteryInfo();
+			}else if(action.equals(BicycleUtil.DEVICE_DISCONNECTED)){
+				connectionLost();
+				stopSynchronize();
+			}else if(action.equals(BMSUtil.BATTERY_UPDATE_FAIL_OVER_TIMEOUT)){
 				if(D) Log.e(TAG, "Timeout over limits, continue to next packet");
 			}else if(action.equals(BicycleUtil.BATTERY_STATE_UPDATE)){
 				String temp= "";
@@ -274,5 +345,59 @@ public class BatteryMainActivity extends Activity implements SenderContext{
 		}
     	
     }
+	
+	
+	/********************** On menu item select to connect to bluetooth*********/
+	@Override
+	 public boolean onOptionsItemSelected(MenuItem item) {
+		Intent intent;
+		if(item.getItemId() == R.id.scan){
+			discoverDevices();
+            return true;
+		}
+		if(deviceConnected == false){
+			Toast.makeText(this, "请先连接上设备", Toast.LENGTH_SHORT).show();
+			return false;
+		}
+	    switch (item.getItemId()) {
+	    case R.id.menu_batteryDetail:
+	       	intent = new Intent(BatteryMainActivity.this, BatteryDescriptionActivity.class);
+	       	this.startActivity(intent);
+	       	return true;
+	    case R.id.menu_batteryversion:
+	       	intent  = new Intent(BatteryMainActivity.this, BatteryVersionActivity.class);
+	       	this.startActivity(intent);
+	       	return true;
+	    case R.id.stop_bluetooth:
+	    	sendBroadcast(new Intent(BicycleUtil.STOP_BT_SERVICE));
+	    	break;
+	    }
+	    return false;
+	}
+	 
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(D) Log.d(TAG, "onActivityResult " + resultCode);
+        switch (requestCode) {
+        case BicycleUtil.REQUEST_CONNECT_DEVICE:
+            // When DeviceListActivity returns with a device to connect
+            if (resultCode == Activity.RESULT_OK) {
+                // Get the device MAC address
+                String address = data.getExtras()
+                                     .getString(DeviceListActivity.EXTRA_DEVICE_ADDRESS);
+                // Attempt to connect to the device
+                Intent intent = new Intent(BicycleUtil.CONNECT_DEVICE);
+                intent.putExtra("deviceAddress", address);
+                sendBroadcast(intent);
+            }
+            break;
+        }
+    }
+    
+    private void discoverDevices(){
+        Intent serverIntent = new Intent(this, DeviceListActivity.class);
+        startActivityForResult(serverIntent, BicycleUtil.REQUEST_CONNECT_DEVICE);
+    }
+    
+    /************************* finish connect to device *************************/
 	
 }

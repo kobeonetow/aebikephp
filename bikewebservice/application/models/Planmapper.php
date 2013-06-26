@@ -52,54 +52,25 @@ class Application_Model_Planmapper
      * @return \Application_Model_Plan|boolean 返回计划得模型数组
      * @throws Exception
      */
-    public function getFinishedPlanList($pagenumber, $lotsize){
+    public function getFinishedPlanList($userid){
         try {
-            $start = ($pagenumber - 1) * $lotsize;
             $statusid = STATUS_PLAN_FINISH;
             $query = "SELECT *
                 FROM plan as p 
-                WHERE p.status != $statusid and p.type != '" . PLAN_TYPE_QUICK . "'
-                LIMIT $lotsize OFFSET $start";
+                WHERE p.status = $statusid AND userid=$userid";
             $rows = $this->table->getAdapter()->query($query)->fetchAll();
             if ($rows !== False && count($rows) > 0) {
-                $models = array();
-                foreach ($rows as $row) {
+                $plans = array();
+                foreach ($rows as $row){
                     $model = new Application_Model_Plan($row);
-                    array_push($models, $model);
+                    array_push($plans, $model);
                 }
-                return $models;
+                return $plans;
             } else {
                 return False;
             }
         } catch (Exception $e) {
             throw new Exception("M020002 get plan list fail for pagenumber $pagenumber and lotsize $lotsize. " . $e->getMessage());
-        }
-    }
-    
-    /**
-     * 
-     * @param type $userid
-     * @return \Application_Model_Plan|boolean 返回计划得模型数组
-     * @throws Exception
-     */
-    public function getOwnPlanList($userid){
-        try {
-            $query = "SELECT *
-                FROM plan as p 
-                WHERE p.userid = $userid";
-            $rows = $this->table->getAdapter()->query($query)->fetchAll();
-            if ($rows !== False && count($rows) > 0) {
-                $models = array();
-                foreach ($rows as $row) {
-                    $model = new Application_Model_Plan($row);
-                    array_push($models, $model);
-                }
-                return $models;
-            } else {
-                return False;
-            }
-        } catch (Exception $e) {
-            throw new Exception("M020003 get own plan list fail for userid $userid. " . $e->getMessage());
         }
     }
     
@@ -133,7 +104,7 @@ class Application_Model_Planmapper
                 return False;
             }
         }  catch (Exception $e){
-            throw new Exception("M020004 get current plan list fail for pagenumber $pagenumber and lotsize $lotsize. " . $e->getMessage());
+            throw new Exception("M020004 get current plan list fail. " . $e->getMessage());
         }
     }
     

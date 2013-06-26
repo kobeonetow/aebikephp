@@ -28,8 +28,11 @@ import android.os.Message;
 import android.util.Log;
 import android.widget.Toast;
 
-public class BluetoothService extends Service {
+public class BluetoothService extends Service implements BluetoothServiceStatus{
 
+	public final static String ServiceAction = "com.aeenery.aebicycle.battery.Bluetooth_Service";
+	public static int state = SERVICE_NOT_STARTED;
+	
 	// Debugging
 	private static final String TAG = "BluetoothService";
 	private static final boolean D = true;
@@ -39,6 +42,7 @@ public class BluetoothService extends Service {
 
 	// Local Bluetooth adapter
 	private static BluetoothAdapter mBluetoothAdapter = null;
+	
 	// Member object for the chat services
 	private BluetoothChatService mChatService = null;
 	private BluetoothDevice device = null;
@@ -145,7 +149,7 @@ public class BluetoothService extends Service {
 
 	private BluetoothDevice getDevice() {
 		if(currentDevice == null){
-			String address = sharedPreferences.getString("batteryAddress", "");
+			String address = sharedPreferences.getString("deviceAddress", "");
 			if (address.equals("")){
 				Toast.makeText(this, "No device available in storge",  Toast.LENGTH_LONG).show();
 				if(D) Log.i(TAG,"Device not in saved");
@@ -277,11 +281,13 @@ public class BluetoothService extends Service {
 				switch (msg.arg1) {
 				case BluetoothChatService.STATE_CONNECTED:
 					setConnected(true);
+					sendBroadcast(new Intent(BicycleUtil.DEVICE_CONNECTED));
 					if(act != null)
 						act.cancel();
 					break;
 				case BluetoothChatService.STATE_DISCONNECT:
 					setConnected(false);
+					sendBroadcast(new Intent(BicycleUtil.DEVICE_DISCONNECTED));
 					Log.i(TAG,"Reconnect is:"+reconnect);
 					if(reconnect)
 						startConnectionToDevice(currentDevice);
@@ -291,7 +297,8 @@ public class BluetoothService extends Service {
 				case BluetoothChatService.STATE_CONNECTING:
 					break;
 				case BluetoothChatService.STATE_NONE:
-					connected  = false;
+					setConnected(false);
+					sendBroadcast(new Intent(BicycleUtil.DEVICE_DISCONNECTED));
 					break;
 				}
 				break;
@@ -400,8 +407,8 @@ public class BluetoothService extends Service {
 					break;
 				}
 			}else if(action.equals(BicycleUtil.CONNECT_DEVICE)){
-				String address = intent.getStringExtra("address");
-				writeToSharedPreferences("batteryAddress", address);
+				String address = intent.getStringExtra("deviceAddress");
+				writeToSharedPreferences("deviceAddress", address);
 				currentDevice = mBluetoothAdapter.getRemoteDevice(address);
 				startConnectionToDevice(currentDevice);
 			}else if(action.equals(BicycleUtil.STOP_CONNECT_DEVICE)){

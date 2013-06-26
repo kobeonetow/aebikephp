@@ -6,13 +6,12 @@
     android:paddingTop="50dp"
     tools:context=".BatteryMainActivity" >
     
-<!--     <Button -->
-<!--         android:id="@+id/buttonTemp" -->
-<!--         android:layout_width="55dp" -->
-<!--         android:layout_height="fill_parent" -->
-<!--         android:layout_alignParentTop="true" -->
-<!--         android:layout_alignParentLeft="true" -->
-<!--         android:text="温度计" /> -->
+	<TextView
+	    android:id="@+id/notification_battery_main_activity"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:visibility="gone"
+	    />
 
     <com.aeenery.aebicycle.battery.widget.Thermometer
         android:id="@+id/thermometer"

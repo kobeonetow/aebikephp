@@ -240,6 +240,7 @@ public class PlanDetailActivity extends BaseActivity {
 				String members  = json.getJSONObject("data").getString("memebers");
 				p.setPplgoing(members);
 				setContents();
+				onQuitPlan();
 			}
 			break;
 		case UPDATE_PLAN:
@@ -272,13 +273,27 @@ public class PlanDetailActivity extends BaseActivity {
 	
 	@Override
 	public void onBackPressed(){
+		Intent ret = getSendBackIntent();
+		this.setResult(BicycleUtil.VIEW_PLAN_FINISH, ret);
+		this.finish();
+	}
+	
+	/**
+	 * Call when quit plan button pressed
+	 */
+	public void onQuitPlan(){
+		Intent ret = getSendBackIntent();
+		this.setResult(BicycleUtil.VIEW_PLAN_QUIT, ret);
+		this.finish();
+	}
+	
+	private Intent getSendBackIntent(){
 		Intent ret = new Intent();
 		Bundle bundle = new Bundle();
 		bundle.putInt("position", position);
 		bundle.putSerializable("plan", p);
 		ret.putExtras(bundle);
-		this.setResult(BicycleUtil.VIEW_PLAN_FINISH, ret);
-		this.finish();
+		return ret;
 	}
 	
 	@Override

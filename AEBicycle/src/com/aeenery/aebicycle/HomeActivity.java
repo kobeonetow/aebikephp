@@ -28,45 +28,38 @@ import com.aeenery.aebicycle.bms.BMSController;
 import com.aeenery.aebicycle.challenge.ChallengeActivity;
 //import com.aeenery.aebicycle.challenge.RouteMapActivity;
 import com.aeenery.aebicycle.entry.BicycleUtil;
+import com.aeenery.aebicycle.entry.UIHelper;
 import com.aeenery.aebicycle.map.MapActivity;
 import com.aeenery.aebicycle.model.netManager;
 import com.aeenery.aebicycle.weather.WeatherActivity;
 
-public class HomeActivity extends BaseActivity {
+public class HomeActivity extends Activity{
 
 	// Debugging
     private static final String TAG = "HomeActivity";
     private static final boolean D = true;
-    
-    private BluetoothService s;
-	
+
 	private ImageButton btnZone;
 	private ImageButton btnWeather;
 	private ImageButton btnMap;
 	private ImageButton btnRide;
 	private ImageButton btnNews;
 	private ImageButton btnOthers;
-	
-	// Local Bluetooth adapter
-    private BluetoothAdapter mBluetoothAdapter = null;
+
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_home);
+		
+		//Set onclick event for buttons
 		init();
-		mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-		if(mBluetoothAdapter != null)
-			enableBluetoothAdapter();
 	}
 
 	@Override
 	protected void onStart(){
 		super.onStart();
 		if(D) Log.i(TAG, "ON START");
-		//Start the bluetooth service
-		//Must assign a controller to service
-		startBluetoothService();
 	}
 	
 	@Override 
@@ -113,35 +106,35 @@ public class HomeActivity extends BaseActivity {
 				case R.id.home_image_button_1:
 					intent = new Intent(HomeActivity.this,
 							MainTabActivity.class);
+					HomeActivity.this.startActivity(intent);
 					break;
 				case R.id.home_image_button_2:
 					intent = new Intent(HomeActivity.this,
 							WeatherActivity.class);
+					HomeActivity.this.startActivity(intent);
 					break;
 				case R.id.home_image_button_3:
 					intent = new Intent(HomeActivity.this,
 							MapActivity.class);
+					HomeActivity.this.startActivity(intent);
 					break;
 				case R.id.home_image_button_4:
 					intent = new Intent(HomeActivity.this,
 							ChallengeActivity.class);
+					HomeActivity.this.startActivity(intent);
 					break;
 				case R.id.home_image_button_5:
-					intent = new Intent(HomeActivity.this,
-							BatteryDetailActivity.class);
+					quitApp();
 					break;
 				case R.id.home_image_button_6:
-//					intent = new Intent(HomeActivity.this,
-//							BluetoothChat.class);
 					intent = new Intent(HomeActivity.this,
 							BatteryMainActivity.class);
-					
+					HomeActivity.this.startActivity(intent);
 					break;
 				default:
 					// do Nothing
 					break;
 				}
-				HomeActivity.this.startActivity(intent);
 			}
 		};
 		btnZone.setOnClickListener(click);
@@ -152,41 +145,9 @@ public class HomeActivity extends BaseActivity {
 		btnOthers.setOnClickListener(click);
 	}
 
-	
-	
-	private void enableBluetoothAdapter(){
-		if (!mBluetoothAdapter.isEnabled()) {
-            Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(enableIntent, BicycleUtil.REQUEST_ENABLE_BT);
-        }
-	}
-	
-	private void startBluetoothService(){
-		 Intent service = new Intent(this, BluetoothService.class);
-	     this.startService(service);
-	     if(D) Log.e(TAG, "+ ON start Service +");
-//	        bindService(new Intent(this, BluetoothService.class), mConnection,
-//	            Context.BIND_AUTO_CREATE);
-	}
-    
-	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(D) Log.d(TAG, "onActivityResult " + resultCode);
-        switch (requestCode) {
-        case BicycleUtil.REQUEST_ENABLE_BT:
-            // When the request to enable Bluetooth returns
-            if (resultCode == Activity.RESULT_OK) {
-                // Bluetooth is now enabled, so set up a chat session
-//                broadcastAction(BicycleUtil.BT_ENABLE);
-            } else {
-                // User did not enable Bluetooth or an error occured
-//            	broadcastAction(BicycleUtil.BT_NOT_ENABLE);
-            }
-        }
-	}
-	
-	public void broadcastAction(String actionName){
-		Intent intent = new Intent();
-		intent.setAction(actionName);
-		sendBroadcast(intent);
+	public void quitApp(){
+		this.stopService(new Intent(BluetoothService.ServiceAction));
+		UIHelper.killApp(true);
+//		this.finish();
 	}
 }

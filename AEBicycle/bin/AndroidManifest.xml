@@ -174,11 +174,14 @@
        <activity
             android:name="com.aeenery.aebicycle.challenge.JoinPlansActivity"
             android:label="@string/title_activity_view_plan" /> 
+       <activity
+            android:name="com.aeenery.aebicycle.challenge.FinishedPlansActivity"
+            android:label="@string/title_activity_view_plan" /> 
        
-        <service
-            android:name="com.aeenery.aebicycle.battery.BluetoothService"
-            android:icon="@drawable/bike"
-            android:label="btservice" >
+        <service android:name="com.aeenery.aebicycle.battery.BluetoothService" android:enabled="true" android:exported="false">
+            <intent-filter android:label="btservice">
+                <action android:name="com.aeenery.aebicycle.battery.Bluetooth_Service"/>
+            </intent-filter>
         </service>
         <service
             android:name="com.baidu.location.f"

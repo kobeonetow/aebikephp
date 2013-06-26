@@ -1,6 +1,5 @@
 package com.aeenery.aebicycle.bms;
 
-import com.aeenery.aebicycle.HomeActivity;
 import com.aeenery.aebicycle.battery.BluetoothService;
 import com.aeenery.aebicycle.bms.models.BMSGeneralReplyPacket;
 import com.aeenery.aebicycle.bms.models.BMSPacket;

@@ -64,7 +64,7 @@ public class HomeActivity extends Activity{
 		//test notifications
 		notis = AppNotifications.getInstance();
 		notiManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE); 
-		testNotifications();
+//		testNotifications();
 	}
 
 	private void testNotifications() {

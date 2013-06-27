@@ -89,7 +89,7 @@ public class BluetoothService extends Service implements BluetoothServiceStatus{
 		// Initiailise the service model
 		setupChat();
 		registerActionToReceiver();
-		controller = BMSController.getInitiliseController(this);
+		controller = BMSController.getController(this);
 		
 		// If the adapter is null, then Bluetooth is not supported
 		if (mBluetoothAdapter == null || !mBluetoothAdapter.isEnabled()) {
@@ -121,27 +121,29 @@ public class BluetoothService extends Service implements BluetoothServiceStatus{
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		if (D)	Log.e(TAG, "+++ ON START COMMAND +++");
-		if(mBluetoothAdapter != null && mBluetoothAdapter.isEnabled() && !connected){
-			getDevice(); //Get the stored battery Mac address from sharePreferences to current device
-			startConnectionToDevice(currentDevice); 
-		}
 		String action = intent.getAction();
-		if(action == null){
+		if(action == ServiceAction){
+			Log.d(TAG,"request to just start service");
+			if(!connected){
+				getDevice();
+				startConnectionToDevice(currentDevice);
+			}
 			//Starting with no action, purpose to just start the service
 		}else if(action.equals(BicycleUtil.BT_SEND_MSG)){
+			Log.d(TAG,"request to send msg");
 			byte[] messages = intent.getByteArrayExtra(BicycleUtil.BT_SEND_MSG);
 			String packetId = intent.getStringExtra(BicycleUtil.BT_SEND_MSG_ID);
 			sendMessage(messages, packetId);
 		}else if(action.equals(BicycleUtil.BT_SEND_EMPTY_BYTES)){
+			Log.d(TAG,"request to send empty bytes");
 			byte[] messages = {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00
 					,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00
 					,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00
 					,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00
 					,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
 			sendMessage(messages, null);
-		}
-		
-		else{
+		}else{
+			Log.d(TAG,"request to unknow action:"+action);
 			//Do nothing
 		}
 		return START_NOT_STICKY; // run until explicitly stopped.
@@ -286,13 +288,12 @@ public class BluetoothService extends Service implements BluetoothServiceStatus{
 						act.cancel();
 					break;
 				case BluetoothChatService.STATE_DISCONNECT:
+					controller.clear();
 					setConnected(false);
 					sendBroadcast(new Intent(BicycleUtil.DEVICE_DISCONNECTED));
 					Log.i(TAG,"Reconnect is:"+reconnect);
 					if(reconnect)
 						startConnectionToDevice(currentDevice);
-					else
-						reconnect = true;
 					break;
 				case BluetoothChatService.STATE_CONNECTING:
 					break;
@@ -377,9 +378,10 @@ public class BluetoothService extends Service implements BluetoothServiceStatus{
 		
 		public void run() {
 			while (!connected && connect) {
+				Log.d(TAG,"Attemp to connect!");
 				mChatService.connect(device);
 				try {
-					sleep(5000);
+					sleep(10000);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -387,8 +389,9 @@ public class BluetoothService extends Service implements BluetoothServiceStatus{
 			}
 		}
 		
-		public void cancel(){
+		public synchronized void cancel(){
 			connect = false;
+			notifyAll();
 		}
 	}
 	
@@ -436,15 +439,15 @@ public class BluetoothService extends Service implements BluetoothServiceStatus{
 				sendMessage(msg, id);
 				if(D) Log.i(TAG,"Message sent as byte:"+ msg);
 			}else if(action.equals(BicycleUtil.STOP_BT_SERVICE)){
-				if(act != null && act.isAlive()){
+				if(act != null){
 					act.cancel();
-//					act = null;
 				}
 				if(connected){
 					reconnect = false;
 					mChatService.stop();
 					connected  = false;
 				}
+				controller.clear();
 			}else if(action.equals(BMSUtil.PACKET_TIMEOUT_ACTION)){
 				String timeoutPID = intent.getStringExtra(BicycleUtil.BT_SEND_MSG_ID);
 				if(controller.responseTimeOut(timeoutPID)){

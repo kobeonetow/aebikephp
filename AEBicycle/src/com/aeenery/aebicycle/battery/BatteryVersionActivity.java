@@ -101,8 +101,8 @@ public class BatteryVersionActivity extends Activity{
 		btn_version = (Button)findViewById(R.id.btn_version_update);
 		btnDevicename = (Button)findViewById(R.id.btndevicename);
 		
-		controller = RequestController.getRequestController();
-		configController = ConfigController.getConfigController();
+		controller = RequestController.getRequestController(this);
+		configController = ConfigController.getConfigController(this);
 		sharedPreferences = this.getSharedPreferences("aebt", MODE_PRIVATE);
 		
 		updateAll();

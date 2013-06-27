@@ -15,16 +15,12 @@ public class ConfigController{
 	private static final String TAG = "RequestController";
 	private static final boolean D = true;
 	private static ConfigController configController;
-	private BMSController controller;
+	private static BMSController controller;
 	
-	
-	public ConfigController() {
-		controller = BMSController.getController();
-	}
-
-	public static ConfigController getConfigController(){
+	public static ConfigController getConfigController(Context _context){
 		if(configController == null){
 			configController = new ConfigController();
+			controller = BMSController.getController(_context);
 		}
 		return configController;
 	}

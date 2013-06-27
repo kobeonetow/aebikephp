@@ -15,15 +15,12 @@ public class RequestController{
 	private static final String TAG = "RequestController";
 	private static final boolean D = true;
 	private static RequestController requestController;
-	private BMSController controller;
-	
-	public RequestController(){
-		controller = BMSController.getController();
-	}
+	private static BMSController controller;
 
-	public static RequestController getRequestController(){
+	public static RequestController getRequestController(Context _context){
 		if(requestController == null){
 			requestController = new RequestController();
+			controller = BMSController.getController(_context);
 		}
 		return requestController;
 	}

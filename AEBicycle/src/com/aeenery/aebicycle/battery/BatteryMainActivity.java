@@ -90,7 +90,7 @@ public class BatteryMainActivity extends Activity implements SenderContext{
 	 * Load all views and set to invisible
 	 */
 	protected void loadAndGoneViews(){
-		controller = RequestController.getRequestController();
+		controller = RequestController.getRequestController(this);
 		sharedPreferences = this.getSharedPreferences("aebt", MODE_PRIVATE);
 		
 		tvNotify = (TextView)findViewById(R.id.notification_battery_main_activity);
@@ -120,7 +120,8 @@ public class BatteryMainActivity extends Activity implements SenderContext{
 		filter.addAction(BMSUtil.BATTERY_UPDATE_FAIL_OVER_TIMEOUT);
 		filter.addAction(BicycleUtil.DEVICE_CONNECTED);
 		filter.addAction(BicycleUtil.DEVICE_DISCONNECTED);
-		registerReceiver(new StateReceiver(), filter);
+		receiver = new StateReceiver();
+		registerReceiver(receiver, filter);
 	}
 	
 	/**
@@ -158,6 +159,7 @@ public class BatteryMainActivity extends Activity implements SenderContext{
 	 * Re show all views and enable synchronization between devices
 	 */
 	protected void showBatteryInfo(){
+		deviceConnected = true;
 		tvNotify.setVisibility(View.GONE);
 		thermo.setVisibility(View.VISIBLE);
 		battery.setVisibility(View.VISIBLE);
@@ -175,7 +177,12 @@ public class BatteryMainActivity extends Activity implements SenderContext{
 	 * Start exchanging data vie bluetooth
 	 */
 	private void startSynchronize() {
+		Log.d(TAG,"Start synchronizing data");
 		//Start the send packer theard for data exchange
+		if(thread != null){
+			thread.cancel();
+			thread = null;
+		}
 		thread = new SendPacketThread(this,PERIOD);
 		thread.start();
 	}
@@ -193,6 +200,7 @@ public class BatteryMainActivity extends Activity implements SenderContext{
 	 * Get back the notification if connection lost
 	 */
 	protected void connectionLost(){
+		deviceConnected = false;
 		tvNotify.setText("未连接上支持蓝牙的电池,请按菜单键进行连接.");
 		tvNotify.setVisibility(View.VISIBLE);
 		thermo.setVisibility(View.GONE);
@@ -207,6 +215,7 @@ public class BatteryMainActivity extends Activity implements SenderContext{
 	
 	public synchronized void sendPackets(){
 			try{
+				Log.d(TAG,"Starting sending syn request.");
 				controller.sendRequestPacket(new BMSCommand(BMSUtil.COMMAND_GET_BATTERY_CAPACITY_AND_SOC_STATUS,
 						BMSUtil.COMMAND_GET_BATTERY_CAPACITY_AND_SOC_STATUS_REPLY),false);
 				wait();
@@ -245,7 +254,6 @@ public class BatteryMainActivity extends Activity implements SenderContext{
 	public void onStop(){
 		if(thread != null && thread.isAlive()){
 			thread.cancel();
-			thread = null;
 		}
 		super.onStop();
 		 if(D) Log.e(TAG, "--- ON STOP ---");
@@ -254,13 +262,12 @@ public class BatteryMainActivity extends Activity implements SenderContext{
 	@Override
 	public void onResume(){
 		if(thread != null){
-			thread.reRun();
-		}else{
+			thread.cancel();
 			thread = new SendPacketThread(this,PERIOD);
 			thread.start();
 		}
 		super.onResume();
-//		receivedPackets();
+		receivedPackets();
 		 if(D) Log.e(TAG, "--- ON RESUME ---");
 	}
 	
@@ -286,6 +293,7 @@ public class BatteryMainActivity extends Activity implements SenderContext{
 			if(D) Log.i(TAG, "Action received:"+action);
 			if(action.equals(BicycleUtil.DEVICE_CONNECTED)){
 				showBatteryInfo();
+				receivedPackets();
 			}else if(action.equals(BicycleUtil.DEVICE_DISCONNECTED)){
 				connectionLost();
 				stopSynchronize();

@@ -26,8 +26,4 @@ public class SendPacketThread extends Thread{
 	public void cancel(){
 		run = false;
 	}
-	
-	public void reRun(){
-		run = true;
-	}
 }

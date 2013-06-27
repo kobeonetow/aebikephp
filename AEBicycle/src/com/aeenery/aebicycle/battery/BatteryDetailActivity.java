@@ -92,7 +92,7 @@ public class BatteryDetailActivity extends Activity{
     }
     
     private void init(){
-    	controller = RequestController.getRequestController();
+    	controller = RequestController.getRequestController(this);
     	btnGetHardwareVersion = (Button)findViewById(R.id.btnGetHardwareVersion);
     	btnGetSoftwareVersion = (Button)findViewById(R.id.btnGetSoftwareVersion);
     	btnGetSystemInfo = (Button)findViewById(R.id.btnGetSystemInfo);

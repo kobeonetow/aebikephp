@@ -1,5 +1,7 @@
 package com.aeenery.aebicycle.bms;
 
+import java.util.Arrays;
+
 import com.aeenery.aebicycle.battery.BluetoothService;
 import com.aeenery.aebicycle.bms.models.BMSGeneralReplyPacket;
 import com.aeenery.aebicycle.bms.models.BMSPacket;
@@ -27,7 +29,7 @@ import android.widget.Toast;
 public class BMSController implements AvailabilityNotificationCheck{
 
 	private final static String TAG = "BMSController";
-	private final static boolean D = false;
+	private final static boolean D = true;
 	private final static int RETRY_IF_TIMEOUT = 3;
 	
 	private static BMSController controller;
@@ -37,10 +39,17 @@ public class BMSController implements AvailabilityNotificationCheck{
 	protected BMSPacket[] queue = new BMSPacket[200];
 	protected int deQueueIndex = 0;
 	protected int enQueueIndex = 0;
-	protected int trySending = 1;
+	protected int trySending = 2;
 	protected BMSPacket packetSending = null;
 	protected boolean waitingForReply = false;
-	protected Thread sendQueueThread = null;
+	public boolean isWaitingForReply() {
+		return waitingForReply;
+	}
+	public void setWaitingForReply(boolean waitingForReply) {
+		this.waitingForReply = waitingForReply;
+	}
+
+	protected SendQueueThread sendQueueThread = null;
 	protected short AEIndex = 0;
 	protected short AFIndex = 0;
 	protected byte[] receiveByteArray;
@@ -48,12 +57,9 @@ public class BMSController implements AvailabilityNotificationCheck{
 	protected SharedPreferences sp;
 	
 	
-	public static BMSController getController(){
-		return controller;
-	}
-	public static BMSController getInitiliseController(Context _context){
+	public static BMSController getController(Context _context){
 		if(controller == null)
-			controller = new BMSController(_context);
+			controller = new BMSController(_context.getApplicationContext());
 		return controller;
 	}
 	public PacketBuilder getBuilder(){
@@ -70,6 +76,17 @@ public class BMSController implements AvailabilityNotificationCheck{
 			sendQueueThread.start();
 		}
 		sp = context.getSharedPreferences("aebt", 0);
+	}
+	
+	public synchronized void clear(){
+		waitingForReply = false;
+		sendQueueThread.cancel();
+		no
+		Arrays.fill(queue, null);
+		deQueueIndex = 0;
+		enQueueIndex = 0;
+		packetSending = null;
+		
 	}
 	
 	protected synchronized void waitingForSend(){
@@ -268,7 +285,7 @@ public class BMSController implements AvailabilityNotificationCheck{
 	
 	private void setPacketSending(BMSPacket packet){
 		this.packetSending = packet;
-		if(D) Log.e(TAG, "Set packetSending to "+ packet);
+		if(D) Log.e(TAG, "Set packetSending to CID:"+ packet);
 	}
 	
 	/**
@@ -321,9 +338,16 @@ public class BMSController implements AvailabilityNotificationCheck{
 	}
 	
 	class SendQueueThread extends Thread{
+		
+		boolean send = false;
+		
+		public SendQueueThread(){
+			send = true;
+		}
+		
 		@Override
 		public void run(){
-			while(true){
+			while(send){
 				waitingForSend();
 				waitingForPacket();
 				Intent intent = new Intent(context, BluetoothService.class);
@@ -333,6 +357,10 @@ public class BMSController implements AvailabilityNotificationCheck{
 				context.startService(intent);
 				if(D) Log.e(TAG,"Message send to service to sendout thread packet Id:" + packetSending.getPacketId() + " -- " + packetSending.getPacketAsByteArray());
 			}
+		}
+		
+		public void cancel(){
+			this.send = false;
 		}
 			
 	}

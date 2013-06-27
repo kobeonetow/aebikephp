@@ -84,7 +84,7 @@ public class BatteryDescriptionActivity extends Activity implements SenderContex
 		tvperiod = (TextView)findViewById(R.id.tvperiod);
 		btnDescriptionUpdate = (Button)findViewById(R.id.btn_description_update);
 
-		controller = RequestController.getRequestController();
+		controller = RequestController.getRequestController(this);
 		sharedPreferences = this.getSharedPreferences("aebt", MODE_PRIVATE);
 		
 		updateAll();
@@ -212,8 +212,7 @@ public class BatteryDescriptionActivity extends Activity implements SenderContex
 	@Override
 	public void onResume(){
 		if(thread != null){
-			thread.reRun();
-		}else{
+			thread.cancel();
 			thread = new SendPacketThread(this,PERIOD);
 			thread.start();
 		}

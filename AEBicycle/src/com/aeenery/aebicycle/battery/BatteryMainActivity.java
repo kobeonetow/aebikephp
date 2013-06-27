@@ -390,6 +390,15 @@ public class BatteryMainActivity extends Activity implements SenderContext{
                 sendBroadcast(intent);
             }
             break;
+        case BicycleUtil.REQUEST_ENABLE_BT:
+        	if(resultCode == RESULT_OK){
+        		if(connectDevice()){
+    				showBatteryInfo();
+    			}else{
+    				tvNotify.setVisibility(View.VISIBLE);
+    			}
+        	}
+            break;
         }
     }
     

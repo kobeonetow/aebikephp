@@ -3,6 +3,7 @@ package com.aeenery.aebicycle;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
+import android.app.NotificationManager;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.ComponentName;
@@ -31,6 +32,7 @@ import com.aeenery.aebicycle.entry.BicycleUtil;
 import com.aeenery.aebicycle.entry.UIHelper;
 import com.aeenery.aebicycle.map.MapActivity;
 import com.aeenery.aebicycle.model.netManager;
+import com.aeenery.aebicycle.notification.AppNotifications;
 import com.aeenery.aebicycle.weather.WeatherActivity;
 
 public class HomeActivity extends Activity{
@@ -45,6 +47,10 @@ public class HomeActivity extends Activity{
 	private ImageButton btnRide;
 	private ImageButton btnNews;
 	private ImageButton btnOthers;
+	
+	//Test
+	AppNotifications notis = null;
+	NotificationManager notiManager = null; 
 
 
 	@Override
@@ -54,6 +60,16 @@ public class HomeActivity extends Activity{
 		
 		//Set onclick event for buttons
 		init();
+		
+		//test notifications
+		notis = AppNotifications.getInstance();
+		notiManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE); 
+		testNotifications();
+	}
+
+	private void testNotifications() {
+		notiManager.notify(BicycleUtil.NOTI_BATTERY_LOW,notis.getBatteryLowNotification(this, "电池约剩下5秒").build());
+		notiManager.notify(BicycleUtil.NOTI_BATTERY_ERROR,notis.getBatteryErrorNotification(this, "电池约剩下5秒").build());
 	}
 
 	@Override

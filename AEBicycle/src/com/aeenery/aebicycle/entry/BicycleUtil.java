@@ -121,4 +121,12 @@ public interface BicycleUtil {
     public static final String DEVICE_NAME = "device_name";
     public static final String TOAST = "toast";
     
+    
+    //Notifications
+    public static final int NOTI_BATTERY_LOW = 0x1001;
+    public static final int NOTI_BATTERY_ERROR = 0x1002;
+    public static final int NOTI_PLAN_INVITE = 0x1003;
+    public static final int NOTI_FRIEND_ADD = 0x1004;
+    public static final int NOTI_JOIN_PLAN = 0x1005;
+    
 }

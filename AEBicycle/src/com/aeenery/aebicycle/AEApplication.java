@@ -7,6 +7,7 @@ import com.baidu.mapapi.MKGeneralListener;
 import com.baidu.mapapi.map.MKEvent;
 
 import android.app.Application;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.widget.Toast;
 
@@ -14,6 +15,7 @@ public class AEApplication extends Application{
 	
 	private static AEApplication instance = null;
 	private BMapManager mBMapManager = null;
+	private NotificationManager notiManager= null;
 	
 	public static final String strBDApiKey = BicycleUtil.mapKey;
 	
@@ -33,6 +35,9 @@ public class AEApplication extends Application{
             Toast.makeText(AEApplication.getInstance().getApplicationContext(), 
                     "BMapManager  初始化错误!", Toast.LENGTH_LONG).show();
         }
+        
+        if(notiManager == null)
+        	notiManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 	}
 	
 	@Override
@@ -52,6 +57,10 @@ public class AEApplication extends Application{
 	
 	public BMapManager getBMapManager(){
 		return this.mBMapManager;
+	}
+	
+	public NotificationManager getNotiManager(){
+		return this.notiManager;
 	}
 	
 	// 常用事件监听，用来处理通常的网络错误，授权验证错误等

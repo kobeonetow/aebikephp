@@ -20,6 +20,7 @@ import com.aeenery.aebicycle.BaseActivity;
 import com.aeenery.aebicycle.LoginActivity;
 import com.aeenery.aebicycle.R;
 import com.aeenery.aebicycle.entry.BicycleUtil;
+import com.aeenery.aebicycle.friend.FriendListActivity;
 import com.aeenery.aebicycle.map.MapActivity;
 import com.aeenery.aebicycle.map.MapActivity.AESearchListener;
 import com.aeenery.aebicycle.model.Plan;
@@ -66,6 +67,7 @@ public class PlanDetailActivity extends BaseActivity {
 	private Button btnQuit;
 	private Button btnDelete;
 	private Button btnUpdate;
+	private Button invite;
 	
 	private ServerAPI api;
 	
@@ -118,11 +120,13 @@ public class PlanDetailActivity extends BaseActivity {
 		btnQuit = (Button)findViewById(R.id.plan_detail_quit_plan);
 		btnDelete = (Button)findViewById(R.id.plan_detail_cancel_plan);
 		btnUpdate = (Button)findViewById(R.id.plan_detail_update_plan);
+		invite = (Button)findViewById(R.id.plan_detail_invite_friends);
 		
 		btnJoin.setOnClickListener(new PlanDetailButtonClickListener());
 		btnQuit.setOnClickListener(new PlanDetailButtonClickListener());
 		btnDelete.setOnClickListener(new PlanDetailButtonClickListener());
 		btnUpdate.setOnClickListener(new PlanDetailButtonClickListener());
+		invite.setOnClickListener(new PlanDetailButtonClickListener());
 		
 		//Show route on map
 		initailiseMapView();
@@ -188,21 +192,30 @@ public class PlanDetailActivity extends BaseActivity {
 		btnJoin.setVisibility(View.GONE);
 		btnQuit.setVisibility(View.GONE);
 		btnDelete.setVisibility(View.GONE);
+		invite.setVisibility(View.GONE);
 //		btnStartPlan.setVisibility(View.GONE);
 //		btnEndPlan.setVisibility(View.GONE);
 		
 		//If viewing own plan
-		if(p.getUserid() != null && p.getUserid().equals(LoginActivity.user.getId())){
-			btnDelete.setVisibility(View.VISIBLE);
-			return;
+//		if(p.getUserid() != null && p.getUserid().equals(LoginActivity.user.getId())){
+//			btnDelete.setVisibility(View.VISIBLE);
+//			return;
+//		}
+		//If null means either not in use or user is the creator
+		if(p.__getAssignStatus() == null){
+			p.__setAssignStatus(BicycleUtil.STATUS_PLAN_NOT_ASSIGN+"");
 		}
-		
 		switch(Integer.parseInt(p.__getAssignStatus())){
 		case BicycleUtil.STATUS_PLAN_NOT_ASSIGN:
-			btnJoin.setVisibility(View.VISIBLE);
+			if(p.getUserid() != null && p.getUserid().equals(LoginActivity.user.getId())){
+				btnDelete.setVisibility(View.VISIBLE);
+			}else
+				btnJoin.setVisibility(View.VISIBLE);
+			invite.setVisibility(View.VISIBLE);
 			break;
 		case BicycleUtil.STATUS_PLAN_ACCEPT:
 			btnQuit.setVisibility(View.VISIBLE);
+			invite.setVisibility(View.VISIBLE);
 			break;
 		case BicycleUtil.STATUS_PLAN_FINISH:
 //			this.setButtonsInvisibleAndDisable();
@@ -340,6 +353,13 @@ public class PlanDetailActivity extends BaseActivity {
 			case R.id.plan_detail_cancel_plan:
 				btnDelete.setEnabled(false);
 				api.detelePlan(PlanDetailActivity.this, p);
+				break;
+			case R.id.plan_detail_invite_friends:
+				Intent send = new Intent(PlanDetailActivity.this, FriendListActivity.class)
+				Bundle b = new Bundle();
+				b.putString("planid", p.getId());
+				send.putExtras(b);
+				PlanDetailActivity.this.startActivity(send);
 				break;
 			}
 		}

@@ -2,6 +2,7 @@ package com.aeenery.aebicycle.bms;
 
 import java.util.Arrays;
 
+import com.aeenery.aebicycle.AEApplication;
 import com.aeenery.aebicycle.battery.BluetoothService;
 import com.aeenery.aebicycle.bms.models.BMSGeneralReplyPacket;
 import com.aeenery.aebicycle.bms.models.BMSPacket;
@@ -17,7 +18,10 @@ import com.aeenery.aebicycle.bms.models.DeviceSerialNumberPacket;
 import com.aeenery.aebicycle.bms.models.HardwareVersionPacket;
 import com.aeenery.aebicycle.bms.models.SoftwareVersionPacket;
 import com.aeenery.aebicycle.entry.BicycleUtil;
+import com.aeenery.aebicycle.entry.UIHelper;
+import com.aeenery.aebicycle.notification.AppNotifications;
 
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -35,6 +39,8 @@ public class BMSController implements AvailabilityNotificationCheck{
 	private static BMSController controller;
 	
 	protected Context context;
+	protected AppNotifications noti = null;
+	protected NotificationManager notiManager = null;
 	protected PacketBuilder builder = new PacketBuilder();
 	protected BMSPacket[] queue = new BMSPacket[200];
 	protected int deQueueIndex = 0;
@@ -42,13 +48,8 @@ public class BMSController implements AvailabilityNotificationCheck{
 	protected int trySending = 2;
 	protected BMSPacket packetSending = null;
 	protected boolean waitingForReply = false;
-	public boolean isWaitingForReply() {
-		return waitingForReply;
-	}
-	public void setWaitingForReply(boolean waitingForReply) {
-		this.waitingForReply = waitingForReply;
-	}
-
+	
+	
 	protected SendQueueThread sendQueueThread = null;
 	protected short AEIndex = 0;
 	protected short AFIndex = 0;
@@ -76,17 +77,8 @@ public class BMSController implements AvailabilityNotificationCheck{
 			sendQueueThread.start();
 		}
 		sp = context.getSharedPreferences("aebt", 0);
-	}
-	
-	public synchronized void clear(){
-		waitingForReply = false;
-		sendQueueThread.cancel();
-		no
-		Arrays.fill(queue, null);
-		deQueueIndex = 0;
-		enQueueIndex = 0;
-		packetSending = null;
-		
+		noti = AppNotifications.getInstance();
+		notiManager = ((AEApplication)context.getApplicationContext()).getNotiManager();
 	}
 	
 	protected synchronized void waitingForSend(){
@@ -96,7 +88,6 @@ public class BMSController implements AvailabilityNotificationCheck{
 					wait();
 					if(D) Log.e(TAG,"waitingForSend() Notified");
 			}
-			waitingForReply = true;
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -238,6 +229,19 @@ public class BMSController implements AvailabilityNotificationCheck{
 			edit.putString("00A6-2", bgcsp.getRelativeSOC()+"");
 			edit.putString("00A6-3", bgcsp.getCapacityleft()+"");
 			edit.putString("00A6-4", bgcsp.getTotalcapacity()+"");
+			try{
+				int power_now = (int)(bgcsp.getCapacityleft()/bgcsp.getTotalcapacity()*100.0);
+				if(power_now < 18){
+					int hourLeft = Integer.parseInt(sp.getString("00AA-1", "0"));
+					int minuteLeft = Integer.parseInt(sp.getString("00AA-2", "0"));
+					String content = "电量剩下"+power_now+"%,约"+hourLeft+"时"+minuteLeft+"分";
+					notiManager.notify(BicycleUtil.NOTI_BATTERY_LOW, noti.getBatteryLowNotification(context,content ).build());
+				}
+			}catch (Exception e) {
+				e.printStackTrace();
+				UIHelper.killApp(true);
+				Log.e(TAG, "Notification of battery low fail");
+			}
 			break;
 		case BMSUtil.COMMAND_GET_BATTERY_VOLTAGE_CURRENT_REPLY:
 			BatteryVoltageCurrentPacket bvcp = (BatteryVoltageCurrentPacket)builder.buildReceivedPacket(packet);
@@ -306,10 +310,23 @@ public class BMSController implements AvailabilityNotificationCheck{
 	}
 	
 	/**
+	 * Reset the queue and the parameters
+	 */
+	public void resetBluetoothQueue() {
+		if(D) Log.d(TAG,"Reset the queue");
+		Arrays.fill(queue, null);
+		enQueueIndex = 0;
+		deQueueIndex = 0;
+		waitingForReply =false;
+		packetSending = null;
+	}
+
+	
+	/**
 	 * 接受数据包作出响应
 	 */
-	public void receivePacket(){
-		
+	public synchronized void receivePacket(){
+		notify();
 	}
 	
 	@Override
@@ -355,6 +372,7 @@ public class BMSController implements AvailabilityNotificationCheck{
 				intent.putExtra(BicycleUtil.BT_SEND_MSG, packetSending.getPacketAsByteArray());
 				intent.putExtra(BicycleUtil.BT_SEND_MSG_ID, packetSending.getPacketId());
 				context.startService(intent);
+				waitingForReply = true;
 				if(D) Log.e(TAG,"Message send to service to sendout thread packet Id:" + packetSending.getPacketId() + " -- " + packetSending.getPacketAsByteArray());
 			}
 		}
@@ -364,6 +382,5 @@ public class BMSController implements AvailabilityNotificationCheck{
 		}
 			
 	}
-
 
 }

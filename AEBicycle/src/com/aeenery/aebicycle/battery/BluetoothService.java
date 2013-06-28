@@ -1,6 +1,7 @@
 package com.aeenery.aebicycle.battery;
 
 import java.lang.reflect.Array;
+import java.util.Arrays;
 
 import com.aeenery.aebicycle.bms.BMSController;
 import com.aeenery.aebicycle.bms.BMSUtil;
@@ -282,13 +283,13 @@ public class BluetoothService extends Service implements BluetoothServiceStatus{
 					Log.i(TAG, "MESSAGE_STATE_CHANGE: " + msg.arg1);
 				switch (msg.arg1) {
 				case BluetoothChatService.STATE_CONNECTED:
+					reset();
 					setConnected(true);
 					sendBroadcast(new Intent(BicycleUtil.DEVICE_CONNECTED));
 					if(act != null)
 						act.cancel();
 					break;
 				case BluetoothChatService.STATE_DISCONNECT:
-					controller.clear();
 					setConnected(false);
 					sendBroadcast(new Intent(BicycleUtil.DEVICE_DISCONNECTED));
 					Log.i(TAG,"Reconnect is:"+reconnect);
@@ -348,6 +349,13 @@ public class BluetoothService extends Service implements BluetoothServiceStatus{
 		sendBroadcast(b_action);
 	}
 	
+
+	/**
+	 * Reset the queue and parameters
+	 */
+	protected void reset() {
+		controller.resetBluetoothQueue();
+	}
 
 	private void writeToSharedPreferences(String name, String value) {
 		Editor editor = sharedPreferences.edit();
@@ -447,7 +455,6 @@ public class BluetoothService extends Service implements BluetoothServiceStatus{
 					mChatService.stop();
 					connected  = false;
 				}
-				controller.clear();
 			}else if(action.equals(BMSUtil.PACKET_TIMEOUT_ACTION)){
 				String timeoutPID = intent.getStringExtra(BicycleUtil.BT_SEND_MSG_ID);
 				if(controller.responseTimeOut(timeoutPID)){

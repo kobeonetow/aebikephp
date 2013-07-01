@@ -355,7 +355,7 @@ public class PlanDetailActivity extends BaseActivity {
 				api.detelePlan(PlanDetailActivity.this, p);
 				break;
 			case R.id.plan_detail_invite_friends:
-				Intent send = new Intent(PlanDetailActivity.this, FriendListActivity.class)
+				Intent send = new Intent(PlanDetailActivity.this, FriendListActivity.class);
 				Bundle b = new Bundle();
 				b.putString("planid", p.getId());
 				send.putExtras(b);

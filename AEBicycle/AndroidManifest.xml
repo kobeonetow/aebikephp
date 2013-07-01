@@ -20,13 +20,22 @@
     <uses-feature android:name="android.hardware.screen.portrait"/>
     <uses-permission android:name="android.permission.VIBRATE" />
     
+    <permission android:name="android.permission.BAIDU_LOCATION_SERVICE" >
+    </permission>
+    
+<!--     Extra permissions for baidu push service -->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+	<uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
+	<uses-permission android:name="android.permission.ACCESS_DOWNLOAD_MANAGER"/>
+	<uses-permission android:name="android.permission.DOWNLOAD_WITHOUT_NOTIFICATION" />
+    
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
     <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
     <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
 
-    <permission android:name="android.permission.BAIDU_LOCATION_SERVICE" >
-    </permission>
+
+    
 
     <uses-permission android:name="android.permission.BAIDU_LOCATION_SERVICE" >
     </uses-permission>
@@ -38,7 +47,6 @@
     </uses-permission>
     <uses-permission android:name="android.permission.ACCES_MOCK_LOCATION" >
     </uses-permission>
-    <!-- <uses-permission android:name="android.permission.WRITE_APN_SETTINGS"></uses-permission> -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" >
     </uses-permission>
     <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS" />
@@ -190,6 +198,44 @@
             android:process=":remote" >
         </service>
 
+        
+		<!--  Push Service client receiver  -->
+		<receiver android:name="com.baidu.android.pushservice.PushServiceReceiver"
+		    android:process=":com.aeenery.aebicycle">
+			<intent-filter>
+			    <action android:name="android.intent.action.BOOT_COMPLETED"/>
+			    <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
+			    <action android:name="com.baidu.android.pushservice.action.notification.SHOW"/>
+			    <action android:name="com.baidu.amdroid.pushservice.action.meida.CLICK"/>
+			</intent-filter>    
+		</receiver>
+		
+		<receiver android:name="com.baidu.android.pushservice.RegistrationReceiver"
+		    android:process=":com.aeenery.aebicycle">
+		    <intent-filter>
+		        <action android:name="com.baidu.android.pushservice.action.METHOD"/>
+		        <action android:name="com.baidu.android.pushservice.action.BIND_SYNC"/>
+		    </intent-filter>
+		    <intent-filter>
+		        <action android:name="android.intent.action.PACKAGE_REMOVED"/>
+		        <data android:scheme="package"/>
+		    </intent-filter>
+		</receiver>
+
+		<receiver android:name="com.aeenery.aebicycle.pushservice.PushMessageReceiver">
+            <intent-filter>
+                <action android:name="com.baidu.android.pushservice.action.MESSAGE"/>
+                <action android:name="com.baidu.android.pushservice.action.RECEIVE"/>
+                <action android:name="com.baidu.android.pushservice.action.notification.CLICK"/>
+            </intent-filter>
+        </receiver>
+        
+		<!-- Push 服务 -->
+		<service 
+		    android:name="com.baidu.android.pushservice.PushService" 
+		    android:process="com.aeenery.aebicycle" 
+		    android:exported="true"/>
+		<!-- push service end -->
     </application>
 
 </manifest>

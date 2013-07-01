@@ -34,6 +34,9 @@ import com.aeenery.aebicycle.map.MapActivity;
 import com.aeenery.aebicycle.model.netManager;
 import com.aeenery.aebicycle.notification.AppNotifications;
 import com.aeenery.aebicycle.weather.WeatherActivity;
+import com.baidu.android.pushservice.PushConstants;
+import com.baidu.android.pushservice.PushManager;
+import com.baidu.android.pushservice.PushSettings;
 
 public class HomeActivity extends Activity{
 
@@ -65,6 +68,21 @@ public class HomeActivity extends Activity{
 		notis = AppNotifications.getInstance();
 		notiManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE); 
 //		testNotifications();
+		
+		//Enable baidu push service
+		startPushService();
+	}
+
+	/**
+	 * Start the push service, will only start once on device
+	 */
+	private void startPushService() {
+		if(D) Log.i(TAG,"++ In PUSH SERVICE ++");
+		if(!PushManager.isPushEnabled(getApplicationContext())){
+			PushSettings.enableDebugMode(getApplicationContext(), true);
+			PushManager.tryConnect(getApplicationContext());
+			PushManager.startWork(getApplicationContext(), PushConstants.LOGIN_TYPE_API_KEY, BicycleUtil.PUSH_API_KEY);
+		}
 	}
 
 	private void testNotifications() {
@@ -162,6 +180,7 @@ public class HomeActivity extends Activity{
 	}
 
 	public void quitApp(){
+		PushManager.stopWork(getApplicationContext());
 		this.stopService(new Intent(BluetoothService.ServiceAction));
 		UIHelper.killApp(true);
 //		this.finish();

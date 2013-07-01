@@ -1,6 +1,9 @@
 package com.aeenery.aebicycle.entry;
 
 public interface BicycleUtil {
+	//Baidu Push Service Constants
+	public final static String PUSH_API_KEY = "7kGhBDp0chc3q9kXhPg6YVWT";
+	
 	//SharedPreferences保存常量
 	public final static String preference_file = "AEBDate";
 	//mainTab常量

@@ -233,7 +233,7 @@
 		<!-- Push 服务 -->
 		<service 
 		    android:name="com.baidu.android.pushservice.PushService" 
-		    android:process="com.aeenery.aebicycle" 
+		    android:process=":com.aeenery.aebicycle" 
 		    android:exported="true"/>
 		<!-- push service end -->
     </application>

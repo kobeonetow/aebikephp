@@ -79,8 +79,7 @@ public class HomeActivity extends Activity{
 	private void startPushService() {
 		if(D) Log.i(TAG,"++ In PUSH SERVICE ++");
 		if(!PushManager.isPushEnabled(getApplicationContext())){
-			PushSettings.enableDebugMode(getApplicationContext(), true);
-			PushManager.tryConnect(getApplicationContext());
+//			PushSettings.enableDebugMode(getApplicationContext(), true);
 			PushManager.startWork(getApplicationContext(), PushConstants.LOGIN_TYPE_API_KEY, BicycleUtil.PUSH_API_KEY);
 		}
 	}

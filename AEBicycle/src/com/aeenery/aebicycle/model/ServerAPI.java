@@ -50,9 +50,11 @@ public class ServerAPI {
 			}else{
 				httpClient.addNameValuePair("userid", this.user.getId());
 			}
+			httpClient.addNameValuePair("baeuserId", LoginActivity.BaeuserId);
 			JSONObject json = httpClient.callUrl(url);
 			return json;
 		} catch (JSONException e) {
+			e.printStackTrace();
 			Log.e("Json Error","Return type is not a json object");
 			return null;
 		} 
@@ -88,6 +90,8 @@ public class ServerAPI {
 		user.setUsername(sharedPreferences.getString("username",""));
 		user.setPassword(sharedPreferences.getString("password",""));
 		user.setId(sharedPreferences.getString("userid", null));
+		if(LoginActivity.BaeuserId == null)
+			LoginActivity.BaeuserId = sharedPreferences.getString("baeuserId", "");
 		if(user.getUsername().equals("") || user.getPassword().equals("")){
 			Log.i("Login","cannot login with empty username or password ");
 			if(context instanceof LoginActivity){
@@ -119,7 +123,7 @@ public class ServerAPI {
 						((LoginActivity)context).checkLogin(null);
 						return;
 					}else{
-						JSONObject json2 = json.getJSONObject("result");
+						JSONObject json2 = json.getJSONObject("data");
 						((LoginActivity)context).checkLogin(json2);
 					}
 				} catch (JSONException e) {

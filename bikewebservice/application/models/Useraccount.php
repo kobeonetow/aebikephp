@@ -114,7 +114,7 @@ class Application_Model_Useraccount extends Application_Model_GetSetModel
     }
     
     public function getAge(){
-        return $this;
+        return $this->_age;
     }
     
     public function setSex($sex){

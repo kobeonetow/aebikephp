@@ -22,6 +22,7 @@ public class LoginActivity extends BaseActivity {
 
 	public static Useraccount user = new Useraccount(); 
 	public static boolean login = false;
+	public static String BaeuserId = null;
 	private Button btnLogin;
 	private Button btnRegister;
 	private EditText etUsername;
@@ -78,6 +79,7 @@ public class LoginActivity extends BaseActivity {
     	editor.putString("username", user.getUsername());
 		editor.putString("password",user.getPassword());
 		editor.putString("userid", user.getId());
+		editor.putString("baeuserId", BaeuserId);
 		editor.commit();
     }
     
@@ -124,7 +126,7 @@ public class LoginActivity extends BaseActivity {
 
     public void checkLogin(JSONObject json){
     	closeDialog();
-    	if(json == null) return; 
+    	if(json == null) return;     	
 		LoginActivity.user.__setUserFromJSONObject(json);
 		Log.i("Login","Login success with user "+user.getUsername());
 		LoginActivity.login = true;

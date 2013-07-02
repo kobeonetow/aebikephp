@@ -32,126 +32,138 @@ import org.json.JSONObject;
 import android.util.Log;
 
 /**
-
+ * 
  * 
  * @author J-Liang
- *
+ * 
  */
 public class HttpRestfulClient {
-	
+
 	//
 	private String uri;
 	//
 	private String key;
-	
+
 	//
 	private List<NameValuePair> postdata;
-	
+
 	/**
 	 * ��ʼ����������ַ���ܳ�
+	 * 
 	 * @param uri
-	 * ��������ַ������Ǳ��ص�ַ��10.0.2.2����localhost
-	 * Android ����
+	 *            ��������ַ������Ǳ��ص�ַ��10.0.2.2����localhost Android ����
 	 * @param key
-	 * �������ܳף��������web service�ṩ����ȡ
+	 *            �������ܳף��������web service�ṩ����ȡ
 	 */
-	public HttpRestfulClient(String uri, String key){
+	public HttpRestfulClient(String uri, String key) {
 		this.uri = uri;
 		this.key = key;
 		this.postdata = new ArrayList<NameValuePair>();
 	}
-	
 
 	/**
 	 * Test call httpclient
-	 * @throws IOException 
-	 * @throws JSONException 
+	 * 
+	 * @throws IOException
+	 * @throws JSONException
 	 */
-	public JSONObject callUrl(String suburi) throws JSONException{
-		HttpURLConnection  connection = null;
-		try{
-//		URL url = new URL("http://webservice.bike/"+suburi);
-		URL url = new URL("http://10.0.2.2/"+suburi);
-//		URL url = new URL("http://aebike.alienpig.org/"+suburi);
-		URLConnection urlConnection = url.openConnection();
-		connection = (HttpURLConnection)urlConnection;
-		Log.i("Calling url", url.getHost() + url.getPath());
-		
-		//���ó�ʱ
-		connection.setConnectTimeout(30000);
-		connection.setReadTimeout(30000);
-		
-		//����post������
-		connection.setDoOutput(true);
-		connection.setDoInput(true);
-		connection.setUseCaches(false);
-		connection.setRequestMethod("POST");
-		
-		//����http�ļ�ͷ
-		String signature  = signatureMD5();
-		connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
-		connection.setRequestProperty("X-CapDyn-AppName", "aebike");
-		connection.setRequestProperty("X-CapDyn-MACHASH", signature);
-		
-		//д��http�ļ�����
-		OutputStream outStrm = connection.getOutputStream();
-		ObjectOutputStream objOutputStrm = new ObjectOutputStream(outStrm);
-		objOutputStrm.reset();
-		
-		String strbud = "";
-		for(NameValuePair p : this.postdata){
-			if(strbud.equals(""))
-				strbud += URLEncoder.encode("empty=empty") + "&";
-			else{
-				strbud += "&";
+	public JSONObject callUrl(String suburi) throws JSONException {
+		HttpURLConnection connection = null;
+		try {
+			 URL url = new URL("http://webservice.bike/"+suburi);
+//			URL url = new URL("http://10.0.2.2/" + suburi);
+			// URL url = new URL("http://aebike.alienpig.org/"+suburi);
+			URLConnection urlConnection = url.openConnection();
+			connection = (HttpURLConnection) urlConnection;
+			Log.i("Calling url", url.getHost() + url.getPath());
+
+			// ���ó�ʱ
+			connection.setConnectTimeout(30000);
+			connection.setReadTimeout(30000);
+
+			// ����post������
+			connection.setDoOutput(true);
+			connection.setDoInput(true);
+			connection.setUseCaches(false);
+			connection.setRequestMethod("POST");
+
+			// ����http�ļ�ͷ
+			String signature = signatureMD5();
+			connection.setRequestProperty("Content-Type",
+					"application/x-www-form-urlencoded; charset=UTF-8");
+			connection.setRequestProperty("X-CapDyn-AppName", "aebike");
+			connection.setRequestProperty("X-CapDyn-MACHASH", signature);
+
+			// д��http�ļ�����
+			OutputStream outStrm = connection.getOutputStream();
+			ObjectOutputStream objOutputStrm = new ObjectOutputStream(outStrm);
+			objOutputStrm.reset();
+
+			String strbud = "";
+			for (NameValuePair p : this.postdata) {
+				if (strbud.equals(""))
+					strbud += URLEncoder.encode("empty=empty") + "&";
+				else {
+					strbud += "&";
+				}
+				Log.i("NameValuePait", p.getName() + " = " + p.getValue());
+				strbud += p.getName() + "=" + URLEncoder.encode(p.getValue());
 			}
-			Log.i("NameValuePait",p.getName()+" = "+p.getValue());
-			strbud += p.getName() + "=" + URLEncoder.encode(p.getValue());
-		}
-		Log.i("Sending", "value "+ strbud);
-		objOutputStrm.writeObject(strbud);
-		objOutputStrm.flush(); 
-		objOutputStrm.close(); 
-		
-		//����http����
-		InputStream inStrm = connection.getInputStream();
-		
-		//���Output Stream��������ݣ������´κ���
-		this.clearNameValuePair();
-		
-		//ת��ΪjsonObject
-		String bufferString = null;
-		StringBuffer buffer = new StringBuffer();
-		BufferedReader br = new BufferedReader(new InputStreamReader(inStrm));
-		while ((bufferString = br.readLine()) != null) {
-			buffer.append(bufferString);
-		}
-//		jsonParam = (JSONObject) xmlSerializer.read(buffer.toString());
-		Log.i("responce from server",buffer.toString());
-		JSONObject jsonObj = new JSONObject(buffer.toString());
-		return jsonObj;
-		}catch(IOException e){
+			Log.i("Sending", "value " + strbud);
+			objOutputStrm.writeObject(strbud);
+			objOutputStrm.flush();
+			objOutputStrm.close();
+
+			// ����http����
+			InputStream inStrm = connection.getInputStream();
+
+			// ���Output Stream��������ݣ������´κ���
+			this.clearNameValuePair();
+
+			// ת��ΪjsonObject
+			String bufferString = null;
+			StringBuffer buffer = new StringBuffer();
+			BufferedReader br = new BufferedReader(
+					new InputStreamReader(inStrm));
+			while ((bufferString = br.readLine()) != null) {
+				buffer.append(bufferString);
+			}
+			
+			int indexStrBrace =buffer.toString().indexOf("{");
+				if(indexStrBrace == -1)
+					indexStrBrace = 0;
+			String jsonStr = buffer.toString().substring(indexStrBrace);
+			Log.i("responce from server", jsonStr);
+			JSONObject jsonObj = new JSONObject(jsonStr);
+			return jsonObj;
+		} catch (IOException e) {
 			try {
 				e.printStackTrace();
-				Log.i(this.getClass().getName(), ""+connection.getResponseCode());
-				Log.i(this.getClass().getName(), ""+connection.getResponseMessage());
-				Log.i(this.getClass().getName(),"The output is not a proper http request :"+e.getCause().getMessage());
+				Log.i(this.getClass().getName(),
+						"" + connection.getResponseCode());
+				Log.i(this.getClass().getName(),
+						"" + connection.getResponseMessage());
+				Log.i(this.getClass().getName(),
+						"The output is not a proper http request :"
+								+ e.getCause().getMessage());
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
 			return null;
 		}
 	}
+
 	/**
 	 * ��ȡ��ϣֵ 32λ
+	 * 
 	 * @return
 	 */
-	private String signatureMD5(){
+	private String signatureMD5() {
 		try {
 			MessageDigest md = MessageDigest.getInstance("MD5");
 			md.reset();
 			String poststring = "";
-			for(NameValuePair pair: this.postdata){
+			for (NameValuePair pair : this.postdata) {
 				poststring += pair.getName() + pair.getValue();
 			}
 			poststring = this.key + poststring + this.key;
@@ -168,87 +180,91 @@ public class HttpRestfulClient {
 			return null;
 		}
 	}
-	
+
 	/**
 	 * To convert the InputStream to String we use the BufferedReader.readLine()
-     * method. We iterate until the BufferedReader return null which means
-     * there's no more data to read. Each line will appended to a StringBuilder
-     * and returned as String. 
+	 * method. We iterate until the BufferedReader return null which means
+	 * there's no more data to read. Each line will appended to a StringBuilder
+	 * and returned as String.
+	 * 
 	 * @param is
 	 * @return
 	 */
 	public static String convertStreamToString(InputStream is) {
-        /*
+		/*
          *
          */
-        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-        StringBuilder sb = new StringBuilder();
- 
-        String line = null;
-        try {
-            while ((line = reader.readLine()) != null) {
-                sb.append(line + "\n");
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                is.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return sb.toString();
-    }
-	
+		BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+		StringBuilder sb = new StringBuilder();
+
+		String line = null;
+		try {
+			while ((line = reader.readLine()) != null) {
+				sb.append(line + "\n");
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				is.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		return sb.toString();
+	}
+
 	/**
 	 * ���һ�����post
+	 * 
 	 * @param name
 	 * @param value
 	 */
-	public void addNameValuePair(String name, String value){
-		this.postdata.add(new BasicNameValuePair(name,value));
+	public void addNameValuePair(String name, String value) {
+		this.postdata.add(new BasicNameValuePair(name, value));
 	}
-	
+
 	/**
 	 * ��post�Ƴ�һ�����
+	 * 
 	 * @param name
 	 */
-	public void removeNameValuePair(String name){
+	public void removeNameValuePair(String name) {
 		int counter = 0;
-		for(NameValuePair pair : this.postdata){
-			if(name.equals(pair.getName())){
+		for (NameValuePair pair : this.postdata) {
+			if (name.equals(pair.getName())) {
 				break;
 			}
 			counter++;
 		}
 		this.postdata.remove(counter);
 	}
-	
-	public void setNameValuePair(List<NameValuePair> pairs, boolean clear){
-		if(this.postdata != null && clear){
+
+	public void setNameValuePair(List<NameValuePair> pairs, boolean clear) {
+		if (this.postdata != null && clear) {
 			this.postdata.clear();
-		}else{
+		} else {
 			this.postdata = new ArrayList<NameValuePair>();
 		}
-		for(NameValuePair pair: pairs){
+		for (NameValuePair pair : pairs) {
 			this.postdata.add(pair);
-//			Log.i(pair.getName(), pair.getValue());
+			// Log.i(pair.getName(), pair.getValue());
 		}
 	}
-	
+
 	/**
 	 * ���post����
 	 */
-	public void clearNameValuePair(){
+	public void clearNameValuePair() {
 		this.postdata.clear();
 	}
-	
+
 	/**
 	 * ���÷���������ַ
+	 * 
 	 * @param uri
 	 */
-	public void setWebServiceBaseUrl(String uri){
+	public void setWebServiceBaseUrl(String uri) {
 		this.uri = uri;
 	}
 }

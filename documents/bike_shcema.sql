@@ -23,6 +23,14 @@ CREATE TABLE `useraccount` (
   PRIMARY KEY (`id`)
 );
 
+DROP TABLE IF EXISTS baepushmapper;
+CREATE TABLE baepushmapper (
+	id INT PRIMARY KEY NOT NULL,
+	baeuserid VARCHAR(32),
+	baetags VARCHAR(64),
+	FOREIGN KEY (id) REFERENCES useraccount(id)
+);
+
 DROP TABLE IF EXISTS userbattery;
 CREATE TABLE `userbattery` (
   `id` int(11) NOT NULL AUTO_INCREMENT,

@@ -688,7 +688,7 @@ class Application_Model_ProcessModel extends Application_Model_DbAdapter
             $result  = $useraccountmapper->login($username, $password);
 //            Zend_Registry::get("logger")->info($username." = ".$password);
             if($result === NULL){
-                return "0";
+                return $result;
             }else{
                 return $result->toKeyValueArray();
             }
@@ -826,6 +826,24 @@ class Application_Model_ProcessModel extends Application_Model_DbAdapter
         }catch(Exception $e){
             Zend_Registry::get('logger')->err($e->getTraceAsString());
             throw new Exception("P000037 Get joined plan list fail. ".$e->getMessage());
+        }
+    }
+    
+    /**
+     * Return true if update success
+     * @param type $userid
+     * @param type $baeuserId
+     * @return boolean
+     * @throws Exception
+     */
+    public function saveBaeuserid($userid, $baeuserId){
+        try{
+            $baeuserMapper = new Application_Model_BaeuserMapper();
+            $baeuserMapper->updateBaeUserid($userid, $baeuserId);
+            return true;
+        }  catch (Exception $e){
+             Zend_Registry::get('logger')->err("P000038 save bae user id fail.( $userid,$baeuserId).".$e->getMessage());
+            throw new Exception("P000038 save bae user id fail.( $userid,$baeuserId).".$e->getMessage());
         }
     }
 }

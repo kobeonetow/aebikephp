@@ -34,6 +34,7 @@ public class FriendListActivity extends BaseActivity {
 	private ListView lv = null;
 	private Useraccount[] friends = null;
 	private Button btnSend = null;
+	private String planId = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +53,12 @@ public class FriendListActivity extends BaseActivity {
 
 		btnSend = (Button) findViewById(R.id.btnSendInvite);
 		btnSend.setOnClickListener(sendButtonClick());
+		
+		getPlanIdFromIntent();
+	}
+
+	private void getPlanIdFromIntent() {
+		planId = getIntent().getExtras().getString("planid");
 	}
 
 	/**
@@ -107,10 +114,17 @@ public class FriendListActivity extends BaseActivity {
 				}
 				if(inviteList.length()>0){
 					inviteList = inviteList.substring(0, inviteList.length()-1);
-					Log.i("String is",inviteList);
+					sendInvite(inviteList);
 				}
 			}
 		};
+	}
+
+	protected void sendInvite(String inviteList) {
+		if(inviteList==null || planId == null)
+			Toast.makeText(this, "请选择要邀请的人", Toast.LENGTH_SHORT).show();
+		else
+			api.sendPlanInvite(this,planId,inviteList);
 	}
 
 	class FriendViewAdapter extends ArrayAdapter<Useraccount> {
@@ -143,6 +157,11 @@ public class FriendListActivity extends BaseActivity {
 			return row;
 		}
 
+	}
+
+	//Call back function after success
+	public void sentInviteSuccess(JSONObject json) {
+		
 	}
 
 }

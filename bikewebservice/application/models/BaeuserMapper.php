@@ -32,18 +32,33 @@ class Application_Model_BaeuserMapper{
      * @param type $baeuserid
      * @throws Exception
      */
-    public function updateBaeUserid($userid, $baeuserid){
+    public function updateBaeUserid($userid, $baeuserid,$channelId){
         try{
             if($this->table->isUserExist($userid)){
-                $this->table->updateBaeUserId($userid, $baeuserid);
+                $this->table->updateBaeUserId($userid, $baeuserid, $channelId);
             }else{
                 $data['id'] = $userid;
                 $data['baeuserid'] = $baeuserid;
+                $data['baechannelid'] = $channelId;
                 $data['baetags'] = "";
                 $this->table->insert($data);
             }
         }  catch (Exception $e){
              throw new Exception("M110002 update bae user id fail for userid=$userid and baeuserid=$baeuserid.".$e->getMessage());
+        }
+    }
+    
+     public function getBaeUserById($userid){
+        try{
+            $row = $this->table->getBaeUserId($userid);
+            if($row == False)
+                return null;
+            else{
+                $model = new Application_Model_BaeUserModel($row->toArray());
+                return $model;
+            }
+        }  catch (Exception $e){
+             throw new Exception("M110001 get bae user id fail for userid=$userid.".$e->getMessage());
         }
     }
 }

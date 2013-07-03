@@ -5,8 +5,11 @@ import org.json.JSONObject;
 
 
 import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -20,6 +23,7 @@ import com.aeenery.aebicycle.BaseActivity;
 import com.aeenery.aebicycle.LoginActivity;
 import com.aeenery.aebicycle.R;
 import com.aeenery.aebicycle.entry.BicycleUtil;
+import com.aeenery.aebicycle.entry.UtilFunction;
 import com.aeenery.aebicycle.friend.FriendListActivity;
 import com.aeenery.aebicycle.map.MapActivity;
 import com.aeenery.aebicycle.map.MapActivity.AESearchListener;
@@ -55,6 +59,7 @@ public class PlanDetailActivity extends BaseActivity {
 	
 	private Plan p;
 	private int position;
+	private int requestCode;
 	private TextView tvStartTime;
 	private TextView tvExpectedDistance;
 	private TextView tvExpectedTime;
@@ -70,6 +75,7 @@ public class PlanDetailActivity extends BaseActivity {
 	private Button invite;
 	
 	private ServerAPI api;
+	private PlanDetailReceiver receiver;
 	
 	protected BMapManager mBMapMan = null;
 	protected MapView mMapView;
@@ -80,15 +86,31 @@ public class PlanDetailActivity extends BaseActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_plan_detail);
 		api = new ServerAPI(PlanDetailActivity.this, LoginActivity.user);
+		UtilFunction.login(this);
+		
 		//Initalise map main class
 		mBMapMan = ((AEApplication)getApplication()).getBMapManager();
 		mMKSearch = new MKSearch();
 		mMKSearch.init(mBMapMan, new AESearchListener());
 		
+		registerActionFilterAndReceiver();
+		
 		//Initialise parameters
-		init();
-		findViewsAndBindViews();
-		setContents();
+		requestCode = getIntent().getExtras().getInt("requestCode");
+		if(requestCode == BicycleUtil.REQUEST_CODE_ViewPlanDetailPreLoad){
+			init();
+			findViewsAndBindViews();
+			setContents();
+		}else if(requestCode == BicycleUtil.REQUEST_CODE_ViewPlanDetailPostLoad){
+			//load box only and display detail on return plan.
+			api.loadPlan(this,getIntent().getExtras().getString("planId"));
+		}
+	}
+
+	private void registerActionFilterAndReceiver() {
+		receiver = new PlanDetailReceiver();
+		IntentFilter filter = new IntentFilter(BicycleUtil.ACTION_PLAN_DETAIL_GET);
+		this.registerReceiver(receiver, filter);
 	}
 
 	protected void init(){
@@ -286,8 +308,10 @@ public class PlanDetailActivity extends BaseActivity {
 	
 	@Override
 	public void onBackPressed(){
-		Intent ret = getSendBackIntent();
-		this.setResult(BicycleUtil.VIEW_PLAN_FINISH, ret);
+		if(requestCode == BicycleUtil.REQUEST_CODE_ViewPlanDetailPreLoad){
+			Intent ret = getSendBackIntent();
+			this.setResult(BicycleUtil.VIEW_PLAN_FINISH, ret);
+		}
 		this.finish();
 	}
 	
@@ -311,6 +335,10 @@ public class PlanDetailActivity extends BaseActivity {
 	
 	@Override
 	protected void onDestroy(){
+		if(receiver != null){
+			this.unregisterReceiver(receiver);
+			receiver = null;
+		}
 	    mMapView.destroy();
 	    if(mBMapMan!=null){
 	        mBMapMan=null;
@@ -407,5 +435,22 @@ public class PlanDetailActivity extends BaseActivity {
 	        
 		}
 
+	}
+	
+	public class PlanDetailReceiver extends BroadcastReceiver{
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			String action = intent.getAction();
+			if(action.equals(BicycleUtil.ACTION_PLAN_DETAIL_GET)){
+				p = (Plan) intent.getSerializableExtra("plan");
+				if(p == null){
+					Toast.makeText(PlanDetailActivity.this, "读取计划失败", Toast.LENGTH_LONG).show();
+					return;
+				}
+				//Show route on map
+				initailiseMapView();
+				displayUserView();
+			}
+		}
 	}
 }

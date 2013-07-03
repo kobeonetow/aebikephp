@@ -26,11 +26,12 @@ class Application_Model_DbTable_Baepushmapper extends Zend_Db_Table_Abstract{
         }
     }
     
-    public function updateBaeUserId($userid, $baeuserId){
+    public function updateBaeUserId($userid, $baeuserId,$channelId){
         try{
             $row = $this->getBaeUserId($userid);
             if($row !== False && count($row) > 0){
                 $data['baeuserid'] = $baeuserId;
+                $data['baechannelid'] = $channelId;
                 $data['id'] = $userid;
                 $data['baetags'] = $row->baetags;
                 $this->update($data, "id=$userid");

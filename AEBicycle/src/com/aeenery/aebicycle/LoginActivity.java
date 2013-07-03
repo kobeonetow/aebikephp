@@ -17,12 +17,12 @@ import android.widget.Toast;
 import com.aeenery.aebicycle.entry.BicycleUtil;
 import com.aeenery.aebicycle.model.ServerAPI;
 import com.aeenery.aebicycle.model.Useraccount;
+import com.aeenery.aebicycle.pushservice.BaeModel;
 
 public class LoginActivity extends BaseActivity {
 
 	public static Useraccount user = new Useraccount(); 
 	public static boolean login = false;
-	public static String BaeuserId = null;
 	private Button btnLogin;
 	private Button btnRegister;
 	private EditText etUsername;
@@ -79,7 +79,8 @@ public class LoginActivity extends BaseActivity {
     	editor.putString("username", user.getUsername());
 		editor.putString("password",user.getPassword());
 		editor.putString("userid", user.getId());
-		editor.putString("baeuserId", BaeuserId);
+		editor.putString("baeuserId", BaeModel.getUserId());
+		editor.putString("channel_id", BaeModel.getChannelId());
 		editor.commit();
     }
     
@@ -97,10 +98,6 @@ public class LoginActivity extends BaseActivity {
 				}else{
 					showDialog("","正在登陆...");
 					api.login(LoginActivity.this);
-////					
-//					writeToSharedPreferences();
-//					LoginActivity.login = true;
-//					toMainActivity();
 				}
 			}
 		}
@@ -130,14 +127,12 @@ public class LoginActivity extends BaseActivity {
 		LoginActivity.user.__setUserFromJSONObject(json);
 		Log.i("Login","Login success with user "+user.getUsername());
 		LoginActivity.login = true;
+		writeToSharedPreferences();
 		toMainActivity();
     }
     
     public void toMainActivity(){
     	if(LoginActivity.login){
-//    		Intent intent = new Intent();
-//    		intent.setClass(this, HomeActivity.class);
-//    		this.startActivity(intent);
     		this.setResult(BicycleUtil.LoginSuccess);
     		this.finish();
     	}

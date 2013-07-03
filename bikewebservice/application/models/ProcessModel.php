@@ -3,6 +3,39 @@
 class Application_Model_ProcessModel extends Application_Model_DbAdapter
 {
 
+    protected $_push;
+    protected $_logger;
+    
+    public function __construct() {
+        parent::__construct();
+        $this->_logger = Zend_Registry::get("logger");
+        $this->_push = Zend_Registry::get("push");
+    }
+    
+    private function pushMessage($notiMessage,$notiMessageKey, Application_Model_BaeuserModel $baeModel){
+        //推送消息到某个user，设置push_type = 1; 
+	//推送消息到一个tag中的全部user，设置push_type = 2;
+	//推送消息到该app中的全部user，设置push_type = 3;
+	$push_type = 3; //推送单播消息
+//	$optional[Mylibrary_Push_Channel::USER_ID] = $baeModel->getBaeuserid(); //如果推送单播消息，需要指定user
+//        $optional[Mylibrary_Push_Channel::CHANNEL_ID] = $baeModel->getChannelid();
+	//optional[Channel::TAG_NAME] = "xxxx";  //如果推送tag消息，需要指定tag_name
+
+	//指定发到android设备
+	$optional[Mylibrary_Push_Channel::DEVICE_TYPE] = 3;
+	//指定消息类型为通知
+	$optional[Mylibrary_Push_Channel::MESSAGE_TYPE] = 0;
+	//通知类型的内容必须按指定内容发送，示例如下：
+	
+        $ret = $this->_push->pushMessage ( $push_type, $notiMessage, $notiMessageKey, $optional ) ;
+         if ( false === $ret ){
+             $this->logger->err ( 'WRONG, ' . __FUNCTION__ . ' ERROR!!!!!' ) ;
+             $this->logger->err ( 'ERROR NUMBER: ' . $this->_push->errno ( ) ) ;
+             $this->logger->err ( 'ERROR MESSAGE: ' . $this->_push->errmsg ( ) ) ;
+             $this->logger->err ( 'REQUEST ID: ' . $this->_push->getRequestId ( ) );
+        }
+    }
+    
     public function getAttribute(Array $arr, $name, $default){
         if(isset($arr[$name])){
             return $arr[$name];
@@ -435,13 +468,35 @@ class Application_Model_ProcessModel extends Application_Model_DbAdapter
      */
     public function inviteFriends($arr){
         try {
-            $this->beginTxn();
             $invitemapper = new Application_Model_Invitefriendmapper();
-            $planid = $arr['planid'];
-            $friends = explode(",", $arr['friends']);
+            $accountmapper = new Application_Model_Useraccountmapper();
+            $planmapper = new Application_Model_Planmapper();
+            $this->beginTxn();
+            
+            $planid = $arr['planId'];
+            $friends = explode(",", $arr['inviteList']);
             $userid = $arr['userid'];
+            
+            $userModel = $accountmapper->find($userid);
+            $planModel = $planmapper->findPlan($planid);
+            
             $result = $invitemapper->inviteFriends($userid, $friends, $planid);
+            if(count($result) != (substr_count($arr['inviteList'], ",")+1))
+                    $this->_logger->info("InviteFriends, not all friends Invited.[".print_r($result)."] and [".$arr['inviteList']."].");
             $this->commitTxn();
+            
+            $baeUsers = $this->getBaeUserModelFromUsers($result);
+            foreach($baeUsers as $baeModel){
+                $message = '{
+                    "msg_type":"'.PUSH_MSG_TYPE_INVITE_PLAN.'",
+                    "title":"收到计划邀请",
+                    "description":"'.$userModel->getName().'邀请你参加['.$planModel->getName().']",
+                    "planId":"'.$planid.'",
+                    "invitorId":"'.$userid.'"
+                    }';
+                $message_key = "msg_key";
+                $this->pushMessage($message,$message_key, $baeModel);
+            }
             return $result;
         } catch (Exception $e) {
             $this->rollbackTxn();
@@ -836,14 +891,36 @@ class Application_Model_ProcessModel extends Application_Model_DbAdapter
      * @return boolean
      * @throws Exception
      */
-    public function saveBaeuserid($userid, $baeuserId){
+    public function saveBaeuserid($userid, $baeuserId, $channelId){
         try{
             $baeuserMapper = new Application_Model_BaeuserMapper();
-            $baeuserMapper->updateBaeUserid($userid, $baeuserId);
+            $baeuserMapper->updateBaeUserid($userid, $baeuserId, $channelId);
             return true;
         }  catch (Exception $e){
              Zend_Registry::get('logger')->err("P000038 save bae user id fail.( $userid,$baeuserId).".$e->getMessage());
             throw new Exception("P000038 save bae user id fail.( $userid,$baeuserId).".$e->getMessage());
+        }
+    }
+    
+    /**
+     * Get bae user models from database according to the
+     * app user id
+     * @param type $userIds
+     * @return array
+     * @throws Exception
+     */
+    private function getBaeUserModelFromUsers($userIds){
+        try{
+            $baeuserMapper = new Application_Model_BaeuserMapper();
+            $baeUsers = array();
+            foreach($userIds as $userid){
+                $model = $baeuserMapper->getBaeUserById($userid);
+                array_push($baeUsers,$model);
+            }
+            return $baeUsers;
+        }  catch (Exception $e){
+            Zend_Registry::get('logger')->err("P000039 get bae user id fail.".print_r($userIds).$e->getMessage());
+            throw new Exception("P000039 get bae user id fail.".print_r($userIds).$e->getMessage());
         }
     }
 }

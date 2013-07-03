@@ -4,6 +4,7 @@ class Application_Model_Useraccount extends Application_Model_GetSetModel
 {
     private $_id;
     private $_username;
+    private $_name;
     private $_password;
     private $_status;
     private $_onlinestatus;
@@ -29,6 +30,15 @@ class Application_Model_Useraccount extends Application_Model_GetSetModel
     
     public function setUsername($username){
         $this->_username = $username;
+        return $this;
+    }
+    
+    public function getName(){
+        return $this->_name;
+    }
+    
+    public function setName($name){
+        $this->_name = $name;
         return $this;
     }
     

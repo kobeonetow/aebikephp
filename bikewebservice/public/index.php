@@ -40,6 +40,10 @@ defined('PLAN_TYPE_NORMAL')
 defined('PLAN_TYPE_CHALLENGE')
     || define('PLAN_TYPE_CHALLENGE','C');
 
+//Define the push message type
+defined('PUSH_MSG_TYPE_INVITE_PLAN')
+    ||define('PUSH_MSG_TYPE_INVITE_PLAN', 1);
+
 // Ensure library/ is on include_path
 set_include_path(implode(PATH_SEPARATOR, array(
     realpath(APPLICATION_PATH . '/../library'),

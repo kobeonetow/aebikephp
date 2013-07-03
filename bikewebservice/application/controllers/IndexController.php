@@ -4,51 +4,13 @@ class IndexController extends Mylibrary_Controller_Action
 {
     protected $_service;
     protected $logger;
-    protected $_push;
-
-
+   
     public function init()
     {
         /* Initialize action controller here */
         $this->_helper->viewRenderer->setNoRender();
         $this->_service = new Application_Model_ProcessModel();
         $this->logger = Zend_Registry::get("logger");
-        $this->_push = Zend_Registry::get("push");
-    }
-    
-    private function pushMessage($userid = array(), $notiMessage){
-        //推送消息到某个user，设置push_type = 1; 
-	//推送消息到一个tag中的全部user，设置push_type = 2;
-	//推送消息到该app中的全部user，设置push_type = 3;
-	$push_type = 1; //推送单播消息
-	$optional[Mylibrary_Push_Channel::USER_ID] = $user_id; //如果推送单播消息，需要指定user
-	//optional[Channel::TAG_NAME] = "xxxx";  //如果推送tag消息，需要指定tag_name
-
-	//指定发到android设备
-	$optional[Mylibrary_Push_Channel::DEVICE_TYPE] = 3;
-	//指定消息类型为通知
-	$optional[Mylibrary_Push_Channel::MESSAGE_TYPE] = 1;
-	//通知类型的内容必须按指定内容发送，示例如下：
-	$message = '{ 
-			"title": "test_push",
-			"description": "open url",
-			"notification_basic_style":7,
-			"open_type":1,
-			"url":"http://www.baidu.com"
- 		}';
-	
-	$message_key = "msg_key";
-        $ret = $this->_push->pushMessage ( $push_type, $message, $message_key, $optional ) ;
-         if ( false === $ret ){
-             $this->logger->err ( 'WRONG, ' . __FUNCTION__ . ' ERROR!!!!!' ) ;
-             $this->logger->err ( 'ERROR NUMBER: ' . $this->_push->errno ( ) ) ;
-             $this->logger->err ( 'ERROR MESSAGE: ' . $this->_push->errmsg ( ) ) ;
-             $this->logger->err ( 'REQUEST ID: ' . $this->_push->getRequestId ( ) );
-        }
-        else{
-            $this->logger->err ( 'SUCC, ' . __FUNCTION__ . ' OK!!!!!' ) ;
-            $this->logger->err ( 'result: ' . print_r ( $ret, true ) ) ;
-        }
     }
     
     public function indexAction()
@@ -66,9 +28,9 @@ class IndexController extends Mylibrary_Controller_Action
             else if (count($result) == 0)
                 $arr['result'] = "2";
             else{
-                if(!empty($this->_postdata['baeuserId'])){
+                if(!empty($this->_postdata['baeuserId']) && !empty($this->_postdata['channel_id'])){
                     $this->logger->info("Saving bae user id:".$this->_postdata['baeuserId']);
-                    $this->_service->saveBaeuserid($result['id'],$this->_postdata['baeuserId']);
+                    $this->_service->saveBaeuserid($result['id'],$this->_postdata['baeuserId'], $this->_postdata['channel_id']);
                 }
                 $arr['result'] = "1";
                 $arr['data'] = $result;
@@ -339,13 +301,20 @@ class IndexController extends Mylibrary_Controller_Action
     }
     
     public function invitefriendsAction(){
-        $data = array(
-            'userid'=>1,
-            'friends'=>'2',
-            'planid'=>1
-        );
-        $result = $this->_service->inviteFriends($data);
-        $this->_helper->json->sendJson($result);
+        try{
+            if(empty($this->_postdata['userid']) ||
+                    empty($this->_postdata['planId']) ||
+                    empty($this->_postdata['inviteList']))
+                throw new Exception("UserId, PlanId, InviteList must all be set, part of them not set.");
+            $result = $this->_service->inviteFriends($this->_postdata);
+            $arr['result'] = "1";
+            $arr['data'] = $result;
+        }  catch (Exception $e){
+            $arr['result'] = "0";
+            $arr['msg'] = $e->getMessage();
+            $this->logger->err($e->getMessage());
+        }
+        $this->_helper->json->sendJson($arr);
     }
     
     public function getinvitesAction(){
@@ -477,5 +446,4 @@ class IndexController extends Mylibrary_Controller_Action
         }
         $this->_helper->json->sendJson($arr);
     }
-
 }

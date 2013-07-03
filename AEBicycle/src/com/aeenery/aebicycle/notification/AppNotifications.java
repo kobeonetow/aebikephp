@@ -48,11 +48,14 @@ public class AppNotifications {
         return noti;
 	}
 	
-	public NotificationCompat.Builder getPlanInviteNotification(Intent _intent, Context context, String content){
+	public NotificationCompat.Builder getPlanInviteNotification(Intent _intent, Context context, String title, String content){
 		_intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		PendingIntent pIntent = PendingIntent.getActivity(context,0,_intent,PendingIntent.FLAG_UPDATE_CURRENT);
 		NotificationCompat.Builder noti = new NotificationCompat.Builder(context.getApplicationContext());
-        noti.setContentTitle("收到参加邀请")
+		if(title == null)
+			noti.setContentTitle("收到参加邀请");
+		else
+			noti.setContentTitle(title)
         .setContentText(content)
         .setSmallIcon(R.drawable.icon_join_plan)
         .setContentIntent(pIntent);

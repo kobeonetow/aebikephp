@@ -85,6 +85,7 @@ public class PlanListActivity extends BaseActivity {
 			Intent intent = new Intent();
 			intent.setClass(PlanListActivity.this, PlanDetailActivity.class);
 			Bundle bundle = new Bundle();
+			bundle.putInt("requestCode", BicycleUtil.REQUEST_CODE_ViewPlanDetailPreLoad);
 			bundle.putSerializable("plan", plan);
 			bundle.putInt("position",position);
 			intent.putExtras(bundle);

@@ -2,6 +2,7 @@ package com.aeenery.aebicycle.model;
 
 import java.io.IOException;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -10,6 +11,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -24,9 +26,11 @@ import com.aeenery.aebicycle.challenge.QuickPlanActivity;
 import com.aeenery.aebicycle.challenge.ViewPlanActivity;
 import com.aeenery.aebicycle.entry.BicycleUtil;
 import com.aeenery.aebicycle.friend.FriendListActivity;
+import com.aeenery.aebicycle.pushservice.BaeModel;
 
 public class ServerAPI {
 	
+	protected static final String TAG = "ServerAPI";
 	private HttpRestfulClient httpClient = null; 
 	private Useraccount user = null;
 	
@@ -50,7 +54,8 @@ public class ServerAPI {
 			}else{
 				httpClient.addNameValuePair("userid", this.user.getId());
 			}
-			httpClient.addNameValuePair("baeuserId", LoginActivity.BaeuserId);
+			httpClient.addNameValuePair("baeuserId", BaeModel.getUserId());
+			httpClient.addNameValuePair("channel_id", BaeModel.getChannelId());
 			JSONObject json = httpClient.callUrl(url);
 			return json;
 		} catch (JSONException e) {
@@ -90,8 +95,10 @@ public class ServerAPI {
 		user.setUsername(sharedPreferences.getString("username",""));
 		user.setPassword(sharedPreferences.getString("password",""));
 		user.setId(sharedPreferences.getString("userid", null));
-		if(LoginActivity.BaeuserId == null)
-			LoginActivity.BaeuserId = sharedPreferences.getString("baeuserId", "");
+		if(BaeModel.getUserId() == null){
+			BaeModel.setUserId(sharedPreferences.getString("baeuserId", ""));
+			BaeModel.setChannelId(sharedPreferences.getString("channel_id", ""));
+		}
 		if(user.getUsername().equals("") || user.getPassword().equals("")){
 			Log.i("Login","cannot login with empty username or password ");
 			if(context instanceof LoginActivity){
@@ -353,6 +360,65 @@ public class ServerAPI {
 				if (checkResult(this, json, finishedPlansActivity,
 						finishedPlansActivity.getString(R.string.server_busy))) {
 					finishedPlansActivity.setPlansToView(json);
+				}
+			}
+			
+		}.execute("");
+	}
+
+	/**
+	 * Send the invitation to others
+	 * requrie planid and string of friend user id seperated by commas
+	 * @param friendListActivity
+	 * @param planId
+	 * @param inviteList
+	 */
+	public void sendPlanInvite(final FriendListActivity friendListActivity,
+			final String planId, final String inviteList) {
+		new AsyncTask<String,String,JSONObject>(){
+			@Override
+			protected JSONObject doInBackground(String... params) {
+				httpClient.clearNameValuePair();
+				httpClient.addNameValuePair("planId", planId);
+				httpClient.addNameValuePair("inviteList", inviteList);
+				return callServer("index/invitefriends");
+			}
+			
+			@Override
+			protected void onPostExecute(JSONObject json){
+				if (checkResult(this, json, friendListActivity,
+						friendListActivity.getString(R.string.server_busy))) {
+					friendListActivity.sentInviteSuccess(json);
+				}
+			}
+			
+		}.execute("");
+	}
+
+	public void loadPlan(final Context context, final String planId) {
+		new AsyncTask<String,String,JSONObject>(){
+			@Override
+			protected JSONObject doInBackground(String... params) {
+				httpClient.clearNameValuePair();
+				httpClient.addNameValuePair("planId", planId);
+				return callServer("index/invitefriends");
+			}
+			
+			@Override
+			protected void onPostExecute(JSONObject json){
+				try{
+					if (checkResult(this, json, null,"读取计划失败")) {
+						Intent intent = new Intent(BicycleUtil.ACTION_PLAN_DETAIL_GET);
+						JSONObject json2 = json.getJSONObject("data");
+						Plan p = new Plan();
+						p.__setPlanFromJSONObject(json2);
+						Bundle b = new Bundle();
+						b.putSerializable("plan", p);
+						intent.putExtras(b);
+						context.sendBroadcast(intent);
+					}
+				}catch(Exception e){
+					Log.e(TAG,e.getMessage());
 				}
 			}
 			

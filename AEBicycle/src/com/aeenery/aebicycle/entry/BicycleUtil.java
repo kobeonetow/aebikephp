@@ -45,6 +45,8 @@ public interface BicycleUtil {
 	public final static int RUN_PLAN = 6;
 	public final static int CREATE_PLAN_FAIL = 8;
 	public final static int CREATE_PLAN = 7;
+	public final static int REQUEST_CODE_ViewPlanDetailPostLoad = 0x0211;
+	public final static int REQUEST_CODE_ViewPlanDetailPreLoad = 0x0212;
 	
 	//Plan Page Position
 	public final static int SetupPlan = 0;
@@ -132,4 +134,6 @@ public interface BicycleUtil {
     public static final int NOTI_FRIEND_ADD = 0x1004;
     public static final int NOTI_JOIN_PLAN = 0x1005;
     
+    //Plan Detail Activity Actions
+    public static final String ACTION_PLAN_DETAIL_GET = "com.aeenery.bicycle.PLAN_DETAIL_GET";
 }

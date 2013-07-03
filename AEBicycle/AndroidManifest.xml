@@ -236,6 +236,7 @@
 		    android:process=":com.aeenery.aebicycle" 
 		    android:exported="true"/>
 		<!-- push service end -->
+		
     </application>
 
 </manifest>

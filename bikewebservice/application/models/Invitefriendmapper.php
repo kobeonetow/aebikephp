@@ -20,11 +20,14 @@ class Application_Model_Invitefriendmapper
         try {
             $statusid = STATUS_INVITE_FRIEND;
             $data = array('userid' => $userid, 'planid' => $planid, 'status' => $statusid);
+            $countArray = array();
+            $count=0;
             foreach($friends as $friend){
                 $data['friendid'] = $friend;
                 $this->table->insert($data);
+                $countArray[$count++] = $friend;
             }
-            return true;
+            return $countArray;
         } catch (Exception $e) {
             Zend_Registry::get('logger')->err($e->getTraceAsString());
             throw new Exception("M090000 invite friend fail. ".$e->getMessage());

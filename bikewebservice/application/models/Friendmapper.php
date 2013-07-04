@@ -30,6 +30,21 @@ class Application_Model_Friendmapper
         }
     }
     
+    public function getNotInvitedFriends($userid,$startRow, $planid){
+        try {
+            $statusid= STATUS_NEW_FRIEND;
+            $query = "SELECT distinct f.friendid as friendid, u.name as name 
+                FROM friend as f, useraccount as u, planassignment as p 
+                WHERE f.userid = $userid AND f.friendid = u.id AND f.status = $statusid AND NOT EXISTS(SELECT planid FROM planassignment WHERE userid=f.friendid AND planid=$planid) 
+                LIMIT 30 OFFSET $startRow";
+            $rows  = $this->table->getAdapter()->query($query)->fetchAll();
+            return $rows;
+        } catch (Exception $e) {
+            Zend_Registry::get('logger')->err($e->getTraceAsString());
+            throw new Exception("M080001 get friends fail for user $userid. ".$e->getMessage());
+        }
+    }
+    
     /**
      * 删除朋友，朋友列别里也会把你移除
      * @param INT $userid 用户id

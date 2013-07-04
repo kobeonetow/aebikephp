@@ -319,6 +319,33 @@ public class ServerAPI {
 		}.execute("");
 	}
 
+	
+	/**
+	 * Get friend starting from number index
+	 * Each time load maximum 30 friends
+	 * @param context
+	 * @param number
+	 */
+	public void getNotInvitedFriendList(final Context context, final String number, final String planId){
+		new AsyncTask<String,String,JSONObject>(){
+			@Override
+			protected JSONObject doInBackground(String... params) {
+				httpClient.addNameValuePair("startRow", number);
+				httpClient.addNameValuePair("planid", planId);
+				return callServer("index/getnotinvitedfriendlist");
+			}
+			
+			@Override
+			protected void onPostExecute(JSONObject json){
+				if (checkResult(this, json, context,
+						context.getString(R.string.server_busy))) {
+					((FriendListActivity) context).setFriendsToView(json);
+				}
+			}
+			
+		}.execute("");
+	}
+	
 	/**
 	 * Get joined plans by user
 	 * @param joinPlansActivity
@@ -400,8 +427,8 @@ public class ServerAPI {
 			@Override
 			protected JSONObject doInBackground(String... params) {
 				httpClient.clearNameValuePair();
-				httpClient.addNameValuePair("planId", planId);
-				return callServer("index/invitefriends");
+				httpClient.addNameValuePair("planid", planId);
+				return callServer("index/getplanbyid");
 			}
 			
 			@Override

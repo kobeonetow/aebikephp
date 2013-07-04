@@ -24,8 +24,10 @@ class Application_Model_Invitefriendmapper
             $count=0;
             foreach($friends as $friend){
                 $data['friendid'] = $friend;
-                $this->table->insert($data);
-                $countArray[$count++] = $friend;
+                if(!$this->hasInvite($friend,$planid)){
+                    $this->table->insert($data);
+                    $countArray[$count++] = $friend;
+                }
             }
             return $countArray;
         } catch (Exception $e) {
@@ -82,16 +84,33 @@ class Application_Model_Invitefriendmapper
             $statusid = STATUS_PLAN_ACCEPT;
             $data['status'] = $statusid;
             $where = "friendid = $friendid and planid = $planid";
-            $result = $this->table->update($data, $where);
-            if(!$result){
-                throw Exception("M091000 Cannot accept because cannot response to the invite");
-            }
-            $planassign  = new Application_Model_Planassignmentmapper();
-            $result = $planassign->assignPlan(array('userid'=>$friendid,'planid'=>$planid));
-            return $result;
+            $countUpdate = $this->table->update($data, $where);
+//            $planassign  = new Application_Model_Planassignmentmapper();
+//            $result = $planassign->assignPlan(array('userid'=>$friendid,'planid'=>$planid));
+            return $countUpdate;
         } catch (Exception $e) {
             Zend_Registry::get('logger')->err($e->getTraceAsString());
             throw new Exception("M090003 accept friend invite fail. ".$e->getMessage());
+        }
+    }
+    
+    /**
+     * Check whether friend has been invited
+     * @param type $friend
+     * @param type $planid
+     * @return boolean
+     * @throws Exception
+     */
+    public function hasInvite($friend, $planid){
+        try {
+            $rows = $this->table->fetchAll($this->table->select()->where('friendid=?',$friend)->where('planid=?', $planid));
+            if($rows !== False && $rows != null && count($rows)>0)
+                return true;
+            else
+                return false;
+        } catch (Exception $e) {
+            Zend_Registry::get('logger')->err($e->getTraceAsString());
+            throw new Exception("M090004 check has invites fail. ".$e->getMessage());
         }
     }
 }

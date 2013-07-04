@@ -364,6 +364,7 @@ public class MapActivity extends Activity {
 			myLocPoint.accuracy = location.getRadius();
 			myLocPoint.direction = location.getDerect();
 			myLocPoint.speed = location.getSpeed();
+			Toast.makeText(MapActivity.this, location.getSpeed()+"", Toast.LENGTH_LONG).show();
 			
 			Editor edit = sp.edit();
 			edit.putFloat("latitude", (float) location.getLatitude());

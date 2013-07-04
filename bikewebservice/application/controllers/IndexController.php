@@ -58,6 +58,8 @@ class IndexController extends Mylibrary_Controller_Action
     
     public function createplanAction(){
         try{
+            if(empty($this->_postdata['userid']))
+                throw new Exception("No userid found.");
             $result = $this->_service->createPlan($this->_postdata);
             $arr['result'] = "1";
             $arr['data'] = $result;
@@ -97,6 +99,26 @@ class IndexController extends Mylibrary_Controller_Action
                 throw new Exception("userid is not provided");
             }
             $result = $this->_service->getFriendList($this->_postdata);
+            if(count($result) > 0){
+                $arr['result'] = 1;//got something
+                $arr['data'] = $result;
+            }else{
+                $arr['result'] = 2;//empty
+            }
+        }  catch (Exception $e){
+            $arr['result'] = 0;
+            $arr['msg'] = $e->getMessage();
+            $this->logger->err($e->getMessage());
+        }
+        $this->_helper->json->sendJson($arr);
+    }
+    
+    public function getnotinvitedfriendlistAction(){
+        try{
+            if(empty($this->_postdata['userid']) || empty($this->_postdata['planid'])){
+                throw new Exception("userid or planid is not provided");
+            }
+            $result = $this->_service->getNotInvitedFriendList($this->_postdata);
             if(count($result) > 0){
                 $arr['result'] = 1;//got something
                 $arr['data'] = $result;
@@ -236,9 +258,9 @@ class IndexController extends Mylibrary_Controller_Action
     
     public function getplanbyidAction(){
         try{
-            if(empty($this->_postdata['planid']))
-                throw new Exception("planid is empty");
-            $result = $this->_service->getPlanById($this->_postdata);
+            if(empty($this->_postdata['planid']) || empty($this->_postdata['userid']))
+                throw new Exception("planid / userid is empty");
+            $result = $this->_service->getPlanById((int)$this->_postdata['planid'],(int)$this->_postdata['userid']);
             $arr['data'] = $result;
             $arr["result"] = 1;
         }catch(Exception $e){

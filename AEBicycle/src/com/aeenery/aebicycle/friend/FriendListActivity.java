@@ -47,14 +47,13 @@ public class FriendListActivity extends BaseActivity {
 
 	// Get the friend list for user
 	private void initFriendListView() {
-		api.getFriendList(this, "0");
+		getPlanIdFromIntent();
+		api.getNotInvitedFriendList(this, "0", planId);
 		lv = (ListView) findViewById(R.id.view_friend_listview);
 		lv.setOnItemClickListener(new FriendClickListener());
 
 		btnSend = (Button) findViewById(R.id.btnSendInvite);
 		btnSend.setOnClickListener(sendButtonClick());
-		
-		getPlanIdFromIntent();
 	}
 
 	private void getPlanIdFromIntent() {
@@ -161,7 +160,8 @@ public class FriendListActivity extends BaseActivity {
 
 	//Call back function after success
 	public void sentInviteSuccess(JSONObject json) {
-		
+		Toast.makeText(this, "邀请已发送", Toast.LENGTH_SHORT).show();
+		this.finish();
 	}
 
 }

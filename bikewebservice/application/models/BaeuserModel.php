@@ -4,7 +4,7 @@ class Application_Model_BaeuserModel extends Application_Model_GetSetModel{
     
     private $_id;
     private $_baeuserid;
-    private $_channelid;
+    private $_baechannelid;
     private $_baetags;
     
     public function getId(){
@@ -25,12 +25,12 @@ class Application_Model_BaeuserModel extends Application_Model_GetSetModel{
         return $this;
     }
     
-    public function getChannelid(){
-        return $this->_channelid;
+    public function getBaechannelid(){
+        return $this->_baechannelid;
     }
     
-    public function setChannelid($channelId){
-        $this->_channelid = $channelId;
+    public function setBaechannelid($channelId){
+        $this->_baechannelid = $channelId;
         return $this;
     }
     

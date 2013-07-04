@@ -4,6 +4,7 @@ class Application_Model_DbTable_Baepushmapper extends Zend_Db_Table_Abstract{
     
     protected $_name = 'baepushmapper';
     protected $_primary = 'id';
+   
     
     public function isUserExist($userid){
         try{
@@ -20,7 +21,12 @@ class Application_Model_DbTable_Baepushmapper extends Zend_Db_Table_Abstract{
     public function getBaeUserId($userid){
         try{
             $row = $this->find($userid);
-            return $row;
+            if($row == False || $row == null || count($row) < 1)
+                return null;
+            else{
+                $rowArray = $row[0]->toArray();
+                return $rowArray;
+            }
         }  catch (Exception $e){
             throw new Exception($e);
         }

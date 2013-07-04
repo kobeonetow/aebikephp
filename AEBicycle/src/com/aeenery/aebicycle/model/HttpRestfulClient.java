@@ -70,8 +70,8 @@ public class HttpRestfulClient {
 	public JSONObject callUrl(String suburi) throws JSONException {
 		HttpURLConnection connection = null;
 		try {
-			 URL url = new URL("http://webservice.bike/"+suburi);
-//			URL url = new URL("http://10.0.2.2/" + suburi);
+//			 URL url = new URL("http://webservice.bike/"+suburi);
+			URL url = new URL("http://10.0.2.2/" + suburi);
 			// URL url = new URL("http://aebike.alienpig.org/"+suburi);
 			URLConnection urlConnection = url.openConnection();
 			connection = (HttpURLConnection) urlConnection;

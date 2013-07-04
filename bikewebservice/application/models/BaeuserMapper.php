@@ -51,10 +51,10 @@ class Application_Model_BaeuserMapper{
      public function getBaeUserById($userid){
         try{
             $row = $this->table->getBaeUserId($userid);
-            if($row == False)
+            if($row == False || $row == null)
                 return null;
             else{
-                $model = new Application_Model_BaeUserModel($row->toArray());
+                $model = new Application_Model_BaeUserModel($row);
                 return $model;
             }
         }  catch (Exception $e){

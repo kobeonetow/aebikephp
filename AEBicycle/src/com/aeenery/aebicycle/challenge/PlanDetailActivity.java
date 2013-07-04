@@ -80,6 +80,7 @@ public class PlanDetailActivity extends BaseActivity {
 	protected BMapManager mBMapMan = null;
 	protected MapView mMapView;
 	protected MKSearch mMKSearch = null;
+	protected MapController mMapController = null;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -93,6 +94,10 @@ public class PlanDetailActivity extends BaseActivity {
 		mMKSearch = new MKSearch();
 		mMKSearch.init(mBMapMan, new AESearchListener());
 		
+		mMapView = (MapView)findViewById(R.id.bmapsViewNoneEditable);
+		mMapView.setBuiltInZoomControls(true);
+		mMapController = mMapView.getController();
+		
 		registerActionFilterAndReceiver();
 		
 		//Initialise parameters
@@ -100,9 +105,12 @@ public class PlanDetailActivity extends BaseActivity {
 		if(requestCode == BicycleUtil.REQUEST_CODE_ViewPlanDetailPreLoad){
 			init();
 			findViewsAndBindViews();
+			initailiseMapView();
+			displayUserView();
 			setContents();
 		}else if(requestCode == BicycleUtil.REQUEST_CODE_ViewPlanDetailPostLoad){
 			//load box only and display detail on return plan.
+			findViewsAndBindViews();
 			api.loadPlan(this,getIntent().getExtras().getString("planId"));
 		}
 	}
@@ -149,18 +157,9 @@ public class PlanDetailActivity extends BaseActivity {
 		btnDelete.setOnClickListener(new PlanDetailButtonClickListener());
 		btnUpdate.setOnClickListener(new PlanDetailButtonClickListener());
 		invite.setOnClickListener(new PlanDetailButtonClickListener());
-		
-		//Show route on map
-		initailiseMapView();
-		
-		displayUserView();
 	}
 
 	private void initailiseMapView() {
-		mMapView = (MapView)findViewById(R.id.bmapsViewNoneEditable);
-		mMapView.setBuiltInZoomControls(true);
-		MapController mMapController=mMapView.getController();
-		
 		//Get latitude and longtitude
 		String startLocStr[] = p.getStartlocation().split("\\|");
 		String endLocStr[] = p.getEndlocation().split("\\|");
@@ -189,7 +188,7 @@ public class PlanDetailActivity extends BaseActivity {
 		if(p.getExpecttime() != null) time = Integer.parseInt(p.getExpecttime());
 		tvExpectedTime.setText(time/3600 + "时" + (time % 3600) / 60 +"分"+ time % 60 +"秒");
 		
-		tvExpectedPpl.setText((Integer.parseInt(p.getPplgoing())+1) +"/"+p.getPplexpected());
+		tvExpectedPpl.setText(Integer.parseInt(p.getPplgoing()) +"/"+p.getPplexpected());
 		tvRemark.setText(p.getDescription());
 		tvPlanId.setText(p.getId());
 		tvStartTime.setText(p.getPlandate());
@@ -447,9 +446,9 @@ public class PlanDetailActivity extends BaseActivity {
 					Toast.makeText(PlanDetailActivity.this, "读取计划失败", Toast.LENGTH_LONG).show();
 					return;
 				}
-				//Show route on map
 				initailiseMapView();
 				displayUserView();
+				setContents();
 			}
 		}
 	}

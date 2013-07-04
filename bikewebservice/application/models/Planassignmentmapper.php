@@ -23,7 +23,7 @@ class Application_Model_Planassignmentmapper
             throw new Exception("M040001 Assign plan fail. ".$e->getMessage());
         }
     }
-    
+  
     /**
      * 改变计划状态为完成，并更新完成时间
      * @param INT $userid
@@ -144,7 +144,7 @@ class Application_Model_Planassignmentmapper
                 $rowarray = $rows[0]->toArray();
                 return new Application_Model_Planassignment($rowarray);
             }else{
-                return False;
+                return null;
             }
         } catch (Exception $e) {
             Zend_Registry::get('logger')->err($e->getTraceAsString());
@@ -200,10 +200,10 @@ class Application_Model_Planassignmentmapper
      * @return type
      * @throws Exception
      */
-    public function deleteAssignment($planid){
+    public function deleteAssignment($planid, $userid){
         try {
             $query = "DELETE FROM planassignment 
-                WHERE planid = $planid";
+                WHERE planid = $planid AND userid=$userid";
             $rows = $this->table->getAdapter()->query($query);
             return $rows;
         } catch (Exception $e) {
@@ -257,5 +257,25 @@ class Application_Model_Planassignmentmapper
             throw new Exception("M040012 Get finished plans fail by userid $userid. ".$e->getMessage());
         }
     }
+    
+    /**
+     * Chech whether plan has assigned
+     * @param type $data
+     * @return boolean
+     * @throws Exception
+     */
+    public function isPlanAssigned($data){
+        try{
+            $assignment = $this->getAssignment($data['planid'], $data['userid']);
+            if($assignment == null)
+                return false;
+            else
+                return true;
+        }  catch (Exception $e){
+            Zend_Registry::get('logger')->err($e->getTraceAsString());
+            throw new Exception("M040013 check plan is assign fail. ".$e->getMessage());
+        }
+    }
+    
 }
 

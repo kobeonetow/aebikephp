@@ -13,12 +13,14 @@ class Application_Model_ProcessModel extends Application_Model_DbAdapter
     }
     
     private function pushMessage($notiMessage,$notiMessageKey, Application_Model_BaeuserModel $baeModel){
+        $this->_logger->info("++ In PushMessage.++ Pushing to user:".$baeModel->getBaeuserid());
         //推送消息到某个user，设置push_type = 1; 
 	//推送消息到一个tag中的全部user，设置push_type = 2;
 	//推送消息到该app中的全部user，设置push_type = 3;
-	$push_type = 3; //推送单播消息
-//	$optional[Mylibrary_Push_Channel::USER_ID] = $baeModel->getBaeuserid(); //如果推送单播消息，需要指定user
-//        $optional[Mylibrary_Push_Channel::CHANNEL_ID] = $baeModel->getChannelid();
+	$push_type = 1; //推送单播消息
+	$optional[Mylibrary_Push_Channel::USER_ID] = $baeModel->getBaeuserid(); //如果推送单播消息，需要指定user
+        $optional[Mylibrary_Push_Channel::CHANNEL_ID] = $baeModel->getBaechannelid();
+
 	//optional[Channel::TAG_NAME] = "xxxx";  //如果推送tag消息，需要指定tag_name
 
 	//指定发到android设备
@@ -29,10 +31,10 @@ class Application_Model_ProcessModel extends Application_Model_DbAdapter
 	
         $ret = $this->_push->pushMessage ( $push_type, $notiMessage, $notiMessageKey, $optional ) ;
          if ( false === $ret ){
-             $this->logger->err ( 'WRONG, ' . __FUNCTION__ . ' ERROR!!!!!' ) ;
-             $this->logger->err ( 'ERROR NUMBER: ' . $this->_push->errno ( ) ) ;
-             $this->logger->err ( 'ERROR MESSAGE: ' . $this->_push->errmsg ( ) ) ;
-             $this->logger->err ( 'REQUEST ID: ' . $this->_push->getRequestId ( ) );
+             $this->_logger->err ( 'WRONG, ' . __FUNCTION__ . ' ERROR!!!!!' ) ;
+             $this->_logger->err ( 'ERROR NUMBER: ' . $this->_push->errno ( ) ) ;
+             $this->_logger->err ( 'ERROR MESSAGE: ' . $this->_push->errmsg ( ) ) ;
+             $this->_logger->err ( 'REQUEST ID: ' . $this->_push->getRequestId ( ) );
         }
     }
     
@@ -82,6 +84,7 @@ class Application_Model_ProcessModel extends Application_Model_DbAdapter
         $this->beginTxn();
         try {
             $planmapper = new Application_Model_Planmapper();
+            $planAssignment = new Application_Model_Planassignmentmapper();
             $data = array(
                 'type' => $arr['plantype'],
                 'startlocation' => $arr['startlocation'],
@@ -89,7 +92,7 @@ class Application_Model_ProcessModel extends Application_Model_DbAdapter
                 'userid' => $arr['userid'],
                 'name' => $arr['name'],
                 'distance' => $this->getAttribute($arr, "distance", ""),
-                'pplgoing' => $this->getAttribute($arr, "pplgoing", 0),
+                'pplgoing' => $this->getAttribute($arr, "pplgoing", 1),
                 'pplexpected' => $this->getAttribute($arr, "pplexpected", 2),
                 'expecttime' => $this->getAttribute($arr, "expecttime", ""),
                 'description' => $this->getAttribute($arr, 'description', ""),
@@ -101,6 +104,7 @@ class Application_Model_ProcessModel extends Application_Model_DbAdapter
                 $data['achievementid'] = $arr['achievementid'];
             }
             $planid = $planmapper->createPlan($data);
+            $planAssignment->assignPlan(array('userid'=>$arr['userid'], 'planid'=>$planid));
             $this->commitTxn();
             return $planid;
         } catch (Exception $e) {
@@ -117,18 +121,18 @@ class Application_Model_ProcessModel extends Application_Model_DbAdapter
      */
     public function getFinishedPlanList($userid){
         try{
-            $planmapper = new Application_Model_Planmapper();
+//            $planmapper = new Application_Model_Planmapper();
             $planassignmapper = new Application_Model_Planassignmentmapper();
-            $list = $planmapper->getFinishedPlanList($userid);
+//            $list = $planmapper->getFinishedPlanList($userid);
             $assginList = $planassignmapper->getFinishedPlanList($userid);
             $plans = array();
-            if($list !== False){
-                foreach($list as $model){
-                    $str = $model->toKeyValueArray();
-                    $str['assignstatus'] = STATUS_PLAN_FINISH;
-                    array_push($plans, $str);
-                }
-            }
+//            if($list !== False){
+//                foreach($list as $model){
+//                    $str = $model->toKeyValueArray();
+//                    $str['assignstatus'] = STATUS_PLAN_FINISH;
+//                    array_push($plans, $str);
+//                }
+//            }
             if($assginList !== False){
                 foreach($assginList as $model){
                     $str = $model->toKeyValueArray();
@@ -204,12 +208,16 @@ class Application_Model_ProcessModel extends Application_Model_DbAdapter
         try {
             $assignmapper = new Application_Model_Planassignmentmapper();
             $plan = new Application_Model_Planmapper();
+            $planinvitemapper = new Application_Model_Invitefriendmapper();
             $data = array(
                 'userid' => $arr['userid'],
                 'planid' => $arr['planid']
             );
-            $id = $assignmapper->assignPlan($data);
-            $plan->joinPlan($data['planid']);
+            $id=0;
+            if(!$assignmapper->isPlanAssigned($data))
+                $id = $assignmapper->assignPlan($data); //Assign to the plan mapper
+            $plan->joinPlan($data['planid']); //Add people going +1
+            $planinvitemapper->acceptInvite($data['userid'], $data['planid']);
             $this->commitTxn();
             return $id;
         } catch (Exception $e) {
@@ -223,7 +231,7 @@ class Application_Model_ProcessModel extends Application_Model_DbAdapter
      * 获取计划的状态统计，统计一个计划的不同状态的人员数
      * <br>
      * @param Array $arr
-     * @return Array 数组，每一组分别有两个值(status,count)
+     * @return INT 返回参加人数
      */
     public function getMemberForPlan($arr){
         try {
@@ -281,15 +289,22 @@ class Application_Model_ProcessModel extends Application_Model_DbAdapter
      * @return \Application_Model_Plan|boolean 返回找到的计划模型
      * @throws Exception
      */
-    public function getPlanById($arr){
+    public function getPlanById($planId,$userId){
         try {
+            $planassignmapper = new Application_Model_Planassignmentmapper();
             $plan = new Application_Model_Planmapper();
-            $planid = $arr['planid'];
-            $result = $plan->findPlan($planid);
-            return $result->toKeyValueArray();
+            $result = $plan->findPlan($planId);
+            $assignment = $planassignmapper->getAssignment((int)$planId, (int)$userId);
+            $strs = $result->toKeyValueArray();
+            if($assignment === False || $assignment == null){
+                $strs['assignstatus'] = STATUS_PLAN_NOT_ASSIGN;
+            }else{
+                $strs['assignstatus'] = $assignment->getStatus();
+            }
+            return $strs;
         } catch (Exception $e) {
             Zend_Registry::get('logger')->err($e->getTraceAsString());
-            throw new Exception("P000011 get plan fail. ".$arr['planid'] . " ".$e->getMessage());
+            throw new Exception("P000011 get plan fail. ".$planId . " ".$e->getMessage());
         }
     }
     
@@ -442,6 +457,21 @@ class Application_Model_ProcessModel extends Application_Model_DbAdapter
         }
     }
     
+    public function getNotInvitedFriendList($arr){
+        try {
+            $friendmapper = new Application_Model_Friendmapper();
+            $userid = $arr['userid'];
+            $startRow = 0;
+            if(!empty($arr['startRow']))
+                $startRow = $arr['startRow'];
+            $result = $friendmapper->getNotInvitedFriends($userid, $startRow, $arr['planid']);
+            return $result;
+        } catch (Exception $e) {
+            Zend_Registry::get('logger')->err($e->getTraceAsString());
+            throw new Exception("P000018 get friends fail. ".$e->getMessage());
+        }
+    }
+    
     /**
      * 获取用户信息
      * @param Array $arr 需要提供userid
@@ -483,7 +513,6 @@ class Application_Model_ProcessModel extends Application_Model_DbAdapter
             $result = $invitemapper->inviteFriends($userid, $friends, $planid);
             if(count($result) != (substr_count($arr['inviteList'], ",")+1))
                     $this->_logger->info("InviteFriends, not all friends Invited.[".print_r($result)."] and [".$arr['inviteList']."].");
-            $this->commitTxn();
             
             $baeUsers = $this->getBaeUserModelFromUsers($result);
             foreach($baeUsers as $baeModel){
@@ -495,8 +524,10 @@ class Application_Model_ProcessModel extends Application_Model_DbAdapter
                     "invitorId":"'.$userid.'"
                     }';
                 $message_key = "msg_key";
+                $this->_logger->info("++ Pushing message.++");
                 $this->pushMessage($message,$message_key, $baeModel);
             }
+            $this->commitTxn();
             return $result;
         } catch (Exception $e) {
             $this->rollbackTxn();
@@ -770,7 +801,7 @@ class Application_Model_ProcessModel extends Application_Model_DbAdapter
                     $userid = $arr['userid'];
                     $planid = $str['id'];
                     $assignment = $planassignmapper->getAssignment($planid, $userid);
-                    if($assignment === False){
+                    if($assignment === False || $assignment == null){
                         $str['assignstatus'] = STATUS_PLAN_NOT_ASSIGN;
                     }else{
                         $str['assignstatus'] = $assignment->getStatus();
@@ -833,9 +864,9 @@ class Application_Model_ProcessModel extends Application_Model_DbAdapter
             $userid = $this->getAttribute($arr, "userid", 0);
             $planassignmentmapper = new Application_Model_Planassignmentmapper();
             $plan = new Application_Model_Planmapper();
-            $planassignmentmapper->deleteAssignment($planid,$userid);
+            $planassignmentmapper->deleteAssignment($planid,$userid); //delete the assignment
             
-            $plan->quitPlan($planid);
+            $plan->quitPlan($planid);//delete 1 from pplGoing in plan detail
             $this->commitTxn();
             return 1;
         }catch(Exception $e){
@@ -915,7 +946,9 @@ class Application_Model_ProcessModel extends Application_Model_DbAdapter
             $baeUsers = array();
             foreach($userIds as $userid){
                 $model = $baeuserMapper->getBaeUserById($userid);
-                array_push($baeUsers,$model);
+                if($model != null){
+                    array_push($baeUsers,$model);
+                }
             }
             return $baeUsers;
         }  catch (Exception $e){

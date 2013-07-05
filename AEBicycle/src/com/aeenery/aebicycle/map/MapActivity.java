@@ -203,6 +203,7 @@ public class MapActivity extends Activity {
 			itemizedOverlay.addItem(getMarkerItem(2, endLoc.latitude, endLoc.longitude, "结束标记", ""));
 		}
 		mMapView.refresh();
+		
 //		if(startLoc != null)
 //			mMapController.animateTo(new GeoPoint((int)(startLoc.latitude),(int)(startLoc.longitude)));
 	}

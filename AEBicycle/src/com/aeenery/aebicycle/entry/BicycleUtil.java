@@ -5,7 +5,7 @@ public interface BicycleUtil {
 	public final static String PUSH_API_KEY = "7kGhBDp0chc3q9kXhPg6YVWT";
 	
 	//SharedPreferences保存常量
-	public final static String preference_file = "AEBDate";
+	public final static String SHAREPREFERENCE_FILE = "AEBData";
 	//mainTab常量
 	public final static String curTab = "currentTab";
 	public final static int tabCommunity = 0;
@@ -134,6 +134,9 @@ public interface BicycleUtil {
     public static final int NOTI_FRIEND_ADD = 0x1004;
     public static final int NOTI_JOIN_PLAN = 0x1005;
     
-    //Plan Detail Activity Actions
-    public static final String ACTION_PLAN_DETAIL_GET = "com.aeenery.bicycle.PLAN_DETAIL_GET";
+    //Activity Recever Actions
+    public static final String ACTION_PLAN_DETAIL_GET = "com.aeenery.bicycle.PLAN_DETAIL_GET"; //For receiver to get plan detail from server
+    
+    //Activity Start Actons
+    public static final String ACTION_SHOW_PROPERTY = "com.aeenery.bicycle.SHOW_PROPERTY_ACTIITY"; // For ShowPropertyActivity
 }

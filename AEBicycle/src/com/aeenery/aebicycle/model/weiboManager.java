@@ -71,7 +71,7 @@ public class weiboManager {
 	}
 	
 	public static void keepAccessToken(Context context, Oauth2AccessToken token) {
-		SharedPreferences pref = context.getSharedPreferences(BicycleUtil.preference_file, Context.MODE_APPEND);
+		SharedPreferences pref = context.getSharedPreferences(BicycleUtil.SHAREPREFERENCE_FILE, Context.MODE_APPEND);
 		Editor editor = pref.edit();
 		editor.putString(BicycleUtil.SINA_WB_TOKEN, token.getToken());
 		editor.putLong(BicycleUtil.SINA_WB_EXPIERS_TIME, token.getExpiresTime());
@@ -82,7 +82,7 @@ public class weiboManager {
 	 * @param context
 	 */
 	public static void clear(Context context){
-	    SharedPreferences pref = context.getSharedPreferences(BicycleUtil.preference_file, Context.MODE_APPEND);
+	    SharedPreferences pref = context.getSharedPreferences(BicycleUtil.SHAREPREFERENCE_FILE, Context.MODE_APPEND);
 	    Editor editor = pref.edit();
 	    editor.clear();
 	    editor.commit();
@@ -95,7 +95,7 @@ public class weiboManager {
 	 */
 	public static Oauth2AccessToken readAccessToken(Context context){
 		Oauth2AccessToken token = new Oauth2AccessToken();
-		SharedPreferences pref = context.getSharedPreferences(BicycleUtil.preference_file, Context.MODE_APPEND);
+		SharedPreferences pref = context.getSharedPreferences(BicycleUtil.SHAREPREFERENCE_FILE, Context.MODE_APPEND);
 		token.setToken(pref.getString(BicycleUtil.SINA_WB_TOKEN, ""));
 		token.setExpiresTime(pref.getLong(BicycleUtil.SINA_WB_EXPIERS_TIME, 0));
 		return token;

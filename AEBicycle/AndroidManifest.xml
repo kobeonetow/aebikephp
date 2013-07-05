@@ -186,6 +186,13 @@
        <activity
             android:name="com.aeenery.aebicycle.challenge.FinishedPlansActivity"
             android:label="@string/title_activity_view_plan" /> 
+       <activity
+           android:name="com.aeenery.aebicycle.challenge.ShowPropertyActivity"
+           android:label="@string/title_activity_show_property">
+            <intent-filter>
+                <action android:name="com.aeenery.bicycle.SHOW_PROPERTY_ACTIITY"/>
+            </intent-filter>
+            </activity>
        
         <service android:name="com.aeenery.aebicycle.battery.BluetoothService" android:enabled="true" android:exported="false">
             <intent-filter android:label="btservice">

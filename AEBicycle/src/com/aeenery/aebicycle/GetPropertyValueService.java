@@ -3,6 +3,7 @@ package com.aeenery.aebicycle;
 import com.aeenery.aebicycle.battery.BluetoothService;
 import com.aeenery.aebicycle.battery.BluetoothService.MyBinder;
 import com.aeenery.aebicycle.bms.BMSController;
+import com.aeenery.aebicycle.entry.UtilFunction;
 import com.aeenery.aebicycle.map.MapActivity;
 import com.aeenery.aebicycle.map.MapActivity.MyLocationListener;
 import com.baidu.location.BDLocation;
@@ -12,6 +13,7 @@ import com.baidu.location.LocationClientOption;
 import com.baidu.mapapi.map.LocationData;
 import com.baidu.mapapi.map.MyLocationOverlay;
 import com.baidu.mapapi.utils.DistanceUtil;
+import com.baidu.platform.comapi.basestruct.GeoPoint;
 
 import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
@@ -34,7 +36,14 @@ public class GetPropertyValueService extends Service{
 	protected LocationClient mLocationClient = null;
 	protected MyLocationOverlay myLocationOverlay = null;
 	protected BDLocationListener myListener;
-	protected LocationData myLoc = null;
+	protected LocationData myLocNew = null;
+	protected LocationData myLocOld = null;
+	
+	//Temp
+	double distancePlus;
+	double speedAverage;
+	double speedCount= 0;
+	double speedSum;
 	
 	@Override
 	public IBinder onBind(Intent intent) {
@@ -62,6 +71,10 @@ public class GetPropertyValueService extends Service{
 	public void onDestroy() {
 		if (D)
 			Log.e(TAG, "--- ON DESTROY ---");
+		if(mLocationClient.isStarted()){
+			mLocationClient.stop();
+			mLocationClient.unRegisterLocationListener(myListener);
+		}
 		super.onDestroy();
 	}
 
@@ -102,18 +115,50 @@ public class GetPropertyValueService extends Service{
 			Log.d("LocSDK3", "locClient is null or not started");
 	}
 	
+	protected synchronized void calculateDistanceParams(BDLocation location){
+		if(myLocNew == null)
+			myLocNew = new LocationData();
+		myLocNew.latitude = location.getLatitude();
+		myLocNew.longitude = location.getLongitude();
+		myLocNew.accuracy = location.getRadius();
+		myLocNew.direction = location.getDerect();
+		myLocNew.speed = location.getSpeed();
+		
+		if(myLocOld != null){
+//			GeoPoint gp1 = new GeoPoint((int)(myLocNew.latitude*1E6),(int)(myLocNew.longitude*1E6));
+//			GeoPoint gp2 = new GeoPoint((int)(myLocOld.latitude*1E6),(int)(myLocOld.longitude*1E6));
+//			double distance = DistanceUtil.getDistance(gp1, gp2);
+			distancePlus += UtilFunction.GetShortDistance(myLocNew.longitude, myLocNew.latitude, myLocOld.longitude, myLocOld.latitude)/1000.0;
+			
+			if(myLocNew.speed > 2){
+				speedCount++;
+				speedSum += myLocNew.speed;
+				speedAverage = speedSum/speedCount;
+			}
+			
+			Toast.makeText(this, "Distance is:"+distancePlus+"\n精准:"+myLocNew.accuracy+"速度:"+speedAverage, Toast.LENGTH_SHORT).show();
+			
+			
+		}
+		copyToOldLocation(myLocNew);
+	}
+	
+	protected void copyToOldLocation(LocationData data){
+		if(myLocOld == null)
+			myLocOld = new LocationData();
+		myLocOld.latitude = data.latitude;
+		myLocOld.longitude = data.longitude;
+		myLocOld.accuracy = data.accuracy;
+		myLocOld.direction = data.direction;
+		myLocOld.speed = data.speed;
+	}
+
 	class MyLocationListener implements BDLocationListener {
 		@Override
 		public void onReceiveLocation(BDLocation location) {
 			if (location == null)
 				return ;
-			if(myLoc == null)
-				myLoc = new LocationData();
-			myLoc.latitude = location.getLatitude();
-			myLoc.longitude = location.getLongitude();
-			myLoc.accuracy = location.getRadius();
-			myLoc.direction = location.getDerect();
-			myLoc.speed = location.getSpeed();
+			calculateDistanceParams(location);
         }
 		@Override
 		public void onReceivePoi(BDLocation poiLocation) {

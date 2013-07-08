@@ -59,7 +59,10 @@ public class ShowPropertyActivity extends Activity{
 	@Override
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_show_property);
 		loadViews();
+		setContents();
+		this.startService(new Intent(BicycleUtil.ACTION_RUN_PROPERTY_SERVICE));
 	}
 	
 	protected void loadViews(){

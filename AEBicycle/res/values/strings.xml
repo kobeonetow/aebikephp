@@ -61,6 +61,7 @@
     <string name="createusersuccess">用户创建成功</string>
 
     <!-- 计划的参数 -->
+    <string name="runPlan">运行</string>
     <string name="title_activity_show_property">参数显示</string>
     <string name="btn_send_invite">发送邀请</string>
     <string name="plan_select_locations">选择地点</string>

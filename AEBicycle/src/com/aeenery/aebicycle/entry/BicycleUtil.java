@@ -139,4 +139,5 @@ public interface BicycleUtil {
     
     //Activity Start Actons
     public static final String ACTION_SHOW_PROPERTY = "com.aeenery.bicycle.SHOW_PROPERTY_ACTIITY"; // For ShowPropertyActivity
+    public static final String ACTION_RUN_PROPERTY_SERVICE = "com.aeenery.aebicycle.Property_Service"; //For property service
 }

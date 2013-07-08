@@ -189,9 +189,6 @@
        <activity
            android:name="com.aeenery.aebicycle.challenge.ShowPropertyActivity"
            android:label="@string/title_activity_show_property">
-            <intent-filter>
-                <action android:name="com.aeenery.bicycle.SHOW_PROPERTY_ACTIITY"/>
-            </intent-filter>
             </activity>
        
         <service android:name="com.aeenery.aebicycle.battery.BluetoothService" android:enabled="true" android:exported="false">
@@ -205,6 +202,11 @@
             android:process=":remote" >
         </service>
 
+        <service android:name="com.aeenery.aebicycle.GetPropertyValueService" android:exported="false">
+            <intent-filter>
+                <action android:name="com.aeenery.aebicycle.Property_Service"/>
+            </intent-filter>
+        </service>
         
 		<!--  Push Service client receiver  -->
 		<receiver android:name="com.baidu.android.pushservice.PushServiceReceiver"

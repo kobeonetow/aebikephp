@@ -23,7 +23,7 @@ public class JoinPlansActivity extends PlanListActivity{
 		super.onActivityResult(requestCode, resultCode, data);
 		Bundle bundle = data.getExtras();
 		int position = bundle.getInt("position", -1);
-		if(position < 0 ||position >= plans.length)
+		if(plans == null || position < 0 ||position >= plans.length)
 			return;
 		if(requestCode == BicycleUtil.VIEW_PLAN){
 			if(resultCode == BicycleUtil.VIEW_PLAN_FINISH){

@@ -73,6 +73,7 @@ public class PlanDetailActivity extends BaseActivity {
 	private Button btnDelete;
 	private Button btnUpdate;
 	private Button invite;
+	private Button btnRunPlan;
 	
 	private ServerAPI api;
 	private PlanDetailReceiver receiver;
@@ -151,12 +152,14 @@ public class PlanDetailActivity extends BaseActivity {
 		btnDelete = (Button)findViewById(R.id.plan_detail_cancel_plan);
 		btnUpdate = (Button)findViewById(R.id.plan_detail_update_plan);
 		invite = (Button)findViewById(R.id.plan_detail_invite_friends);
+		btnRunPlan = (Button)findViewById(R.id.btn_plan_run);
 		
 		btnJoin.setOnClickListener(new PlanDetailButtonClickListener());
 		btnQuit.setOnClickListener(new PlanDetailButtonClickListener());
 		btnDelete.setOnClickListener(new PlanDetailButtonClickListener());
 		btnUpdate.setOnClickListener(new PlanDetailButtonClickListener());
 		invite.setOnClickListener(new PlanDetailButtonClickListener());
+		btnRunPlan.setOnClickListener(new PlanDetailButtonClickListener());
 	}
 
 	private void initailiseMapView() {
@@ -214,6 +217,7 @@ public class PlanDetailActivity extends BaseActivity {
 		btnQuit.setVisibility(View.GONE);
 		btnDelete.setVisibility(View.GONE);
 		invite.setVisibility(View.GONE);
+		btnRunPlan.setVisibility(View.GONE);
 //		btnStartPlan.setVisibility(View.GONE);
 //		btnEndPlan.setVisibility(View.GONE);
 		
@@ -237,6 +241,7 @@ public class PlanDetailActivity extends BaseActivity {
 		case BicycleUtil.STATUS_PLAN_ACCEPT:
 			btnQuit.setVisibility(View.VISIBLE);
 			invite.setVisibility(View.VISIBLE);
+			btnRunPlan.setVisibility(View.VISIBLE);
 			break;
 		case BicycleUtil.STATUS_PLAN_FINISH:
 //			this.setButtonsInvisibleAndDisable();
@@ -387,6 +392,11 @@ public class PlanDetailActivity extends BaseActivity {
 				b.putString("planid", p.getId());
 				send.putExtras(b);
 				PlanDetailActivity.this.startActivity(send);
+				break;
+			case R.id.btn_plan_run:
+				//Start a notification bar icon and run plan activity
+				Intent planRun = new Intent(PlanDetailActivity.this, ShowPropertyActivity.class);
+				PlanDetailActivity.this.startActivity(planRun);
 				break;
 			}
 		}

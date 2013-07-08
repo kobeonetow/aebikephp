@@ -202,6 +202,13 @@
             android:layout_height="wrap_content"
             android:text="@string/invite"
             />
+        
+        <Button
+            android:id="@+id/btn_plan_run"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/runPlan"
+			/>
     </LinearLayout>
     
 </LinearLayout>

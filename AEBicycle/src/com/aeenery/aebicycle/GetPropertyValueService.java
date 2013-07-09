@@ -3,6 +3,7 @@ package com.aeenery.aebicycle;
 import com.aeenery.aebicycle.battery.BluetoothService;
 import com.aeenery.aebicycle.battery.BluetoothService.MyBinder;
 import com.aeenery.aebicycle.bms.BMSController;
+import com.aeenery.aebicycle.challenge.ShowPropertyActivity;
 import com.aeenery.aebicycle.entry.UtilFunction;
 import com.aeenery.aebicycle.map.MapActivity;
 import com.aeenery.aebicycle.map.MapActivity.MyLocationListener;
@@ -18,9 +19,11 @@ import com.baidu.platform.comapi.basestruct.GeoPoint;
 import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Binder;
 import android.os.IBinder;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -31,6 +34,9 @@ public class GetPropertyValueService extends Service{
 	private static final boolean D = true;
 	private static final String TAG = "GetPropertyValueService";
 	private final IBinder mBinder = new MyBinder();
+	
+	//SharePreference
+	private SharedPreferences sp;
 	
 	//定位系统
 	protected LocationClient mLocationClient = null;
@@ -81,6 +87,9 @@ public class GetPropertyValueService extends Service{
 	
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
+		if(sp == null){
+			sp = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
+		}
 		requestLocation();
 		return START_NOT_STICKY; // run until explicitly stopped.
 	}
@@ -116,6 +125,10 @@ public class GetPropertyValueService extends Service{
 	}
 	
 	protected synchronized void calculateDistanceParams(BDLocation location){
+		if(location.getRadius() > 16.0){
+			Log.i(TAG,"Waiting for accurate position");
+			return;
+		}
 		if(myLocNew == null)
 			myLocNew = new LocationData();
 		myLocNew.latitude = location.getLatitude();
@@ -125,12 +138,12 @@ public class GetPropertyValueService extends Service{
 		myLocNew.speed = location.getSpeed();
 		
 		if(myLocOld != null){
-//			GeoPoint gp1 = new GeoPoint((int)(myLocNew.latitude*1E6),(int)(myLocNew.longitude*1E6));
-//			GeoPoint gp2 = new GeoPoint((int)(myLocOld.latitude*1E6),(int)(myLocOld.longitude*1E6));
-//			double distance = DistanceUtil.getDistance(gp1, gp2);
-			distancePlus += UtilFunction.GetShortDistance(myLocNew.longitude, myLocNew.latitude, myLocOld.longitude, myLocOld.latitude)/1000.0;
-			
-			if(myLocNew.speed > 2){
+			float distance  = sp.getFloat(ShowPropertyActivity.RideDistance,0.0f);
+			float speed = sp.getFloat(ShowPropertyActivity.RideSpeed, 0.0f);
+			float averageSpeed = sp.getFloat(ShowPropertyActivity.RideAvgSpeed, 0.0f);
+			int count = sp.getInt(ShowPropertyActivity.RideSpeedCount, 0);
+			distancePlus = UtilFunction.GetShortDistance(myLocNew.longitude, myLocNew.latitude, myLocOld.longitude, myLocOld.latitude)/1.15;
+			if(myLocNew.speed > 3){
 				speedCount++;
 				speedSum += myLocNew.speed;
 				speedAverage = speedSum/speedCount;

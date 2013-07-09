@@ -54,6 +54,11 @@ public class ShowPropertyActivity extends Activity{
 	public static final String PhoneBTemp = "phoneBatteryTemp";
 	public static final String PhoneBTime = "phoneBatteryTime";
 	
+	/**
+	 * SP Labels
+	 */
+	public static final String RideAvgSpeed = "avgSpeed";
+	public static final String RideSpeedCount = "speedCount";
 	
 	
 	@Override
